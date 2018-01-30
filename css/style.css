@@ -128,12 +128,12 @@ p {
     flex-direction: column;
     /*Somehow justify center vertically fml */
     justify-content: center;
+    transition: 1.5s;
 }
 
 #landing .title{
   font-family: Helvetica, sans-serif;
   font-size: 4em;
-  transition: 1.5s;
   color: #FFF;
   text-align: center;
 }
