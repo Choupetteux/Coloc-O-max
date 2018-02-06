@@ -5,13 +5,13 @@ require_once 'myPDO.mysql.colocomax.php';
 
 Class Utilisateur{
 
-    private $UTILISATEUR_ID = null;
-    private $NOM = null;
-    private $PRENOM = null;
-    private $DATE_DE_NAISSANCE = null;
-    private $SEXE = null;
-    private $PSEUDO = null;
-    private $COLOCATION_ID = null;
+    private $utilisateur_id = null;
+    private $nom = null;
+    private $prenom = null;
+    private $date_de_naissance = null;
+    private $sexe = null;
+    private $pseudo = null;
+    private $colocation_id = null;
 
     public function saveIntoSession(){
         Session::start();
@@ -25,16 +25,19 @@ Class Utilisateur{
         }
     }
 
-    public static function getPseudo(){
-        $PDO = myPDO::getInstance()->prepare(<<<'SQL'
-        SELECT PSEUDO
-        FROM UTILISATEURS
-        WHERE UTILISATEUR_ID = 1
-SQL
-    );
-        $PDO->execute();
-        $pseudo = $PDO->fetch();
-        return $pseudo;
+    public static function getUtilisateurFromID($id){
+        $PDO = myPdo::getInstance()->prepare(
+                "SELECT *
+                FROM Utilisateurs
+                WHERE utilisateur_id = ?");
+        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
+        $PDO->execute(array($id));
+        $user = $PDO->fetch();
+        return $user;
+    }
+    
+    public function getPseudo(){
+        return $this->pseudo;
     }
 
     /*PDO Request Format

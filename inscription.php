@@ -6,15 +6,13 @@ require_once 'WebPage.Class.php' ;
 require_once 'php/session.class.php' ;
 require_once 'php/visiteur.php' ;
 
-$username = Utilisateur::getUtilisateurFromId(2);
-
 Session::start();
 
 $p = new WebPage() ;
 
-$p->setTitle('ColocOmax') ;
+$p->setTitle('Inscription | ColocOmax') ;
 
-$p->appendCssUrl("css/style.css") ;
+$p->appendCssUrl("css/style-sign-up.css") ;
 
 /*
 $p->appendCSS(<<<CSS
@@ -30,19 +28,11 @@ $p->appendJsUrl("lib/easing/easing.min.js");
 $p->appendJsUrl("lib/wow/wow.min.js");
 $p->appendJsUrl("lib/jquery/login_effect.js");
 
-
-/*
-$p->appendJS(<<<JAVASCRIPT
-
-JAVASCRIPT
-);
-*/
-
 $s = WebPage::escapeString('Vous êtes à la fin de <body>.') ;
 
 $p->appendToHead(<<<HTML
   <meta charset="utf-8">
-  <title>ColocOmax</title>
+  <title>Inscription | ColocOmax</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -66,49 +56,30 @@ $p->appendToHead(<<<HTML
 HTML
 );
 
-if(isset($_SESSION['user']->pseudo)){
-    include_once('assets/menu/menu_loggedin.html');
-}
-else{
-    include_once('assets/menu/menu_visiteur.html');
-}
-
 $p->appendContent(<<<HTML
+<header id="banner">
+    <div class="row">
+        <h1 class="col-lg-12" ><a href="index.php">Coloc'O'max</a></h1>
+    </div>
+</header>
 
-
-<section id="landing">
-<div class="landing-text">
+<section id="sign-up">
+    <p class="landing-text">Lorem Ipsum Very mucho doggo</p>
     <div class="row">
         <div class="col-lg-3"></div>
-
-        <div class="col-lg-6">
-            <h1 class="title animated zoomIn">Prêt pour une coloc' ?</h1>
-            <p class="animated zoomIn">Revenez plus tard, nous sommes en train de paufiner la future plateforme qui facilitera les points importants de votre colocation !</p>
-            <a href="inscription.php" class="btn-sign-up">S'inscrire</a>
+        <div class="col-lg-6 form-div">
+            <p>Lorem Ipsum</p><br>
+            <p>Lorem Ipsum</p><br>
+            <p>Lorem Ipsum</p><br>
+            <p>Lorem Ipsum</p><br>
+            <p>Lorem Ipsum</p><br>
         </div>
-
-        <div class="col-lg-3"></div>   
-    </div> 
-</div>
-<div class="landing-img">
-    <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8"></div>
-        <div class="col-lg-2"></div>
+        <div class="col-lg-3"></div>
     </div>
-</div>
 </section>
-
- 
- 
 
 HTML
 );
 
 
-
-
 echo $p->toHTML() ;
-
-var_dump($_SESSION['user']);
-?>

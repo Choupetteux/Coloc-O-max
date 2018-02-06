@@ -1,0 +1,160 @@
+body {
+    background: #fff;
+    color: #666666;
+    font-family: "Open Sans", sans-serif;
+    overflow-x: hidden;
+  }
+
+a {
+    color: #1dc8cd;
+    transition: 0.5s;
+}
+  
+a:hover, a:active, a:focus {
+    color: #1dc9ce;
+    outline: none;
+    text-decoration: none;
+}
+  
+p {
+    padding: 0;
+    margin: 0 0 30px 0;
+}
+
+/*----------------
+  Header css  */
+#header h1 a{
+  color: #FFF;
+  font-family: 'Lobster', cursive;
+  font-size: 1.2em;
+  margin-left: 1em;
+  display: inline-block;
+  padding-top: 10px;
+  letter-spacing: 3px;
+}
+
+#profile{
+  display:inline-block;
+  padding-left: 4em;
+  margin-top: 10px;
+}
+
+#profile #avatar{
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 65px;
+  vertical-align: middle;
+}
+
+
+#profile p{
+  color: #FFF;
+  font-family: 'Open Sans';
+  margin-left: 1em;
+  font-weight: 600;
+  display: inline-block;
+  letter-spacing: 3px;
+}
+
+#navbar .row{
+  margin-top:25px;
+}
+
+#navbar .col-lg-2{
+  margin-left:10px;
+  margin-right:10px;
+  display: inline-block;
+}
+
+#navbar h3 a{
+  color: #FFF;
+  font-family: 'Open Sans';
+  font-weight: 600;
+  display: inline-block;
+}
+
+#navbar .current-page{
+    border-radius: 50px;
+    display: inline-block;
+    border: 2px solid #fff;
+}
+
+#header{
+  padding-top: 20px;
+  height: 92px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  transition: all 0.5s;
+  z-index: 997;
+}
+
+#header.header-fixed {
+  background: #1A2980;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  padding: 15px 0px 20px 0px;
+  height: 72px;
+  transition: all 0.5s;
+}
+
+#header .connect{
+  color: #fff;
+  transition: 0s;
+}
+
+
+
+/*----------------
+  Landing css */
+#landing {
+    width: 100%;
+    height: 110vh;
+    background: #1A2980;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    position: relative;
+}
+
+#landing p {
+  color: #FFF;
+  margin-bottom: 20px;
+  padding: 0 15px;
+  font-size: 20px;
+}
+
+#landing .landing-text{
+    height:calc(50% - 60px);
+    display:flex;
+    top:50px;
+    left: 0;
+    right: 0;
+    position: absolute;
+    text-align:center;
+    flex-direction: column;
+    /*Somehow justify center vertically fml */
+    justify-content: center;
+    transition: 1.5s;
+}
+
+#landing .title{
+  font-family: Helvetica, sans-serif;
+  font-size: 4em;
+  color: #FFF;
+  text-align: center;
+}
+
+#landing .btn-sign-up{
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 28px;
+    border-radius: 50px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
