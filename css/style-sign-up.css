@@ -142,3 +142,23 @@ input{
 #sign-up .form-div p{
   color: black;
 }
+
+#sign-up .confirm{
+  background-color: lightgreen;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#sign-up #confirm-div{
+  margin-top: 5em;
+}
+
+#sign-up .error{
+  background-color: lightcoral;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#sign-up #error-div{
+  margin-top: 5em;
+}

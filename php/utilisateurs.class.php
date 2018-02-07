@@ -60,10 +60,10 @@ Class Utilisateur{
 SQL
                  );
                  $PDO->execute(array($nom, $prenom, $pseudo, $hashPass));
-                 echo 'Votre compte a bien été crée.';
+                 return true;
             }
             else{
-                echo 'Pseudo déjà existant.';
+                return false;
             }
         }
         catch(PDOException $e){

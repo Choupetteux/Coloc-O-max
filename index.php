@@ -24,7 +24,6 @@ $p->appendCSS(<<<CSS
 CSS
 );
 */
-$p->appendJsUrl("js/main.js");
 $p->appendJsUrl("lib/jquery/jquery.min.js");
 $p->appendJsUrl("lib/jquery/jquery-migrate.min.js");
 $p->appendJsUrl("lib/bootstrap/js/bootstrap.bundle.min.js");
@@ -62,9 +61,7 @@ $p->appendToHead(<<<HTML
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <link href="lib/animate/animate.min.css" rel="stylesheet">
-  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="lib/magnific-popup/magnific-popup.css" rel="stylesheet">
 HTML
 );
 

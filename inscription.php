@@ -20,7 +20,6 @@ $p->appendCSS(<<<CSS
 CSS
 );
 */
-$p->appendJsUrl("js/main.js");
 $p->appendJsUrl("lib/jquery/jquery.min.js");
 $p->appendJsUrl("lib/jquery/jquery-migrate.min.js");
 $p->appendJsUrl("lib/bootstrap/js/bootstrap.bundle.min.js");
@@ -41,8 +40,36 @@ if(isset($_POST['signup'])){
             }
     }
     if(!$erreur){
-        $_SESSION['user']->inscription($newpost['nom'],$newpost['prenom'],$newpost['pseudo'],$newpost['mdp']);
+        $result = $_SESSION['user']->inscription($newpost['nom'],$newpost['prenom'],$newpost['pseudo'],$newpost['mdp']);
     }
+}
+
+if(isset($result)){
+    if($result){
+        $confirm = <<<HTML
+            <div id="confirm-div" class="row">
+            <div class="col-lg-5"></div>
+            <div class="col-lg-2 confirm">
+            <h3 style='text-align:center;color:#2B2735;font-size:1.5em;' class='sign-up-confirm'>Votre compte a bien été crée ! </h3>
+            </div>
+            <div class"col-lg-5"</div>
+        </div>
+HTML;
+    }
+    else{
+        $confirm = <<<HTML
+            <div id="error-div" class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4 error">
+            <h3 style='text-align:center;color:#2B2735;font-size:1.5em;' class='sign-up-confirm'> Le pseudo est déjà utilisé, veuillez en choisir un autre. </h3>
+            </div>
+            <div class"col-lg-4"</div>
+        </div>
+HTML;
+    }
+}
+else{
+    $confirm = "";
 }
 
 $p->appendToHead(<<<HTML
@@ -65,24 +92,23 @@ $p->appendToHead(<<<HTML
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <link href="lib/animate/animate.min.css" rel="stylesheet">
-  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="lib/magnific-popup/magnific-popup.css" rel="stylesheet">
 HTML
 );
 
 $p->appendContent(<<<HTML
 <header id="banner">
     <div class="row">
-        <h1 class="col-xs-12 col-lg-12" ><a href="index.php">Coloc'O'max</a></h1>
+        <h1 class="col-xs-12 col-lg-12 animated flipInX" ><a href="index.php">Coloc'O'max</a></h1>
     </div>
 </header>
 
 <section id="sign-up">
-    <p class="landing-text">Rejoignez-nous et profitez d'une colocation sans stress !</p>
+    <p class="landing-text animated flipInX">Rejoignez-nous et profitez d'une colocation sans stress !</p>
+    
     <div class="row">
         <div class="col-xs-2 col-lg-5"></div>
-        <div class="col-xs-8 col-lg-2 form-div">
+        <div class="col-xs-8 col-lg-2 form-div animated flipInX">
             <form id="form-sign-up" method="post">
                 <label for="nom">Nom :</label><br>
                 <input name="nom" id="nom" type="text" required>
@@ -101,9 +127,11 @@ $p->appendContent(<<<HTML
                 <br>
                 <hr>
                 <p> Déjà inscrit ? <a href="connexion.php">Connectez-vous !</a></p>
-        </div>
+                </form>
+            </div>
         <div class="col-xs-2 col-lg-5"></div>
     </div>
+    {$confirm}
 </section>
 
 HTML
