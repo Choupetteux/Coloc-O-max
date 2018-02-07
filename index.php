@@ -6,9 +6,11 @@ require_once 'WebPage.Class.php' ;
 require_once 'php/session.class.php' ;
 require_once 'php/visiteur.php' ;
 
+Session::start();
+
 $username = Utilisateur::getUtilisateurFromId(2);
 
-Session::start();
+
 
 $p = new WebPage() ;
 
@@ -66,7 +68,7 @@ $p->appendToHead(<<<HTML
 HTML
 );
 
-if(isset($_SESSION['user']->pseudo)){
+if(isset($_SESSION['loggedin'])){
     include_once('assets/menu/menu_loggedin.html');
 }
 else{

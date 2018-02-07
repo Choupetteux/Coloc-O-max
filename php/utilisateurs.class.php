@@ -1,6 +1,6 @@
 <?php
 
-require_once 'myPDO.mysql.colocomax.php';
+require_once 'myPDO.mysql.colocomax.home.php';
 
 
 Class Utilisateur{
@@ -35,9 +35,40 @@ Class Utilisateur{
         $user = $PDO->fetch();
         return $user;
     }
+
+    public static function getUtilisateurFromPseudo($pseudo){
+        $PDO = myPdo::getInstance()->prepare(
+                "SELECT *
+                FROM Utilisateurs
+                WHERE pseudo = ?");
+        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
+        $PDO->execute(array($pseudo));
+        $user = $PDO->fetch();
+        return $user;
+    }
     
     public function getPseudo(){
         return $this->pseudo;
+    }
+
+    public function inscription($nom, $prenom, $pseudo, $mdp){
+        try{
+            if(!self::getUtilisateurFromPseudo($pseudo)){
+                $hashPass = password_hash($mdp, PASSWORD_DEFAULT);
+                $PDO = myPdo::getInstance()->prepare(<<<SQL
+                    INSERT INTO UTILISATEURS (nom, prenom, pseudo, passwd) values (?, ?, ?, ?);
+SQL
+                 );
+                 $PDO->execute(array($nom, $prenom, $pseudo, $hashPass));
+                 echo 'Votre compte a bien été crée.';
+            }
+            else{
+                echo 'Pseudo déjà existant.';
+            }
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
     }
 
     /*PDO Request Format

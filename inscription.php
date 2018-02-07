@@ -30,6 +30,21 @@ $p->appendJsUrl("lib/jquery/login_effect.js");
 
 $s = WebPage::escapeString('Vous êtes à la fin de <body>.') ;
 
+if(isset($_POST['signup'])){
+    $champs = array('nom', 'prenom', 'pseudo', 'mdp');
+    $newpost = array_map ( 'htmlspecialchars' , $_POST );
+    $erreur = false;
+    foreach($champs AS $nomChamps){
+        if(!isset($newpost[$nomChamps]) || empty($newpost[$nomChamps])){
+            echo 'Le champ' . $nomChamps . 'est manquant. <br>';
+            $erreur = true;
+            }
+    }
+    if(!$erreur){
+        $_SESSION['user']->inscription($newpost['nom'],$newpost['prenom'],$newpost['pseudo'],$newpost['mdp']);
+    }
+}
+
 $p->appendToHead(<<<HTML
   <meta charset="utf-8">
   <title>Inscription | ColocOmax</title>
@@ -59,22 +74,35 @@ HTML
 $p->appendContent(<<<HTML
 <header id="banner">
     <div class="row">
-        <h1 class="col-lg-12" ><a href="index.php">Coloc'O'max</a></h1>
+        <h1 class="col-xs-12 col-lg-12" ><a href="index.php">Coloc'O'max</a></h1>
     </div>
 </header>
 
 <section id="sign-up">
-    <p class="landing-text">Lorem Ipsum Very mucho doggo</p>
+    <p class="landing-text">Rejoignez-nous et profitez d'une colocation sans stress !</p>
     <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6 form-div">
-            <p>Lorem Ipsum</p><br>
-            <p>Lorem Ipsum</p><br>
-            <p>Lorem Ipsum</p><br>
-            <p>Lorem Ipsum</p><br>
-            <p>Lorem Ipsum</p><br>
+        <div class="col-xs-2 col-lg-5"></div>
+        <div class="col-xs-8 col-lg-2 form-div">
+            <form id="form-sign-up" method="post">
+                <label for="nom">Nom :</label><br>
+                <input name="nom" id="nom" type="text" required>
+                <br>
+                <label for="prenom">Prenom :</label><br>
+                <input name="prenom" id="prenom" type="text" required>
+                <br>
+                <label for="pseudo">Pseudo :</label><br>
+                <input name="pseudo" id="pseudo" type="text" required>
+                <br>
+                <label for="mdp">Mot de passe :</label><br>
+                <input name="mdp" id="mdp" type="password" required>
+                <br>
+                <br>
+                <input class="btn btn-primary" name="signup" type="submit" value="S'inscrire">
+                <br>
+                <hr>
+                <p> Déjà inscrit ? <a href="connexion.php">Connectez-vous !</a></p>
         </div>
-        <div class="col-lg-3"></div>
+        <div class="col-xs-2 col-lg-5"></div>
     </div>
 </section>
 
