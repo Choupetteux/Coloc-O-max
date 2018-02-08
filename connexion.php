@@ -10,9 +10,9 @@ Session::start();
 
 $p = new WebPage() ;
 
-$p->setTitle('Inscription | ColocOmax') ;
+$p->setTitle('Connexion | ColocOmax') ;
 
-$p->appendCssUrl("css/style-sign-up.css") ;
+$p->appendCssUrl("css/style-sign-in.css") ;
 
 /*
 $p->appendCSS(<<<CSS
@@ -29,52 +29,19 @@ $p->appendJsUrl("lib/jquery/login_effect.js");
 
 $s = WebPage::escapeString('Vous êtes à la fin de <body>.') ;
 
-if(isset($_POST['signup'])){
-    $champs = array('nom', 'prenom', 'pseudo', 'mdp');
-    $newpost = array_map ( 'htmlspecialchars' , $_POST );
-    $erreur = false;
-    foreach($champs AS $nomChamps){
-        if(!isset($newpost[$nomChamps]) || empty($newpost[$nomChamps])){
-            echo 'Le champ' . $nomChamps . 'est manquant. <br>';
-            $erreur = true;
-            }
-    }
-    if(!$erreur){
-        $result = $_SESSION['user']->inscription($newpost['nom'],$newpost['prenom'],$newpost['pseudo'],$newpost['mdp']);
-    }
-}
-
-if(isset($result)){
-    if($result){
-        $confirm = <<<HTML
-            <div id="confirm-div" class="row">
-            <div class="col-lg-5"></div>
-            <div class="col-lg-2 confirm">
-            <h3 style='text-align:center;color:#2B2735;font-size:1.5em;' class='sign-up-confirm'>Votre compte a bien été crée ! </h3>
-            </div>
-            <div class"col-lg-5"</div>
-        </div>
-HTML;
+$mauvais="";
+if(isset($_POST['signin'])){
+    if($_SESSION['user']->connexion($_POST['pseudo'], $_POST['mdp'])){
+        $_SESSION['user']->redirection('index.php');
     }
     else{
-        $confirm = <<<HTML
-            <div id="error-div" class="row">
-            <div class="col-lg-4"></div>
-            <div class="col-lg-4 error">
-            <h3 style='text-align:center;color:#2B2735;font-size:1.5em;' class='sign-up-confirm'> Le pseudo est déjà utilisé, veuillez en choisir un autre. </h3>
-            </div>
-            <div class"col-lg-4"</div>
-        </div>
-HTML;
+        $mauvais = "Mauvais pseudo ou mot de passe.<br/>";
     }
-}
-else{
-    $confirm = "";
 }
 
 $p->appendToHead(<<<HTML
   <meta charset="utf-8">
-  <title>Inscription | ColocOmax</title>
+  <title>Connexion | ColocOmax</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -102,19 +69,13 @@ $p->appendContent(<<<HTML
     </div>
 </header>
 
-<section id="sign-up">
-    <p class="landing-text animated flipInX">Rejoignez-nous et profitez d'une colocation sans stress !</p>
+<section id="sign-in">
+    <p class="landing-text animated flipInX">Connectez-vous pour pouvoir utiliser toutes nos fonctionnalités.</p>
     
     <div class="row">
         <div class="col-xs-2 col-lg-5"></div>
         <div class="col-xs-8 col-lg-2 form-div animated flipInX">
-            <form id="form-sign-up" method="post">
-                <label for="nom">Nom :</label><br>
-                <input name="nom" id="nom" type="text" required>
-                <br>
-                <label for="prenom">Prenom :</label><br>
-                <input name="prenom" id="prenom" type="text" required>
-                <br>
+            <form id="form-sign-in" method="post">
                 <label for="pseudo">Pseudo :</label><br>
                 <input name="pseudo" id="pseudo" type="text" required>
                 <br>
@@ -122,19 +83,18 @@ $p->appendContent(<<<HTML
                 <input name="mdp" id="mdp" type="password" required>
                 <br>
                 <br>
-                <input class="btn btn-primary" name="signup" type="submit" value="S'inscrire">
+                <input class="btn btn-primary" name="signin" type="submit" value="Se connecter">
                 <br>
                 <hr>
-                <p> Déjà inscrit ? <a href="connexion.php">Connectez-vous !</a></p>
+                <p> Pas de compte ? <a href="inscription.php">Inscrivez-vous !</a></p>
                 </form>
             </div>
         <div class="col-xs-2 col-lg-5"></div>
     </div>
-    {$confirm}
+    {$mauvais}
 </section>
 
 HTML
 );
-
 
 echo $p->toHTML() ;
