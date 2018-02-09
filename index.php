@@ -8,7 +8,9 @@ require_once 'php/visiteur.php' ;
 
 Session::start();
 
-
+if($_SESSION['loggedin']){
+    $_SESSION['user']->redirection("dashboard.php");
+}
 
 $p = new WebPage() ;
 
