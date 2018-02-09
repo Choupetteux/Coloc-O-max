@@ -111,14 +111,13 @@ header .header-fixed {
 }
 
 #sign-up .form-div{
-    border-radius: 10px;
-    background-color: floralwhite;
+    border-radius: 5px;
+    background-color: #e2e0e0;
     margin-top: 150px;
     display:flex;
     top:50px;
     left: 0;
     right: 0;
-    text-align:center;
     flex-direction: column;
     /*Somehow justify center vertically fml */
     justify-content: center;
@@ -126,5 +125,40 @@ header .header-fixed {
 }
 
 #sign-up .form-div p{
+  font-size: 1.2em;
+}
+
+#sign-up .form-div #form-sign-up label{
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  color: #4c4c4c;
+}
+
+input{
+  width:100%;
+}
+
+#sign-up .form-div p{
   color: black;
+}
+
+#sign-up .confirm{
+  background-color: lightgreen;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#sign-up #confirm-div{
+  margin-top: 5em;
+}
+
+#sign-up .error{
+  background-color: lightcoral;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#sign-up #error-div{
+  margin-top: 5em;
 }

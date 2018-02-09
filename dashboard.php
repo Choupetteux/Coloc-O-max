@@ -8,8 +8,8 @@ require_once 'php/visiteur.php' ;
 
 Session::start();
 
-if($_SESSION['loggedin']){
-    $_SESSION['user']->redirection("dashboard.php");
+if(!$_SESSION['loggedin']){
+    $_SESSION['user']->redirection("index.php");
 }
 
 $p = new WebPage() ;
@@ -66,31 +66,18 @@ HTML
 if(isset($_SESSION['loggedin'])){
     include_once('assets/menu/menu_loggedin.html');
 }
+else{
+    include_once('assets/menu/menu_visiteur.html');
+}
 
 $p->appendContent(<<<HTML
- 
- <section id="landing">
-<div class="landing-text">
-    <div class="row">
-        <div class="col-lg-3"></div>
 
-        <div class="col-lg-6">
-            <h1 class="title animated zoomIn">Prêt pour une coloc' ?</h1>
-            <p class="animated zoomIn">Revenez plus tard, nous sommes en train de paufiner la future plateforme qui facilitera les points importants de votre colocation !</p>
-            <a href="inscription.php" class="btn-sign-up">S'inscrire</a>
-        </div>
 
-        <div class="col-lg-3"></div>   
-    </div> 
-</div>
-<div class="landing-img">
-    <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8"></div>
-        <div class="col-lg-2"></div>
-    </div>
-</div>
+<section id="landing">
 </section>
+
+ 
+ 
 
 HTML
 );
@@ -99,4 +86,6 @@ HTML
 
 
 echo $p->toHTML() ;
+
+var_dump($_SESSION['user']);
 ?>
