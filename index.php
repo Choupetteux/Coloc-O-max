@@ -8,11 +8,11 @@ require_once 'php/visiteur.php' ;
 
 Session::start();
 
-if($_SESSION['loggedin']){
+if(isset($_SESSION['loggedin'])){
     $_SESSION['user']->redirection("dashboard.php");
 }
 
-$p = new WebPage() ;
+$p = new WebPage($loggedin, "ColocOmax") ;
 
 $p->setTitle('ColocOmax') ;
 
@@ -29,7 +29,7 @@ $p->appendJsUrl("lib/jquery/jquery-migrate.min.js");
 $p->appendJsUrl("lib/bootstrap/js/bootstrap.bundle.min.js");
 $p->appendJsUrl("lib/easing/easing.min.js");
 $p->appendJsUrl("lib/wow/wow.min.js");
-$p->appendJsUrl("lib/jquery/login_effect.js");
+$p->appendJsUrl("lib/jquery/jquery-currentpage.js");
 
 
 /*
@@ -43,7 +43,6 @@ $s = WebPage::escapeString('Vous êtes à la fin de <body>.') ;
 
 $p->appendToHead(<<<HTML
   <meta charset="utf-8">
-  <title>ColocOmax</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -62,10 +61,6 @@ $p->appendToHead(<<<HTML
   <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
 HTML
 );
-
-if(isset($_SESSION['loggedin'])){
-    include_once('assets/menu/menu_loggedin.html');
-}
 
 $p->appendContent(<<<HTML
  
@@ -99,4 +94,6 @@ HTML
 
 
 echo $p->toHTML() ;
+
+
 ?>

@@ -25,7 +25,6 @@ $p->appendJsUrl("lib/jquery/jquery-migrate.min.js");
 $p->appendJsUrl("lib/bootstrap/js/bootstrap.bundle.min.js");
 $p->appendJsUrl("lib/easing/easing.min.js");
 $p->appendJsUrl("lib/wow/wow.min.js");
-$p->appendJsUrl("lib/jquery/login_effect.js");
 
 $s = WebPage::escapeString('Vous êtes à la fin de <body>.') ;
 

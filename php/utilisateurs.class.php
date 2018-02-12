@@ -1,6 +1,6 @@
 <?php
 
-require_once 'myPDO.mysql.colocomax.home.php';
+require_once 'myPDO.mysql.colocomax.php';
 
 
 Class Utilisateur{
@@ -57,7 +57,7 @@ Class Utilisateur{
             if(!self::getUtilisateurFromPseudo($pseudo)){
                 $hashPass = password_hash($mdp, PASSWORD_DEFAULT);
                 $PDO = myPdo::getInstance()->prepare(<<<SQL
-                    INSERT INTO UTILISATEURS (nom, prenom, pseudo, passwd) values (?, ?, ?, ?);
+                    INSERT INTO Utilisateurs (nom, prenom, pseudo, passwd) values (?, ?, ?, ?);
 SQL
                  );
                  $PDO->execute(array($nom, $prenom, $pseudo, $hashPass));
