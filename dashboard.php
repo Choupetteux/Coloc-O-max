@@ -79,6 +79,8 @@ $p->appendJS(<<<JS
       $('#dashboard').addClass("current-page");
       break;
     }
+    
+    $('#username').text("@{$_SESSION['user']->getPseudo()}");
   })
 JS
 );

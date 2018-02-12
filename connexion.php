@@ -8,7 +8,9 @@ require_once 'php/visiteur.php' ;
 
 Session::start();
 
-$p = new WebPage() ;
+$loggedin = isset($_SESSION['loggedin']);
+
+$p = new WebPage($loggedin, "Connexion | ColocOmax") ;
 
 $p->setTitle('Connexion | ColocOmax') ;
 
@@ -40,7 +42,7 @@ if(isset($_POST['signin'])){
 
 $p->appendToHead(<<<HTML
   <meta charset="utf-8">
-  <title>Connexion | ColocOmax</title>
+  <title></title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -96,4 +98,13 @@ $p->appendContent(<<<HTML
 HTML
 );
 
-echo $p->toHTML() ;
+$p->appendJs(<<<JS
+  $(document).ready(function() { 
+    $("#header").hide();
+  })
+JS
+);
+
+echo $p->toHTML();
+
+//$html = file_get_contents('path/to/somefile.htm');

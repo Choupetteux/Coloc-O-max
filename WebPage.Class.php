@@ -22,41 +22,10 @@ class WebPage {
      */
     public function __construct($loggedin, $title=null) {
         if($loggedin){
-            $this->menu = <<<HTML
-            <header id="header">
-            <div id="menu" class="row animated fadeIn">
-                <h1 class="col-lg-3" ><a href="#landing">Coloc'O'max</a></h1>
-                <div id="navbar" class="col-lg-6">
-                    <div class="row">
-                        <h3 id="dashboard"><a href="dashboard.php" class="col-lg-2">Dashboard</a></h3>
-                        <h3><a href="" class="col-lg-2">Dépenses</a></h3>
-                        <h3><a href="" class="col-lg-2">Colocs</a></h3>
-                        <h3><a href="" class="col-lg-2">Agenda</a></h3>
-                        <h3><a href="" class="col-lg-2">Paramètres</a></h3>
-                    </div>  
-                </div>
-                <div id="profile" class="col-lg-3">
-                    <p id="username">@{$_SESSION['user']->getPseudo()}</p>
-                    <img class="img-fluid" id="avatar" src="img/lily.jpg"><a href=#></a></img>
-                </div>
-            </div>
-            </header>
-HTML
-;
+            $this->menu = file_get_contents("assets/menu/menu_loggedin.html");
         }
         else{
-            $this->menu = <<<HTML
-            <header id="header">
-                <div id="menu" class="row">
-                    <h1 class="col-lg-10" ><a href="#landing" class="scrollto">Coloc'O'max</a></h1>
-                    <div id="profile" class="col-lg-2">
-                        <p id="username"><a class="connect" href='connexion.php'>Se connecter</a></p>
-                        <img class="img-fluid" id="avatar" src="img/blank-user.png"><a href=#></a></img>
-                    </div>
-                </div>
-            </header>
-HTML
-;
+            $this->menu = file_get_contents("assets/menu/menu_visiteur.html");
         }
         $this->setTitle($title) ;
     }

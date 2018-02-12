@@ -8,9 +8,9 @@ require_once 'php/visiteur.php' ;
 
 Session::start();
 
-$p = new WebPage() ;
+$loggedin = isset($_SESSION['loggedin']);
 
-$p->setTitle('Inscription | ColocOmax') ;
+$p = new WebPage($loggedin, "Inscription | ColocOmax") ;
 
 $p->appendCssUrl("css/style-sign-up.css") ;
 
@@ -73,7 +73,6 @@ else{
 
 $p->appendToHead(<<<HTML
   <meta charset="utf-8">
-  <title>Inscription | ColocOmax</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -135,5 +134,11 @@ $p->appendContent(<<<HTML
 HTML
 );
 
+$p->appendJs(<<<JS
+  $(document).ready(function() { 
+    $("#header").hide();
+  })
+JS
+);
 
 echo $p->toHTML() ;

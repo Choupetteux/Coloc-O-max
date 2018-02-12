@@ -8,7 +8,8 @@ require_once 'php/visiteur.php' ;
 
 Session::start();
 
-if(isset($_SESSION['loggedin'])){
+$loggedin = isset($_SESSION['loggedin']);
+if($loggedin){
     $_SESSION['user']->redirection("dashboard.php");
 }
 
