@@ -99,6 +99,12 @@ SQL
         header("Location: $url");
     }
 
+    public function deconnexion(){
+        unset($_SESSION['user']);
+        unset($_SESSION['loggedin']);
+        return true;
+    }
+
     /*PDO Request Format
     $PDO = myPdo::getInstance()->prepare(***REQUEST***);
     $PDO->execute(array($idAnn, $this->NUMMEMB, $texte));

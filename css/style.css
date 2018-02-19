@@ -39,9 +39,9 @@ p {
 
 #profile{
   display:inline-block;
-  padding-left: 4em;
   margin-top: 25px;
   font-size: 20px;
+  text-align: center;
 }
 
 #profile #avatar{
@@ -49,6 +49,7 @@ p {
   border-radius: 20%;
   width: 40px;
   vertical-align: middle;
+  margin-bottom: 20px;
 }
 
 
@@ -162,4 +163,8 @@ p {
     margin: 10px;
     border: 2px solid #fff;
     color: #fff;
+}
+
+#landing h2{
+  color:#FFF;
 }
