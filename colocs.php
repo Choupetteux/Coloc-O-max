@@ -10,10 +10,33 @@ require_once 'php/visiteur.php' ;
 
 Session::start();
 
+//Redirige l'utilisateur si il n'est pas connecté.
 $loggedin = isset($_SESSION['loggedin']);
 if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
+
+//Gestion formulaire rejoindre colocation
+if(isset($_POST['join']) && isset($_POST['code'])){
+  if(Colocation::getColocationFromPass($_POST['code']) != false){
+    $_SESSION['user']->rejoindreColocation($_POST['code']);
+  }
+}
+
+//Gestion formulaire quitter colocation
+if(isset($_POST['quit'])){
+  $_SESSION['user']->quitterColocation();
+}
+
+
+//Gestion formulaire création colocation
+if(isset($_POST['create'])){
+  $champs = array('nom', 'ville', 'adresse');
+  $newpost = array_map ( 'htmlspecialchars' , $_POST );
+  $coloc = Colocation::createNewColocation($newpost['nom'], $newpost['ville'], $newpost['adresse']);
+  $_SESSION['user']->rejoindreColocation($coloc);
+}
+
 
 $p = new WebPage($loggedin, "Colocations | ColocOmax") ;
 
@@ -63,6 +86,81 @@ $p->appendToHead(<<<HTML
 HTML
 );
 
+if($_SESSION['user']->hasColocation()){
+  $p->appendContent(<<<HTML
+ 
+  <section id="landing">
+    <div class="landing-text">
+      <div class="row">
+          <div class="col-lg-3"></div>
+  
+          <div class="col-lg-6">
+              <h3 class="title">Vous êtes dans une colocation !</h3>
+              <p> Le nom de la colocation est : {$_SESSION['user']->getColocation()->getColocationNom()}</p>
+  
+          </div>
+  
+          <div class="col-lg-3"></div>   
+      </div>
+      <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-5">
+          <button type="button" id="create-btn" class="btn btn-primary btn-lg btn-block">Créer une colocation</button>
+        </div>
+        <div class="col-lg-5">
+          <button type="button" id="join-btn" class="btn btn-danger btn-lg btn-block">Quitter votre colocation</button>
+        </div>
+        <div class="col-lg-1"></div>
+      </div>
+  
+      <div class="row">
+      <div class="col-lg-1"></div>
+      
+  
+  <div class="col-lg-5">
+      <div id="form-create" style="display:none;" class="row">
+        <div class="col-xs-2 col-lg-4"></div>
+          <div class="col-xs-8 col-lg-4 form-div animated flipInX">
+              <form id="form-create" method="post">
+                  <label for="nom">Nom de la colocation*</label><br>
+                  <input name="nom" id="nom" type="text" required>
+                  <br>
+                  <label for="ville">Ville*</label><br>
+                  <input name="ville" id="ville" type="text" required>
+                  <br>
+                  <label for="ville">Adresse</label><br>
+                  <input name="ville" id="ville" type="text" required>
+                  <br>
+                  <input class="btn btn-primary" name="join" type="submit" value="Créer">
+                  <br>
+                  </form>
+              </div>
+          <div class="col-xs-2 col-lg-5"></div>
+      </div>
+      </div>
+      <div class="col-lg-5">
+  
+        <div id="form-join" style="display:none;" class="row">
+          <div class="col-xs-2 col-lg-4"></div>
+            <div class="col-xs-8 col-lg-4 form-div animated flipInX">
+                <form id="form-join" method="post">
+                    <label for="code">Êtes-vous sûr de vouloir quitter votre colocation ?</label><br>
+                    <input class="btn btn-danger" name="quit" type="submit" value="Quitter la colocation">
+                    <br>
+                    </form>
+                </div>
+            <div class="col-xs-2 col-lg-5"></div>
+      </div>
+  </div>
+  </div>
+    </div>
+  </section>
+
+HTML
+);
+}
+
+else{
 $p->appendContent(<<<HTML
  
 <section id="landing">
@@ -105,9 +203,9 @@ $p->appendContent(<<<HTML
                 <input name="ville" id="ville" type="text" required>
                 <br>
                 <label for="ville">Adresse</label><br>
-                <input name="ville" id="ville" type="text" required>
+                <input name="adresse" id="ville" type="text">
                 <br>
-                <input class="btn btn-primary" name="join" type="submit" value="Créer">
+                <input class="btn btn-primary" name="create" type="submit" value="Créer">
                 <br>
                 </form>
             </div>
@@ -136,6 +234,7 @@ $p->appendContent(<<<HTML
 
 HTML
 );
+}
 
 $p->appendJS(<<<JS
   $(document).ready(function() { 
@@ -165,5 +264,4 @@ JS
 
 
 echo $p->toHTML() ;
-
 ?>

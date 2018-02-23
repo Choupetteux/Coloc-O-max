@@ -14,11 +14,13 @@ Class Utilisateur{
     private $passwd = null;
     private $colocation_id = null;
 
+    //Sauvegarde l'instance d'utilisateur dans la session actuelle.
     public function saveIntoSession(){
         Session::start();
         $_SESSION['user'] = this;
     }
 
+    //Lis les données de la session actuelle.
     public static function readFromSession(){
         Session::start();
         if(isset($_SESSION['user']) && $_SESSION['user'] instanceof self){
@@ -26,6 +28,7 @@ Class Utilisateur{
         }
     }
 
+    //Récupère une instance d'utilisateur à partir de son ID.
     public static function getUtilisateurFromID($id){
         $PDO = myPdo::getInstance()->prepare(
                 "SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, passwd, colocation_id
@@ -37,6 +40,7 @@ Class Utilisateur{
         return $user;
     }
 
+    //Récupère une instance d'utilisateur à partir de son pseudo. Chaque pseudo est censé être unique.
     public static function getUtilisateurFromPseudo($pseudo){
         $PDO = myPdo::getInstance()->prepare(
                 "SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, passwd, colocation_id
@@ -48,10 +52,9 @@ Class Utilisateur{
         return $user;
     }
     
-    public function getPseudo(){
-        return $this->pseudo;
-    }
 
+    //Inscrit un utilisateur dans la base de données et hash son password
+    //TODO: Maybe change if time le hash
     public function inscription($nom, $prenom, $pseudo, $mdp){
         try{
             if(!self::getUtilisateurFromPseudo($pseudo)){
@@ -72,6 +75,7 @@ SQL
         }
     }
 
+    //Permet à l'utilisateur de se connecter à partir de son pseudo et son mot de passe.
     public function connexion($pseudo, $mdp){
         try{
             $user = Utilisateur::getUtilisateurFromPseudo($pseudo);
@@ -91,18 +95,58 @@ SQL
         }
     }
 
-    public function getPass(){
-        return $this->passwd;
-    }
-
+    //Redirige l'utilisateur vers une url.
     public function redirection($url){
         header("Location: $url");
     }
 
+    //Déconnecte l'utilisateur.
     public function deconnexion(){
         unset($_SESSION['user']);
         unset($_SESSION['loggedin']);
         return true;
+    }
+
+    //Retourne si l'utilisateur à une colocation.
+    public function hasColocation(){
+        return !is_null($this->colocation_id);
+    }
+
+    //Permet de rejoindre une colocation à partir du pass de cette colocation.
+    public function rejoindreColocation($pass){
+        $PDO = myPdo::getInstance()->prepare(
+            "UPDATE Utilisateurs
+            set colocation_id = ?
+            WHERE utilisateur_id = ?");
+        $PDO->execute(array(Colocation::getColocationFromPass($pass)->getColocationId(), $this->utilisateur_id));
+        $this->colocation_id = Colocation::getColocationFromPass($pass)->getColocationId();
+    }
+
+    //Fais quitter la colocation à l'utilisateur actuelle.
+    public function quitterColocation(){
+        $PDO = myPdo::getInstance()->prepare(
+            "UPDATE Utilisateurs
+            set colocation_id = null
+            WHERE utilisateur_id = ?"
+        );
+        $PDO->execute(array($this->utilisateur_id));
+        $this->colocation_id = null;
+    }
+
+    //Récupère la colocation depuis l'id de la colocation de l'utilisateur.
+    public function getColocation(){
+        return Colocation::getColocationFromId($this->colocation_id);
+    }
+
+
+    //Retourne le mot de passe hashé de l'utilisateur.
+    public function getPass(){
+        return $this->passwd;
+    }
+
+    //Retourne le pseudo de l'utilisateur.
+    public function getPseudo(){
+        return $this->pseudo;
     }
 
     /*PDO Request Format
