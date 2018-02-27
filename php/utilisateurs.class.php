@@ -1,6 +1,7 @@
 <?php
 
 require_once 'myPDO.mysql.colocomax.home.php';
+require_once 'colocation.class.php';
 
 
 Class Utilisateur{
@@ -136,7 +137,12 @@ SQL
 
     //Récupère la colocation depuis l'id de la colocation de l'utilisateur.
     public function getColocation(){
-        return Colocation::getColocationFromId($this->colocation_id);
+        if(is_null($this->colocation_id)){
+            return null;
+        }
+        else{
+            return Colocation::getColocationFromId($this->colocation_id);
+        }
     }
 
 

@@ -1,5 +1,7 @@
 body {
     background: #1A2980;
+    background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     color: #666666;
     font-family: "Open Sans", sans-serif;
     overflow-x: hidden;
@@ -64,6 +66,7 @@ p {
 
 #navbar .row{
   margin-top:25px;
+  margin-left:25px;
 }
 
 #navbar .col-lg-2{
@@ -87,22 +90,22 @@ p {
 
 #header{
   padding-top: 20px;
-  height: 92px;
-  position: fixed;
   left: 0;
   top: 0;
   right: 0;
   transition: all 0.5s;
   z-index: 997;
+  position: fixed;
 }
 
 #header.header-fixed {
   background: #1A2980;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  padding: 15px 0px 20px 0px;
-  height: 72px;
-  transition: all 0.5s;
+  padding: 10px 0px 20px 0px;
+  transition: all 0.15s;
+  position:fixed;
+  height:75px;
 }
 
 #header .connect{
@@ -114,28 +117,27 @@ p {
 
 /*----------------
   Landing css */
-body {
+#landing {
     width: 100%;
     height: 110vh;
     background: #1A2980;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    position: relative;
 }
 
 #landing p {
   color: #FFF;
-  margin-bottom: 20px;
-  padding: 0 15px;
   font-size: 20px;
 }
 
 #landing .landing-text{
-    height:calc(50% - 10px);
+    height:calc(50%);
     display:flex;
-    top:150px;
+    top:75px;
     left: 0;
     right: 0;
-    position: absolute;
+    position: relative;
     text-align:center;
     flex-direction: column;
     /*Somehow justify center vertically fml */
@@ -145,7 +147,7 @@ body {
 
 #landing .title{
   font-family: Helvetica, sans-serif;
-  font-size: 2em;
+  font-size: 3em;
   color: #FFF;
   text-align: center;
 }
@@ -164,37 +166,51 @@ body {
     color: #fff;
 }
 
-#landing h2{
-  color:#FFF;
+/*-----------------
+Dashboard CSS*/
+#dash-colocataires .dash-avatar{
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 80px;
+  vertical-align: middle;
+  align-content: center;
 }
 
-#form-join .form-div{
-  background-color: white;
-  border-radius:10px;
-  margin-top: 20px;
+#dash-colocataires{
+  margin-top: 40px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
-#form-join .form-div input{
-  margin:5px;
+.name-avatar{
+  text-align: center;
 }
 
-#form-create .form-div{
-  background-color: white;
-  border-radius:10px;
-  margin-top: 20px;
+.col-centered{
+  float: none;
+  margin: 0 auto;
 }
 
-#form-create .form-div input{
-  margin:5px;
+.hidden{
+    display:none;
 }
 
-#form-create .form-div label{
-  text-align: left;
-  margin-top: 10px;
-  margin-bottom: 0px;
-  color: #4c4c4c;
+.box-event{
+    margin: 7% auto;
+    background-color: whitesmoke;
+    height: 350px;
+    border-radius: 10px;
+    padding: 0 !important;
 }
 
-.button-coloc{
-  margin-top: 25px;
+.box-title{
+    margin-top:10px;
+    text-align:center;
+    color:#000;
+    font-family: "Open Sans", sans-serif;
+}
+
+#topDivPush {
+    height: 92px;
+    width: 100%;
 }
