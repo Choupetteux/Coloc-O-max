@@ -239,6 +239,10 @@ $p->appendJS(<<<JS
     $("#create-btn").click(function(){
         $("#form-create").toggle();
     });
+
+    $("#join-btn").click(function(){
+      $("#form-join").toggle();
+    });
   })
 JS
 );

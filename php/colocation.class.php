@@ -1,6 +1,7 @@
 <?php
 
 require_once 'myPDO.mysql.colocomax.home.php';
+require_once 'utilisateurs.class.php';
 
 Class Colocation{
 
@@ -100,5 +101,21 @@ Class Colocation{
 		return $this->colocation_pass;
 	}
 
+	//Retourne l'instance utilisateur du créateur de la colocation.
+	public function getColocationCreator(){
+		return Utilisateur::getUtilisateurFromID($this->colocation_creator);
+	}
+
+	//Retourne un array contenant chaque colocataire
+	public function getListeColocataire(){
+		$PDO = myPdo::getInstance()->prepare(
+			"SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, colocation_id
+			FROM Utilisateurs
+			WHERE colocation_id = ?");
+		$PDO->setFetchMode(PDO::FETCH_CLASS, "Utilisateur");
+		$PDO->execute(array($this->colocation_id));
+		$colocataires = $PDO->fetchAll();
+		return $colocataires;
+	}
 
 }

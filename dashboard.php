@@ -17,7 +17,7 @@ $p = new WebPage($loggedin, "ColocOmax") ;
 
 $p->setTitle('ColocOmax') ;
 
-$p->appendCssUrl("css/style.css") ;
+$p->appendCssUrl("css/style-dash.css") ;
 
 /*
 $p->appendCSS(<<<CSS
@@ -61,18 +61,47 @@ $p->appendToHead(<<<HTML
   <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
 HTML
 );
+//Liste colocataires
 
 //Ajoute le premier tag du div landing
 $p->appendContent(<<<HTML
 <div id="landing">
+  <div id="dash-colocataires" class="row">
 HTML
 );
 
 //Insérer la page ici
+if(is_null($_SESSION['user']->getColocation())){
 
-
+}
+else{ 
+  $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+  foreach($colocataires as $key => $coloc){
+    $p->appendContent(<<<HTML
+      <div class="col-lg-1 col-centered">
+        <img class="img-fluid dash-avatar" id="avatar-{$key}" src="img/lily.jpg"><a href=#></a></img>
+        <p class="name-avatar hidden" id="name-{$key}">{$coloc->getPseudo()}</p>
+      </div>
+HTML
+  );
+    $p->appendJs(<<<JS
+      $(document).ready(function() { 
+        $("#avatar-{$key}").on({
+          mouseenter: function () {
+              $("#name-{$key}").fadeIn(500).removeClass("hidden")
+          },
+          mouseleave: function () {
+              $("#name-{$key}").fadeOut(500).addClass("hidden");
+          }
+        });
+      });
+JS
+    );
+  }
+}
 //Fin de tag du div landing
 $p->appendContent(<<<HTML
+  </div>
 </div>
 HTML
 );
@@ -91,6 +120,22 @@ $p->appendJS(<<<JS
       break;
     }
     
+
+    $(window).scroll(function() {
+    if ($(this).scrollTop() > 50) {
+      $('.back-to-top').fadeIn('slow');
+      $('#header').addClass('header-fixed');
+    } else {
+      $('.back-to-top').fadeOut('slow');
+      $('#header').removeClass('header-fixed');
+    }
+    });
+    $('.back-to-top').click(function() {
+      $('html, body').animate({
+        scrollTop: 0
+      }, 1500, 'easeInOutExpo');
+      return false;
+    });
   })
 JS
 );

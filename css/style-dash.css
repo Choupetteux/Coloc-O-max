@@ -128,8 +128,6 @@ p {
 
 #landing p {
   color: #FFF;
-  margin-bottom: 20px;
-  padding: 0 15px;
   font-size: 20px;
 }
 
@@ -170,4 +168,32 @@ p {
 
 #landing h2{
   color:#FFF;
+}
+
+/*-----------------
+Dashboard CSS*/
+#dash-colocataires .dash-avatar{
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 80px;
+  vertical-align: middle;
+}
+
+#dash-colocataires{
+  margin-top:10%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.name-avatar{
+  text-align: center;
+}
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
+}
+
+.hidden{
+    display:none;
 }
