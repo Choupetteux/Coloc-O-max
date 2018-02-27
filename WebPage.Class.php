@@ -22,10 +22,10 @@ class WebPage {
      */
     public function __construct($loggedin, $title=null) {
         if($loggedin){
-            $this->menu = file_get_contents("assets/menu/menu_loggedin.html");
+            include_once("assets/menu/menu_loggedin.php");
         }
         else{
-            $this->menu = file_get_contents("assets/menu/menu_visiteur.html");
+            include_once("assets/menu/menu_visiteur.php");
         }
         $this->setTitle($title) ;
     }

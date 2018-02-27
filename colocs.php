@@ -37,11 +37,9 @@ if(isset($_POST['create'])){
   $_SESSION['user']->rejoindreColocation($coloc);
 }
 
-
 $p = new WebPage($loggedin, "Colocations | ColocOmax") ;
 
 $p->appendCssUrl("css/style-coloc.css") ;
-
 /*
 $p->appendCSS(<<<CSS
 
@@ -237,12 +235,6 @@ $p->appendJS(<<<JS
       $('#colocs').addClass("current-page");
       break;
     }
-    
-    $('#username').text("@{$_SESSION['user']->getPseudo()}");
-
-    $("#join-btn").click(function(){
-        $("#form-join").toggle();
-    });
 
     $("#create-btn").click(function(){
         $("#form-create").toggle();

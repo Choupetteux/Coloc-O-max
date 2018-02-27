@@ -1,3 +1,6 @@
+<?php
+
+echo(<<<HTML
 <header id="header">
     <div id="menu" class="row animated fadeIn">
         <h1 class="col-lg-3" ><a href="">Coloc'O'max</a></h1>
@@ -7,17 +10,20 @@
                 <h3 id="depense"><a href="" class="col-lg-2">Dépenses</a></h3>
                 <h3 id="colocs"><a href="colocs.php" class="col-lg-2">Colocs</a></h3>
                 <h3 id="agenda"><a href="" class="col-lg-2">Agenda</a></h3>
-                <h3 id="parametres"><a href="" class="col-lg-2">Paramètres</a></h3>
             </div>  
         </div>
         <div id="profile" class="col-lg-3">
-            <p id="username" class="btn dropdown-toggle" data-toggle="dropdown"></p>
+            <p id="username" class="btn dropdown-toggle" data-toggle="dropdown">{$_SESSION['user']->getPseudo()}</p>
             <img class="img-fluid" id="avatar" src="img/lily.jpg"><a href=#></a></img>
             <ul class="dropdown-menu">
-                <li><a href="#">Option 1</a></li>
+                <li><a href="profil?id=">Modifier votre profil</a></li>
                 <li><a href="#">Option 2</a></li>
                 <li><a href="deconnexion.php">Se déconnecter</a></li>
             </ul>
         </div>
     </div>
 </header>
+HTML
+            );
+
+?>

@@ -1,3 +1,6 @@
+<?php
+
+echo(<<<HTML
 <header id="header">
         <div class="row">
             <h1 class="col-lg-10" ><a href="" class="scrollto">Coloc'O'max</a></h1>
@@ -7,3 +10,7 @@
             </div>
         </div>
     </header>
+HTML
+);
+
+?>

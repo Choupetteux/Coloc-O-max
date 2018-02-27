@@ -62,13 +62,21 @@ $p->appendToHead(<<<HTML
 HTML
 );
 
+//Ajoute le premier tag du div landing
 $p->appendContent(<<<HTML
-
-
-<section id="landing">
-</section>
+<div id="landing">
 HTML
 );
+
+//Insérer la page ici
+
+
+//Fin de tag du div landing
+$p->appendContent(<<<HTML
+</div>
+HTML
+);
+
 
 $p->appendJS(<<<JS
   $(document).ready(function() { 
@@ -78,14 +86,14 @@ $p->appendJS(<<<JS
     case 'dashboard':
       $('#dashboard').addClass("current-page");
       break;
+    case 'colocs':
+      $('#colocs').addClass("current-page");
+      break;
     }
     
-    $('#username').text("@{$_SESSION['user']->getPseudo()}");
   })
 JS
 );
 
 echo $p->toHTML() ;
-
-var_dump($_SESSION['user']);
 ?>
