@@ -149,6 +149,10 @@ SQL
         return $this->pseudo;
     }
 
+    public function getId(){
+        return $this->utilisateur_id;
+    }
+
     /*PDO Request Format
     $PDO = myPdo::getInstance()->prepare(***REQUEST***);
     $PDO->execute(array($idAnn, $this->NUMMEMB, $texte));

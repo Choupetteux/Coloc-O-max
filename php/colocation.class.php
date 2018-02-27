@@ -9,6 +9,7 @@ Class Colocation{
 	private $adresse = null;
 	private $ville = null;
 	private $colocation_pass = null;
+	private $colocation_creator = null;
 
 	/*
 		Génère un code a 9 lettre séparé tout les 3 caractères par un tiret, le code est régénéré si il existe déjà.
@@ -40,7 +41,7 @@ Class Colocation{
 	*/
 	public static function getColocationFromPass($pass) {
 	$PDO = myPdo::getInstance()->prepare(
-		"SELECT colocation_id, colocation_nom, adresse, ville, colocation_pass
+		"SELECT colocation_id, colocation_nom, adresse, ville, colocation_pass, colocation_creator
 		FROM Colocations
 		WHERE colocation_pass = ?");
 	$PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
@@ -54,7 +55,7 @@ Class Colocation{
 	*/
 	public static function getColocationFromId($id) {
 		$PDO = myPdo::getInstance()->prepare(
-			"SELECT colocation_id, colocation_nom, adresse, ville, colocation_pass
+			"SELECT colocation_id, colocation_nom, adresse, ville, colocation_pass, colocation_creator
 			FROM Colocations
 			WHERE colocation_id = ?");
 		$PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
@@ -67,19 +68,19 @@ Class Colocation{
 		Créer une nouvelle colocation, si le paramètre 'adresse' est vide, la valeur NULL est assigné au champs adresse de la base de données.
 		Cette méthode utilise le code généré par la méthode statique generateColocationPass pour donner un pass à chaque colocation.
 	*/
-	public static function createNewColocation($nom, $ville, $adresse){
+	public static function createNewColocation($nom, $ville, $adresse, $idUser){
 		$pass = Colocation::generateColocationPass();
 		if(!empty($adresse)){
 			$PDO = myPdo::getInstance()->prepare(
-				"INSERT INTO Colocations (colocation_nom, adresse, ville, colocation_pass)
-				VALUES (?, ?, ?, ?)");
-			$PDO->execute(array($nom, $adresse, $ville, $pass));
+				"INSERT INTO Colocations (colocation_nom, adresse, ville, colocation_pass, colocation_creator)
+				VALUES (?, ?, ?, ?, ?)");
+			$PDO->execute(array($nom, $adresse, $ville, $pass, $idUser));
 		}
 		else{
 			$PDO = myPdo::getInstance()->prepare(
-				"INSERT INTO Colocations (colocation_nom, adresse, ville, colocation_pass)
-				VALUES (?, ?, ?, ?)");
-			$PDO->execute(array($nom, NULL, $ville, $pass));
+				"INSERT INTO Colocations (colocation_nom, adresse, ville, colocation_pass, colocation_creator)
+				VALUES (?, ?, ?, ?, ?)");
+			$PDO->execute(array($nom, NULL, $ville, $pass, $idUser));
 		}
 		return $pass;
 	}

@@ -33,7 +33,7 @@ if(isset($_POST['quit'])){
 if(isset($_POST['create'])){
   $champs = array('nom', 'ville', 'adresse');
   $newpost = array_map ( 'htmlspecialchars' , $_POST );
-  $coloc = Colocation::createNewColocation($newpost['nom'], $newpost['ville'], $newpost['adresse']);
+  $coloc = Colocation::createNewColocation($newpost['nom'], $newpost['ville'], $newpost['adresse'], $_SESSION['user']->getId());
   $_SESSION['user']->rejoindreColocation($coloc);
 }
 
