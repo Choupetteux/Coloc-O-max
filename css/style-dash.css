@@ -90,8 +90,6 @@ p {
 
 #header{
   padding-top: 20px;
-  height: 90px;
-  position: fixed;
   left: 0;
   top: 0;
   right: 0;
@@ -104,7 +102,6 @@ p {
   background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   padding: 20px 0px 20px 0px;
-  height: 90px;
   transition: all 0.5s;
 }
 
@@ -137,7 +134,7 @@ p {
     top:75px;
     left: 0;
     right: 0;
-    position: absolute;
+    position: relative;
     text-align:center;
     flex-direction: column;
     /*Somehow justify center vertically fml */
@@ -181,7 +178,7 @@ Dashboard CSS*/
 }
 
 #dash-colocataires{
-  margin-top:10%;
+  margin-top: 40px;
   margin-left: 10%;
   margin-right: 10%;
 }
@@ -197,4 +194,10 @@ Dashboard CSS*/
 
 .hidden{
     display:none;
+}
+
+.box-event{
+    margin: 7% auto;
+    background-color: wheat;
+    height: 250px;
 }

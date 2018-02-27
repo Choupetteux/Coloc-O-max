@@ -102,8 +102,24 @@ $p->appendContent(<<<HTML
 HTML
 );
 
+//Afficher les 3 blocs contenant les dépenses, activités, agenda
+$p->appendContent(<<<HTML
+<div class="row">
+  <div class="col-lg-3 box-event">
+    
+  </div>
+  <div class="col-lg-3 box-event">
+
+  </div>
+  <div class="col-lg-3 box-event">
+
+  </div>
+</div>
+HTML
+);
 
 }
+//Sinon si l'utilisateur n'as pas de colocation, afficher un message de bienvenue.
 else{
   $p->appendContent(<<<HTML
 <div class="landing-text">
