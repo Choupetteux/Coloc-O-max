@@ -82,6 +82,7 @@ SQL
             if($user){
                 if(password_verify($mdp, $user->getPass())){
                     $_SESSION['loggedin'] = true;
+                    $user->setPass();
                     $_SESSION['user'] = $user;
                     return true;
                 }
@@ -151,6 +152,10 @@ SQL
 
     public function getId(){
         return $this->utilisateur_id;
+    }
+
+    public function setPass($value = null){
+        $this->passwd = $value;
     }
 
     /*PDO Request Format
