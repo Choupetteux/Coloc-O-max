@@ -100,5 +100,10 @@ Class Colocation{
 		return $this->colocation_pass;
 	}
 
+	//Retourne une instance de l'utilisateur ayant créer la colocation
+	public function getColocationCreator(){
+		return Utilisateur::getUtilisateurFromId($this->colocation_creator);
+	}
+
 
 }
