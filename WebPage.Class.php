@@ -25,7 +25,7 @@ class WebPage {
             $this->appendContent(<<<HTML
                 <header id="header">
                     <div id="menu" class="row animated fadeIn">
-                        <h1 class="col-lg-3" ><a href="">Coloc'O'max</a></h1>
+                        <h1 class="col-lg-3" ><a href="index.php">Coloc'O'max</a></h1>
                         <div id="navbar" class="col-lg-6">
                             <div class="row">
                                 <h3 id="dashboard"><a href="dashboard.php" class="col-lg-2">Dashboard</a></h3>
@@ -36,10 +36,10 @@ class WebPage {
                         </div>
                         <div id="profile" class="col-lg-3">
                             <p id="username" class="btn dropdown-toggle" data-toggle="dropdown">{$_SESSION['user']->getPseudo()}</p>
-                            <img class="img-fluid" id="avatar" src="img/lily.jpg"><a href=#></a></img>
+                            <a href="profil?id={$_SESSION['user']->getId()}"><img class="img-fluid" id="avatar" src="img/lily.jpg"></a></img>
                             <ul class="dropdown-menu">
-                                <li><a href="profil?id=">Modifier votre profil</a></li>
-                                <li><a href="#">Option 2</a></li>
+                                <li><a href="profil?id={$_SESSION['user']->getId()}">Voir votre profil</a></li>
+                                <li><a href="#">Paramètres</a></li>
                                 <li><a href="deconnexion.php">Se déconnecter</a></li>
                             </ul>
                         </div>
