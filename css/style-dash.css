@@ -95,14 +95,17 @@ p {
   right: 0;
   transition: all 0.5s;
   z-index: 997;
+  position: fixed;
 }
 
 #header.header-fixed {
   background: #1A2980;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  padding: 20px 0px 20px 0px;
-  transition: all 0.5s;
+  padding: 10px 0px 20px 0px;
+  transition: all 0.15s;
+  position:fixed;
+  height:75px;
 }
 
 #header .connect{
@@ -163,10 +166,6 @@ p {
     color: #fff;
 }
 
-#landing h2{
-  color:#FFF;
-}
-
 /*-----------------
 Dashboard CSS*/
 #dash-colocataires .dash-avatar{
@@ -198,6 +197,20 @@ Dashboard CSS*/
 
 .box-event{
     margin: 7% auto;
-    background-color: wheat;
-    height: 250px;
+    background-color: whitesmoke;
+    height: 350px;
+    border-radius: 10px;
+    padding: 0 !important;
+}
+
+.box-title{
+    margin-top:10px;
+    text-align:center;
+    color:#000;
+    font-family: "Open Sans", sans-serif;
+}
+
+#topDivPush {
+    height: 92px;
+    width: 100%;
 }

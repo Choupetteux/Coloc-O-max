@@ -76,7 +76,7 @@ HTML
     $p->appendContent(<<<HTML
       <div class="col-lg-2 col-centered text-center">
         <img class="img-fluid dash-avatar" id="avatar-{$key}" src="img/lily.jpg"><a href=#></a></img>
-        <p class="name-avatar hidden" id="name-{$key}">{$coloc->getPseudo()}</p>
+        <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
       </div>
 HTML
   );
@@ -85,11 +85,10 @@ HTML
       $(document).ready(function() { 
         $("#avatar-{$key}").on({
           mouseenter: function () {
-              $("#name-{$key}").stop(true, true);
-              $("#name-{$key}").fadeIn(200).removeClass("hidden")
+              $("#name-{$key}").stop(true, true).fadeTo(200, 1);
           },
           mouseleave: function () {
-              $("#name-{$key}").fadeOut(200).addClass("hidden");
+              $("#name-{$key}").fadeTo(200, 0);
           }
         });
       });
@@ -106,13 +105,16 @@ HTML
 $p->appendContent(<<<HTML
 <div class="row">
   <div class="col-lg-3 box-event">
-    
+    <h2 class="box-title">Dépenses</h2>
+    <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
   </div>
   <div class="col-lg-3 box-event">
-
+    <h2 class="box-title">Activités</h2>
+    <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
   </div>
   <div class="col-lg-3 box-event">
-
+    <h2 class="box-title">Agenda</h2>
+    <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
   </div>
 </div>
 HTML

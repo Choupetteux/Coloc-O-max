@@ -45,11 +45,13 @@ class WebPage {
                         </div>
                      </div>
                 </header>
+                <div id=topDivPush></div>
 HTML
             );
         }
         else{
             $this->appendContent(<<<HTML
+                
                 <header id="header">
                         <div class="row">
                             <h1 class="col-lg-10" ><a href="" class="scrollto">Coloc'O'max</a></h1>
@@ -59,6 +61,7 @@ HTML
                             </div>
                         </div>
                 </header>
+                <div id=topDivPush></div>
 HTML
             );
         }
