@@ -22,11 +22,47 @@ class WebPage {
      */
     public function __construct($loggedin, $title=null) {
         if($loggedin){
-            include_once("assets/menu/menu_loggedin.php");
+            $this->appendContent(<<<HTML
+                <header id="header">
+                    <div id="menu" class="row animated fadeIn">
+                        <h1 class="col-lg-3" ><a href="">Coloc'O'max</a></h1>
+                        <div id="navbar" class="col-lg-6">
+                            <div class="row">
+                                <h3 id="dashboard"><a href="dashboard.php" class="col-lg-2">Dashboard</a></h3>
+                                <h3 id="depense"><a href="" class="col-lg-2">Dépenses</a></h3>
+                                <h3 id="colocs"><a href="colocs.php" class="col-lg-2">Colocs</a></h3>
+                                <h3 id="agenda"><a href="" class="col-lg-2">Agenda</a></h3>
+                            </div>  
+                        </div>
+                        <div id="profile" class="col-lg-3">
+                            <p id="username" class="btn dropdown-toggle" data-toggle="dropdown">{$_SESSION['user']->getPseudo()}</p>
+                            <img class="img-fluid" id="avatar" src="img/lily.jpg"><a href=#></a></img>
+                            <ul class="dropdown-menu">
+                                <li><a href="profil?id=">Modifier votre profil</a></li>
+                                <li><a href="#">Option 2</a></li>
+                                <li><a href="deconnexion.php">Se déconnecter</a></li>
+                            </ul>
+                        </div>
+                     </div>
+                </header>
+HTML
+            );
         }
         else{
-            include_once("assets/menu/menu_visiteur.php");
+            $this->appendContent(<<<HTML
+                <header id="header">
+                        <div class="row">
+                            <h1 class="col-lg-10" ><a href="" class="scrollto">Coloc'O'max</a></h1>
+                            <div id="profile" class="col-lg-2">
+                                <p id="username"><a class="connect" href='connexion.php'>Se connecter</a></p>
+                                <img class="img-fluid" id="avatar" src="img/blank-user.png"><a href=#></a></img>
+                            </div>
+                        </div>
+                </header>
+HTML
+            );
         }
+
         $this->setTitle($title) ;
     }
 
@@ -182,7 +218,7 @@ HTML
 {$this->head($var=null)}
     </head>
     <body>
-        <div>
+        <div id="landing">
         {$this->menu()}
         {$this->body()}
         </div>

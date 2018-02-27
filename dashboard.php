@@ -64,47 +64,72 @@ HTML
 //Liste colocataires
 
 //Ajoute le premier tag du div landing
+if($_SESSION['user']->hasColocation()){
 $p->appendContent(<<<HTML
-<div id="landing">
-  <div id="dash-colocataires" class="row">
+<div id="dash-colocataires" class="row">
 HTML
 );
 
-//Insérer la page ici
-if(is_null($_SESSION['user']->getColocation())){
-
-}
-else{ 
+//Création du html affichant chaque colocataire et le script jquery associé
   $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
   foreach($colocataires as $key => $coloc){
     $p->appendContent(<<<HTML
-      <div class="col-lg-1 col-centered">
+      <div class="col-lg-2 col-centered text-center">
         <img class="img-fluid dash-avatar" id="avatar-{$key}" src="img/lily.jpg"><a href=#></a></img>
         <p class="name-avatar hidden" id="name-{$key}">{$coloc->getPseudo()}</p>
       </div>
 HTML
   );
+    //Append le Jquery pour afficher le pseudo on hover pour chaque bloc de colocataire
     $p->appendJs(<<<JS
       $(document).ready(function() { 
         $("#avatar-{$key}").on({
           mouseenter: function () {
-              $("#name-{$key}").fadeIn(500).removeClass("hidden")
+              $("#name-{$key}").stop(true, true);
+              $("#name-{$key}").fadeIn(200).removeClass("hidden")
           },
           mouseleave: function () {
-              $("#name-{$key}").fadeOut(500).addClass("hidden");
+              $("#name-{$key}").fadeOut(200).addClass("hidden");
           }
         });
       });
 JS
     );
-  }
 }
 //Fin de tag du div landing
 $p->appendContent(<<<HTML
-  </div>
 </div>
 HTML
 );
+
+
+}
+else{
+  $p->appendContent(<<<HTML
+<div class="landing-text">
+    <div class="row">
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-6">
+            <h1 class="title animated zoomIn">Vous n'êtes pas dans une colocation !</h1>
+            <p class="animated zoomIn">Rejoignez celle de vos colocataires, ou alors créez la votre et partagez la.</p>
+            <a href="colocs.php" class="btn-sign-up">Créer ou rejoindre une colocation</a>
+        </div>
+
+        <div class="col-lg-3"></div>   
+    </div> 
+</div>
+<div class="landing-img">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8"></div>
+        <div class="col-lg-2"></div>
+    </div>
+</div>
+
+HTML
+);
+}
 
 
 $p->appendJS(<<<JS

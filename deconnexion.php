@@ -60,7 +60,6 @@ HTML
 );
 
 $p->appendContent(<<<HTML
- <section id="landing">
 <div class="landing-text">
     <div class="row">
         <div class="col-lg-3"></div>
@@ -74,7 +73,6 @@ $p->appendContent(<<<HTML
         <div class="col-lg-3"></div>   
     </div> 
 </div>
-</section>
 HTML
 );
 

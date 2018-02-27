@@ -132,9 +132,9 @@ p {
 }
 
 #landing .landing-text{
-    height:calc(50% - 60px);
+    height:calc(50%);
     display:flex;
-    top:50px;
+    top:75px;
     left: 0;
     right: 0;
     position: absolute;
@@ -147,7 +147,7 @@ p {
 
 #landing .title{
   font-family: Helvetica, sans-serif;
-  font-size: 4em;
+  font-size: 3em;
   color: #FFF;
   text-align: center;
 }
@@ -177,6 +177,7 @@ Dashboard CSS*/
   border-radius: 50%;
   width: 80px;
   vertical-align: middle;
+  align-content: center;
 }
 
 #dash-colocataires{

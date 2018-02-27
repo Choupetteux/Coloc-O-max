@@ -86,8 +86,6 @@ HTML
 
 if($_SESSION['user']->hasColocation()){
   $p->appendContent(<<<HTML
- 
-  <section id="landing">
     <div class="landing-text">
       <div class="row">
           <div class="col-lg-3"></div>
@@ -100,7 +98,7 @@ if($_SESSION['user']->hasColocation()){
   
           <div class="col-lg-3"></div>   
       </div>
-      <div class="row">
+      <div class="row button-coloc">
         <div class="col-lg-1"></div>
         <div class="col-lg-5">
           <button type="button" id="create-btn" class="btn btn-success btn-lg btn-block">Partager votre code colocation</button>
@@ -141,7 +139,6 @@ if($_SESSION['user']->hasColocation()){
   </div>
   </div>
     </div>
-  </section>
 
 HTML
 );
@@ -150,20 +147,19 @@ HTML
 else{
 $p->appendContent(<<<HTML
  
-<section id="landing">
   <div class="landing-text">
     <div class="row">
         <div class="col-lg-3"></div>
 
         <div class="col-lg-6">
-            <h3 class="title">Il semblerait que vous n'ayez pas encore enregistré dans une colocation ! </h3>
+            <h3 class="title">Il semblerait que vous ne soyez pas encore enregistré dans une colocation ! </h3>
             <p> Vous pouvez en rejoindre une ou une créez une, faites votre choix.</p>
 
         </div>
 
         <div class="col-lg-3"></div>   
     </div>
-    <div class="row">
+    <div class="row button-coloc">
       <div class="col-lg-1"></div>
       <div class="col-lg-5">
         <button type="button" id="create-btn" class="btn btn-primary btn-lg btn-block">Créer une colocation</button>
@@ -217,7 +213,6 @@ $p->appendContent(<<<HTML
 </div>
 </div>
   </div>
-</section>
 
 HTML
 );
