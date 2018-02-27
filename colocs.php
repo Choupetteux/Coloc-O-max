@@ -105,7 +105,7 @@ if($_SESSION['user']->hasColocation()){
       <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-5">
-          <button type="button" id="create-btn" class="btn btn-primary btn-lg btn-block">Créer une colocation</button>
+          <button type="button" id="create-btn" class="btn btn-success btn-lg btn-block">Partager votre code colocation</button>
         </div>
         <div class="col-lg-5">
           <button type="button" id="join-btn" class="btn btn-danger btn-lg btn-block">Quitter votre colocation</button>
@@ -121,19 +121,8 @@ if($_SESSION['user']->hasColocation()){
       <div id="form-create" style="display:none;" class="row">
         <div class="col-xs-2 col-lg-4"></div>
           <div class="col-xs-8 col-lg-4 form-div animated flipInX">
-              <form id="form-create" method="post">
-                  <label for="nom">Nom de la colocation*</label><br>
-                  <input name="nom" id="nom" type="text" required>
-                  <br>
-                  <label for="ville">Ville*</label><br>
-                  <input name="ville" id="ville" type="text" required>
-                  <br>
-                  <label for="ville">Adresse</label><br>
-                  <input name="ville" id="ville" type="text" required>
-                  <br>
-                  <input class="btn btn-primary" name="join" type="submit" value="Créer">
-                  <br>
-                  </form>
+                  <label for="code">Code colocation :</label><br>
+                  <input style="text-align:center;" name="code" id="code" type="text" value="{$_SESSION['user']->getColocation()->getColocationPass()}">
               </div>
           <div class="col-xs-2 col-lg-5"></div>
       </div>
@@ -144,7 +133,7 @@ if($_SESSION['user']->hasColocation()){
           <div class="col-xs-2 col-lg-4"></div>
             <div class="col-xs-8 col-lg-4 form-div animated flipInX">
                 <form id="form-join" method="post">
-                    <label for="code">Êtes-vous sûr de vouloir quitter votre colocation ?</label><br>
+                    <label for="quit">Êtes-vous sûr de vouloir quitter votre colocation ?</label><br>
                     <input class="btn btn-danger" name="quit" type="submit" value="Quitter la colocation">
                     <br>
                     </form>

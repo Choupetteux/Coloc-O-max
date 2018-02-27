@@ -1,6 +1,6 @@
 <?php
 
-require_once 'myPDO.mysql.colocomax.php';
+require_once 'myPDO.mysql.colocomax.home.php';
 
 Class Colocation{
 
@@ -92,6 +92,11 @@ Class Colocation{
 	//Retourne le nom de la colocation.
 	public function getColocationNom(){
 		return $this->colocation_nom;
+	}
+
+	//Retourne le pass de la colocation.
+	public function getColocationPass(){
+		return $this->colocation_pass;
 	}
 
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'myPDO.mysql.colocomax.php';
+require_once 'myPDO.mysql.colocomax.home.php';
 
 
 Class Utilisateur{
