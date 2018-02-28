@@ -83,7 +83,7 @@ $p->appendContent(<<<HTML
     <input type="text" id="pseudo" readonly class="form-control-plaintext" value="{$_SESSION['user']->getPseudo()}">
     <hr/>
     <label class="form-label">Votre photo de profil :</label>
-    <form method='POST' action='php/form-action/change-profile.php' enctype='multipart/form-data'>
+    <form method='POST' action='php/form-action/change-profile.php' enctype='multipart/form-data' target="resultForm">
         <img class="avatar" src="{$_SESSION['user']->getAvatarPath()}"/>
         <label for="pic" class="label-file" id="label-pic">Changer votre photo</label>
         <input type='file' name='pic' id='pic'/>
@@ -132,7 +132,7 @@ $p->appendContent(<<<HTML
             <label class="form-check-label" for="inlineRadio3">Autre</label>
         </div>
         <small id="genderHelpBlock" class="form-text text-muted"> Vous pourrez changez ce paramètres à tout moment.</small>
-        <br/>
+        <iframe name="resultForm" frameborder="0" border="0" cellspacing="0"style="border-style: none;width: 100%; height: 2.5em;"></iframe>
         <input class="btn btn-primary float-right" type='submit' name='save' value="Enregistrer les paramètres">
     </form>
   </section>

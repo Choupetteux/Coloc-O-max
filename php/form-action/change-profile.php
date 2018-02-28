@@ -27,11 +27,11 @@ if (file_exists($_FILES['pic']['tmp_name']) || is_uploaded_file($_FILES['pic']['
         //Vérifie si l'utilisateur à déjà une photo de profil
         $alreadyHasPic = $_SESSION['user']->getAvatar() != "placeholder.jpg";
         if($_FILES['pic']['size'] < 2000000){
-            $namefile = hash('sha256', openssl_random_pseudo_bytes(8)) . $type;
+            $namefile = hash('sha256', openssl_random_pseudo_bytes(8)) . "." . $type;
             $target_file = "../../assets/uploaded_avatar/" . $namefile;
             if (move_uploaded_file($_FILES["pic"]["tmp_name"], $target_file)) {
                 if($alreadyHasPic){
-                    $unlink("../../assets/uploaded_avatar/" . $_SESSION['user']->getAvatar());
+                    unlink("../../assets/uploaded_avatar/" . $_SESSION['user']->getAvatar());
                 }
                 $PDO = myPdo::getInstance()->prepare(
                     "UPDATE Utilisateurs
@@ -40,19 +40,19 @@ if (file_exists($_FILES['pic']['tmp_name']) || is_uploaded_file($_FILES['pic']['
                 );
                 $PDO->execute(array($namefile, $_SESSION['user']->getId()));
                 $_SESSION['user']->setAvatar($namefile);
-                echo "Votre photo de profil a été mise à jour.";
+                echo "<p> Votre photo à été mise à jour avec succès !</p>";
             } else {
-                echo "Sorry, there was an error uploading your file.";
+                echo "<p>Désolé, il y a eu un problème pendant l'envoi de votre image.</p>";
             }
         }
         else{
             //Echo trop gros
-            echo "trop gros";
+            echo "<p>Votre image est trop volumineuse.</p>";
         }
     }
     else{
         //Votre image n'est pas valide (REDIRECTION ? ECHO HTML ?)
-        echo "Votre image n'est pas valide";
+        echo "<p>Votre image n'est pas valide.</p>";
     }
 }
 

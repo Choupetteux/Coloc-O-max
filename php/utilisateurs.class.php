@@ -169,6 +169,27 @@ SQL
         $this->avatar = $name;
     }
 
+    public function setSexe($sex){
+        $this->sexe = $sex;
+        $PDO = myPdo::getInstance()->prepare(
+            "UPDATE Utilisateurs
+            set sexe = ?
+            WHERE utilisateur_id = ?"
+        );
+        $PDO->execute(array($sex, $this->utilisateur_id));
+    }
+
+    public function setDateDeNaissance($jourNais, $moisNais, $anneeNais){
+        $this->date_de_naissance = $jourNais . "/" . $moisNais . "/" . $anneeNais;
+        $PDO = myPdo::getInstance()->prepare(
+            "UPDATE Utilisateurs
+            set date_de_naissance = STR_TO_DATE(?, '%d/%m/%Y')
+            WHERE utilisateur_id = ?"
+        );
+        $PDO->execute(array($this->date_de_naissance, $this->utilisateur_id));
+        $this->colocation_id = null;
+    }
+
     public function getAvatarPath(){
         return "assets/uploaded_avatar/" . $this->avatar;
     }
