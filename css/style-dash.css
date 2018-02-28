@@ -121,7 +121,7 @@ Dashboard event CSS*/
 .box-event{
     margin: 7% auto;
     background-color: #f2f3eb;
-    height: 350px;
+    height:50vh;
     border-radius: 10px;
     -webkit-box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
     -moz-box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
