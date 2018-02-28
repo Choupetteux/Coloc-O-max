@@ -156,7 +156,7 @@ else{
 
         <div class="col-lg-6">
             <h1 class="title animated zoomIn">Vous n'êtes pas dans une colocation !</h1>
-            <p class="animated zoomIn">Rejoignez celle de vos colocataires, ou alors créez la votre et partagez la.</p>
+            <p style="color:#FFF;" class="animated zoomIn">Rejoignez celle de vos colocataires, ou alors créez la votre et partagez la.</p>
             <a href="colocs.php" class="btn-sign-up">Créer ou rejoindre une colocation</a>
         </div>
 

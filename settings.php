@@ -2,6 +2,7 @@
 
 require_once 'php/utilisateurs.class.php';
 require_once 'php/colocation.class.php';
+require_once 'php/ImageManipulator.class.php';
 
 require_once 'WebPage.Class.php' ;
 require_once 'php/session.class.php' ;
@@ -15,6 +16,80 @@ $loggedin = isset($_SESSION['loggedin']);
 if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
+
+//===================================================================
+//================== Gestion du formulaire profile ==================
+//===================================================================
+//Si la partie date de naissance est remplie.
+if(isset($_POST['save'])){
+    if(isset($_POST['jourNais']) && isset($_POST['moisNais']) && isset($_POST['anneeNais'])){
+        $jourNais = htmlspecialchars($_POST['jourNais']);
+        $moisNais = htmlspecialchars($_POST['moisNais']);
+        $anneeNais = htmlspecialchars($_POST['anneeNais']);
+        $_SESSION['user']->setDateDeNaissance($jourNais, $moisNais, $anneeNais);
+    }
+
+    //Si la partie Genre est remplie.
+    if(isset($_POST['gender'])){
+        $gender = htmlspecialchars($_POST['gender']);
+        $_SESSION['user']->setSexe($gender);
+    }
+
+    //Si un fichier à été envoyé
+    if (file_exists($_FILES['pic']['tmp_name']) || is_uploaded_file($_FILES['pic']['tmp_name'])) {
+        $type = explode("/", mime_content_type($_FILES['pic']['tmp_name']))[1];
+        if($type == "jpg" || $type == "jpeg" || $type == "png"){
+            //Upload
+            //Vérifie si l'utilisateur à déjà une photo de profil
+            $alreadyHasPic = $_SESSION['user']->getAvatar() != "placeholder.jpg";
+            if($_FILES['pic']['size'] < 2000000){
+                $namefile = hash('sha256', openssl_random_pseudo_bytes(8)) . "." . $type;
+                $target_file = "assets/uploaded_avatar/" . $namefile;
+                $manipulator = new ImageManipulator($_FILES['pic']['tmp_name']);
+                $width  = $manipulator->getWidth();
+                $height = $manipulator->getHeight();
+                $centreX = round($width / 2);
+                $centreY = round($height / 2);
+                // Les dimensions doivent être égale en largeur et hauteur
+                if($width > $height){
+                    $diff = $width - $height;
+                    $diff = $diff / 2;
+                    $y1 = $centreY - $centreY;
+                    $y2 = $centreY + $centreY;
+                    $x1 = $centreX - $centreX + $diff;
+                    $x2 = $centreX + $centreX - $diff;
+                }
+                elseif($height > $width){
+                    $diff = $height - $width;
+                    $diff = $diff / 2;
+                    $x1 = $centreX - $centreX;
+                    $x2 = $centreX + $centreX;
+                    $y1 = $centreY - $centreY + $diff;
+                    $y2 = $centreY + $centreY - $diff;
+                }
+                //Crop automatiquement pour faire un carré
+                $manipulator = $manipulator->crop($x1, $y1, $x2, $y2);
+                $manipulator->save("assets/uploaded_avatar/" . $namefile);
+                if($alreadyHasPic){
+                    unlink("assets/uploaded_avatar/" . $_SESSION['user']->getAvatar());
+                }
+                $_SESSION['user']->setAvatar($namefile);
+                echo "<p> Votre photo à été mise à jour avec succès !</p>";
+            }
+            else{
+                //Echo trop gros
+                echo "<p>Votre image est trop volumineuse.</p>";
+            }
+        }
+        else{
+            //Votre image n'est pas valide (REDIRECTION ? ECHO HTML ?)
+            echo "<p>Votre image n'est pas valide.</p>";
+        }
+    }
+}
+//===================================================================
+//=============== Fin Gestion du formulaire profil ==================
+//===================================================================
 
 $p = new WebPage($loggedin, "Paramètres | ColocOmax") ;
 
@@ -83,7 +158,7 @@ $p->appendContent(<<<HTML
     <input type="text" id="pseudo" readonly class="form-control-plaintext" value="{$_SESSION['user']->getPseudo()}">
     <hr/>
     <label class="form-label">Votre photo de profil :</label>
-    <form method='POST' action='php/form-action/change-profile.php' enctype='multipart/form-data' target="resultForm">
+    <form method='POST' enctype='multipart/form-data'>
         <img class="avatar" src="{$_SESSION['user']->getAvatarPath()}"/>
         <label for="pic" class="label-file" id="label-pic">Changer votre photo</label>
         <input type='file' name='pic' id='pic'/>
@@ -132,7 +207,6 @@ $p->appendContent(<<<HTML
             <label class="form-check-label" for="inlineRadio3">Autre</label>
         </div>
         <small id="genderHelpBlock" class="form-text text-muted"> Vous pourrez changez ce paramètres à tout moment.</small>
-        <iframe name="resultForm" frameborder="0" border="0" cellspacing="0"style="border-style: none;width: 100%; height: 2.5em;"></iframe>
         <input class="btn btn-primary float-right" type='submit' name='save' value="Enregistrer les paramètres">
     </form>
   </section>

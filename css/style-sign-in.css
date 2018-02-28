@@ -1,25 +1,3 @@
-body {
-    background: #fff;
-    color: #666666;
-    font-family: "Open Sans", sans-serif;
-    overflow-x: hidden;
-  }
-
-a {
-    color: #1dc8cd;
-    transition: 0.5s;
-}
-  
-a:hover, a:active, a:focus {
-    color: #1dc9ce;
-    outline: none;
-    text-decoration: none;
-}
-  
-p {
-    padding: 0;
-    margin: 0 0 30px 0;
-}
 
 /*----------------
   Header css  */
@@ -74,7 +52,6 @@ header .header-fixed {
   Landing css */
 #sign-in {
     width: 100%;
-    height: 110vh;
     background: #1A2980;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -89,7 +66,6 @@ header .header-fixed {
 }
 
 #sign-in .landing-text{
-    height:calc(25% - 60px);
     display:flex;
     top:50px;
     left: 0;
@@ -113,7 +89,7 @@ header .header-fixed {
 #sign-in .form-div{
     border-radius: 5px;
     background-color: #e2e0e0;
-    margin-top: 150px;
+    margin-top: 90px;
     display:flex;
     top:50px;
     left: 0;

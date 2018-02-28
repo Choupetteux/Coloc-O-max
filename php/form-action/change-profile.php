@@ -33,12 +33,6 @@ if (file_exists($_FILES['pic']['tmp_name']) || is_uploaded_file($_FILES['pic']['
                 if($alreadyHasPic){
                     unlink("../../assets/uploaded_avatar/" . $_SESSION['user']->getAvatar());
                 }
-                $PDO = myPdo::getInstance()->prepare(
-                    "UPDATE Utilisateurs
-                    set avatar = ?
-                    WHERE utilisateur_id = ?"
-                );
-                $PDO->execute(array($namefile, $_SESSION['user']->getId()));
                 $_SESSION['user']->setAvatar($namefile);
                 echo "<p> Votre photo à été mise à jour avec succès !</p>";
             } else {

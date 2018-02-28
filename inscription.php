@@ -139,6 +139,22 @@ $p->appendJs(<<<JS
   $(document).ready(function() { 
     $("#header").hide();
   })
+
+  $(window).scroll(function() {
+    if ($(this).scrollTop() > 50) {
+      $('.back-to-top').fadeIn('slow');
+      $('#banner').addClass('header-fixed');
+    } else {
+      $('.back-to-top').fadeOut('slow');
+      $('#banner').removeClass('header-fixed');
+    }
+    });
+    $('.back-to-top').click(function() {
+      $('html, body').animate({
+        scrollTop: 0
+      }, 1500, 'easeInOutExpo');
+      return false;
+    });
 JS
 );
 

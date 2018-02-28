@@ -167,6 +167,12 @@ SQL
 
     public function setAvatar($name){
         $this->avatar = $name;
+        $PDO = myPdo::getInstance()->prepare(
+            "UPDATE Utilisateurs
+            set avatar = ?
+            WHERE utilisateur_id = ?"
+        );
+        $PDO->execute(array($name, $this->utilisateur_id));
     }
 
     public function setSexe($sex){

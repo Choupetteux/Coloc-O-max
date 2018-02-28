@@ -14,7 +14,8 @@ $p = new WebPage($loggedin, "Connexion | ColocOmax") ;
 
 $p->setTitle('Connexion | ColocOmax') ;
 
-$p->appendCssUrl("css/style-sign-in.css") ;
+$p->appendCssUrl("css/general-style.css");
+$p->appendCssUrl("css/style-sign-in.css");
 
 /*
 $p->appendCSS(<<<CSS
