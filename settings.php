@@ -70,21 +70,71 @@ $p->appendContent(<<<HTML
 <main>
   
   <input id="tab1" type="radio" name="tabs" checked>
-  <label for="tab1">Profil</label>
+  <label class="tab" for="tab1">Profil</label>
     
   <input id="tab2" type="radio" name="tabs">
-  <label for="tab2">Confidentialité</label>
+  <label class="tab" for="tab2">Confidentialité</label>
     
   <input id="tab3" type="radio" name="tabs">
-  <label for="tab3">Sécurité</label>
+  <label class="tab" for="tab3">Sécurité</label>
     
   <section id="content1">
-    <p>
-      Bacon ipsum dolor sit amet beef venison beef ribs kielbasa. Sausage pig leberkas, t-bone sirloin shoulder bresaola. Frankfurter rump porchetta ham. Pork belly prosciutto brisket meatloaf short ribs.
-    </p>
-    <p>
-      Brisket meatball turkey short loin boudin leberkas meatloaf chuck andouille pork loin pastrami spare ribs pancetta rump. Frankfurter corned beef beef tenderloin short loin meatloaf swine ground round venison.
-    </p>
+    <label class="form-label">Votre pseudonyme :</label>
+    <input type="text" id="pseudo" readonly class="form-control-plaintext" value="{$_SESSION['user']->getPseudo()}">
+    <hr/>
+    <label class="form-label">Votre photo de profil :</label>
+    <form method='POST' action='php/form-action/change-profile.php' enctype='multipart/form-data'>
+        <img class="avatar" src="{$_SESSION['user']->getAvatarPath()}"/>
+        <label for="pic" class="label-file" id="label-pic">Changer votre photo</label>
+        <input type='file' name='pic' id='pic'/>
+        <small id="photoHelpBlock" class="form-text text-muted"> Votre image ne doit pas dépassez 2Mo et doit être envoyé en format JPG, JPEG ou PNG.</small>
+        <hr/>
+        <label class="form-label" for="dateNaiss">Votre date de naissance :</label>
+        <br/>
+        <div class="form-row">
+            <div class="col-lg-2">
+                <input id="jourNais" class="form-control dateNais" type="text" name="jourNais" placeholder="Jour" pattern="[0-9]{1,2}">
+            </div>
+            <div class="col-lg-3">
+                <select id="moisNais" class="dateNais custom-select" name="moisNais" value="">
+                    <option value="" disabled selected> - Mois - </option>
+                    <option value="01">Janvier</option>
+                    <option value="02">Février</option>
+                    <option value="03">Mars</option>
+                    <option value="04">Avril</option>
+                    <option value="05">Mai</option>
+                    <option value="06">Juin</option>
+                    <option value="07">Juillet</option>
+                    <option value="08">Août</option>
+                    <option value="09">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Decembre</option>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <input id="anneeNais" class="form-control dateNais" type="text" name="anneeNais" placeholder="Année" pattern="(?:19|20)[0-9]{2}">
+            </div>
+        </div>
+        <hr/>
+        <label class="form-label" for="gender">Votre genre :</label>
+        <br/>
+        <div class="form-check form-check-inline">
+            <input class="form-input form-check-input" type="radio" name="gender" id="gender-M" value="M">
+            <label class="form-check-label" for="inlineRadio1">Masculin</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-input form-check-input" type="radio" name="gender" id="gender-F" value="F">
+            <label class="form-check-label" for="inlineRadio2">Féminin</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-input form-check-input" type="radio" name="gender" id="gender-A" value="A">
+            <label class="form-check-label" for="inlineRadio3">Autre</label>
+        </div>
+        <small id="genderHelpBlock" class="form-text text-muted"> Vous pourrez changez ce paramètres à tout moment.</small>
+        <br/>
+        <input class="btn btn-primary float-right" type='submit' name='save' value="Enregistrer les paramètres">
+    </form>
   </section>
     
   <section id="content2">
@@ -130,12 +180,19 @@ $p->appendJS(<<<JS
       $('#header').removeClass('header-fixed');
     }
     });
+
     $('.back-to-top').click(function() {
       $('html, body').animate({
         scrollTop: 0
       }, 1500, 'easeInOutExpo');
       return false;
     });
+
+    $("#pic").change(function (){
+        $("#label-pic").empty();
+        $("#label-pic").append("Votre photo est prête à être envoyée  ")
+        $("#label-pic").addClass("label-pic");
+     });
   })
 JS
 );

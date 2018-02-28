@@ -13,8 +13,8 @@ p {
 
 main {
   min-width: 320px;
-  max-width: 800px;
-  padding: 30px 50px 30px 50px;
+  max-width: 700px;
+  padding: 30px 50px 50px 50px;
   margin: 5% auto;
   background: #fff;
   border-radius: 15px;
@@ -27,10 +27,19 @@ section {
 }
 
 input {
-  display: none;
+    display: none;
 }
 
-label {
+.form-label{
+display: inline-block;
+  margin: 0 0 -1px;
+  font-weight: 600;
+  text-align: center;
+  color: #555;
+  border: 1px solid transparent;
+}
+
+.tab{
   display: inline-block;
   margin: 0 0 -1px;
   padding: 15px 25px;
@@ -40,34 +49,39 @@ label {
   border: 1px solid transparent;
 }
 
-label:before {
+.tab:before {
   font-family: fontawesome;
   font-weight: normal;
   margin-right: 10px;
 }
 
-label[for*='1']:before {
+.tab[for*='1']:before {
   content: '\f007';
 }
 
-label[for*='2']:before {
+.tab[for*='2']:before {
   content: "\f023";
 }
 
-label[for*='3']:before {
+.tab[for*='3']:before {
   content: '\f132';
 }
 
-label[for*='4']:before {
+.tab[for*='4']:before {
   content: '\f1a9';
 }
 
-label:hover {
+.tab:hover {
   color: #888;
   cursor: pointer;
 }
 
-input:checked + label {
+.label-pic:after{
+    font-family: fontawesome;
+    content: '\f00c';
+}
+
+input:checked + .tab {
   color: #555;
   border: 1px solid #ddd;
   border-top: 2px solid orange;
@@ -95,4 +109,30 @@ input:checked + label {
   label {
     padding: 15px;
   }
+}
+
+.label-file {
+    cursor: pointer;
+    color: #00b1ca;
+    font-weight: bold;
+    margin-left:5px;
+}
+.label-file:hover {
+    color: #25a5c4;
+}
+
+.avatar{
+    margin: 0 auto;
+    border-radius: 50%;
+    width: 50px;
+    vertical-align: middle;
+    align-content: center;
+}
+
+.form-input{
+    display: inherit;
+}
+
+#pseudo{
+    font-family: "Open Sans", sans-serif;
 }

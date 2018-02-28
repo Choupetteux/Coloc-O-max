@@ -36,7 +36,7 @@ class WebPage {
                         </div>
                         <div id="profile" class="col-lg-3">
                             <p id="username" class="btn dropdown-toggle" data-toggle="dropdown">{$_SESSION['user']->getPseudo()}</p>
-                            <a href="profil?id={$_SESSION['user']->getId()}"><img class="img-fluid" id="avatar" src="img/lily.jpg"></a></img>
+                            <a href="profil?id={$_SESSION['user']->getId()}"><img class="img-fluid" id="avatar" src="{$_SESSION['user']->getAvatarPath()}"></a></img>
                             <ul class="dropdown-menu" style="margin-left:10px;">
                                 <li class="dropdown-item"><a class="dropdown-link" href="profil?id={$_SESSION['user']->getId()}">Voir votre profil</a></li>
                                 <li class="dropdown-item"><a class="dropdown-link" href="settings.php">Paramètres</a></li>
@@ -57,7 +57,7 @@ HTML
                             <h1 class="col-lg-9" ><a href="" class="scrollto">Coloc'O'max</a></h1>
                             <div id="profile" class="col-lg-3">
                                 <p id="username"><a class="connect" href='connexion.php'>Se connecter</a></p>
-                                <img class="img-fluid" id="avatar" src="img/blank-user.png"><a href=#></a></img>
+                                <img class="img-fluid" id="avatar" src="assets/uploaded_avatar/placeholder.jpg"><a href=#></a></img>
                             </div>
                         </div>
                 </header>

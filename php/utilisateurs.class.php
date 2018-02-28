@@ -165,8 +165,16 @@ SQL
         $this->passwd = $value;
     }
 
+    public function setAvatar($name){
+        $this->avatar = $name;
+    }
+
     public function getAvatarPath(){
         return "assets/uploaded_avatar/" . $this->avatar;
+    }
+
+    public function getAvatar(){
+        return $this->avatar;
     }
 
     /*PDO Request Format
