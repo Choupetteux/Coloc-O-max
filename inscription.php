@@ -12,6 +12,7 @@ $loggedin = isset($_SESSION['loggedin']);
 
 $p = new WebPage($loggedin, "Inscription | ColocOmax") ;
 
+$p->appendCssUrl("css/general-style.css") ;
 $p->appendCssUrl("css/style-sign-up.css") ;
 
 /*

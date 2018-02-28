@@ -126,7 +126,7 @@ p {
     position: relative;
 }
 
-#landing p {
+#dash-colocataires p {
   color: #FFF;
   font-size: 20px;
 }
@@ -195,22 +195,71 @@ Dashboard CSS*/
     display:none;
 }
 
+/*=================
+Dashboard event CSS*/
 .box-event{
     margin: 7% auto;
-    background-color: whitesmoke;
+    background-color: #f2f3eb;
     height: 350px;
     border-radius: 10px;
-    padding: 0 !important;
+    -webkit-box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
+    -moz-box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
+    box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
 }
 
 .box-title{
     margin-top:10px;
     text-align:center;
-    color:#000;
+    color:#202020;
+    font-weight:500;
     font-family: "Open Sans", sans-serif;
 }
 
-#topDivPush {
-    height: 92px;
-    width: 100%;
+.avatar-event{
+  margin: 0 auto;
+  border: 2px solid black;
+  border-radius: 50%;
+  width: 60px;
+  vertical-align: middle;
+  align-content: center;
+}
+
+.text-event{
+  color:black;
+  margin-top:18px;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+  font-size:0.9em;
+}
+
+.text-event-refund{
+  color:black;
+  margin-top:10px;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+  font-size:0.9em;
+}
+
+.span-event{
+  vertical-align: middle;
+  display: inline-block;
+  margin-top:9px;
+  font-size: 1.5em;
+  margin-right:5px;
+}
+
+.positive{
+  color:green;
+}
+
+.negative{
+  color:red;
+}
+
+.dash-event{
+  padding:0 !important;
+}
+
+.dash-event-avatar{
+  padding-left: 15px !important;
 }

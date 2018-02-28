@@ -101,13 +101,6 @@ Class Colocation{
 		return $this->colocation_pass;
 	}
 
-<<<<<<< HEAD
-	//Retourne une instance de l'utilisateur ayant créer la colocation
-	public function getColocationCreator(){
-		return Utilisateur::getUtilisateurFromId($this->colocation_creator);
-	}
-
-=======
 	//Retourne l'instance utilisateur du créateur de la colocation.
 	public function getColocationCreator(){
 		return Utilisateur::getUtilisateurFromID($this->colocation_creator);
@@ -124,6 +117,5 @@ Class Colocation{
 		$colocataires = $PDO->fetchAll();
 		return $colocataires;
 	}
->>>>>>> dashboard
 
 }

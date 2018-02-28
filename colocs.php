@@ -39,6 +39,7 @@ if(isset($_POST['create'])){
 
 $p = new WebPage($loggedin, "Colocations | ColocOmax") ;
 
+$p->appendCssUrl("css/general-style.css") ;
 $p->appendCssUrl("css/style-coloc.css") ;
 /*
 $p->appendCSS(<<<CSS

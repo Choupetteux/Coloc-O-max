@@ -17,6 +17,7 @@ $p = new WebPage($loggedin, "ColocOmax") ;
 
 $p->setTitle('ColocOmax') ;
 
+$p->appendCssUrl("css/general-style.css") ;
 $p->appendCssUrl("css/style-dash.css") ;
 
 /*
@@ -107,6 +108,31 @@ $p->appendContent(<<<HTML
   <div class="col-lg-3 box-event">
     <h2 class="box-title">Dépenses</h2>
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
+
+    <!--Structure à foreach-->
+    <div class="dep-row">
+      <div class="row">
+        <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="img/lily.jpg"></img></div>
+        <div class="col-lg-6 dash-event"><p class="text-event">Vous devez à Lilypichu :</p></div>
+        <div class="col-lg-3 dash-event"><span class="span-event negative">20€</span></div>
+      </div>
+    </div>
+    <hr>
+    <div class="dep-row">
+      <div class="row">
+        <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="img/lily.jpg"></img></div>
+        <div class="col-lg-6 dash-event"><p class="text-event">Fedmyster vous doit :</p></div>
+        <div class="col-lg-3 dash-event"><span class="span-event positive">10€</span></div>
+      </div>
+    </div>
+    <hr>
+    <div class="dep-row">
+      <div class="row">
+        <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="img/lily.jpg"></img></div>
+        <div class="col-lg-9 dash-event"><p class="text-event-refund">Vous ne devez plus d'argent à Pokimane !</p></div>
+      </div>
+    </div>
+    
   </div>
   <div class="col-lg-3 box-event">
     <h2 class="box-title">Activités</h2>
