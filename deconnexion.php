@@ -13,6 +13,7 @@ $loggedin = false;
 
 $p = new WebPage($loggedin, "Déconnexion | ColocOmax") ;
 
+$p->appendCssUrl("css/general-style.css") ;
 $p->appendCssUrl("css/style.css") ;
 
 /*

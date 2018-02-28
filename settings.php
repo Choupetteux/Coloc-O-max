@@ -67,6 +67,12 @@ if(isset($_POST['save'])){
                     $y1 = $centreY - $centreY + $diff;
                     $y2 = $centreY + $centreY - $diff;
                 }
+                else{
+                    $x1 = $centreX - $centreX;
+                    $x2 = $centreX + $centreX;
+                    $y1 = $centreY - $centreY;
+                    $y2 = $centreY + $centreY;
+                }
                 //Crop automatiquement pour faire un carré
                 $manipulator = $manipulator->crop($x1, $y1, $x2, $y2);
                 $manipulator->save("assets/uploaded_avatar/" . $namefile);

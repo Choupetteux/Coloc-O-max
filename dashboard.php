@@ -77,6 +77,7 @@ HTML
     $p->appendContent(<<<HTML
       <div class="col-lg-2 col-centered text-center">
         <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
+        <div class="full-height"></div>
         <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
       </div>
 HTML
@@ -104,8 +105,10 @@ HTML
 
 //Afficher les 3 blocs contenant les dépenses, activités, agenda
 $p->appendContent(<<<HTML
-<div class="row">
-  <div class="col-lg-3 box-event">
+<div class="row box-wrapper">
+  
+
+  <div class="col-lg-3 box-event" id="box-1">
     <h2 class="box-title">Dépenses</h2>
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
 
@@ -132,8 +135,17 @@ $p->appendContent(<<<HTML
         <div class="col-lg-9 dash-event"><p class="text-event-refund">Vous ne devez plus d'argent à Pokimane !</p></div>
       </div>
     </div>
-    
+    <hr>
+    <div class="dep-row">
+      <div class="row">
+        <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="img/lily.jpg"></img></div>
+        <div class="col-lg-9 dash-event"><p class="text-event-refund">Vous ne devez plus d'argent à Pokimane !</p></div>
+      </div>
+    </div>
   </div>
+  
+
+
   <div class="col-lg-3 box-event">
     <h2 class="box-title">Activités</h2>
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
@@ -192,18 +204,18 @@ $p->appendJS(<<<JS
 
     $(window).scroll(function() {
     if ($(this).scrollTop() > 50) {
-      $('.back-to-top').fadeIn('slow');
       $('#header').addClass('header-fixed');
     } else {
-      $('.back-to-top').fadeOut('slow');
       $('#header').removeClass('header-fixed');
     }
     });
-    $('.back-to-top').click(function() {
-      $('html, body').animate({
-        scrollTop: 0
-      }, 1500, 'easeInOutExpo');
-      return false;
+
+    $("#box1").scroll(function() {
+    if ($(this).scrollTop() < 100) {
+      $('#header').addClass('header-fixed');
+    } else {
+      $('#header').removeClass('header-fixed');
+    }
     });
   })
 JS

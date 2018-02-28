@@ -1,3 +1,4 @@
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 body {
     background: #1A2980;
     background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
@@ -112,6 +113,11 @@ Dashboard CSS*/
 
 /*=================
 Dashboard event CSS*/
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}
+
 .box-event{
     margin: 7% auto;
     background-color: #f2f3eb;
@@ -120,6 +126,7 @@ Dashboard event CSS*/
     -webkit-box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
     -moz-box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
     box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
+    overflow:auto;
 }
 
 .box-title{
@@ -177,4 +184,16 @@ Dashboard event CSS*/
 
 .dash-event-avatar{
   padding-left: 15px !important;
+}
+
+.full-height{
+  position: absolute;
+  right: 31%;
+  top: 50%;
+  z-index: 996;
+  background-color: #1de71df5;
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  border-radius: 50%;
 }
