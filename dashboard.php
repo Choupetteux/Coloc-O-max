@@ -76,7 +76,7 @@ HTML
   foreach($colocataires as $key => $coloc){
     $p->appendContent(<<<HTML
       <div class="col-lg-2 col-centered text-center">
-        <img class="img-fluid dash-avatar" id="avatar-{$key}" src="img/lily.jpg"><a href=#></a></img>
+        <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
         <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
       </div>
 HTML

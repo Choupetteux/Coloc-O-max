@@ -14,6 +14,7 @@ Class Utilisateur{
     private $pseudo = null;
     private $passwd = null;
     private $colocation_id = null;
+    private $avatar = null;
 
     //Sauvegarde l'instance d'utilisateur dans la session actuelle.
     public function saveIntoSession(){
@@ -32,7 +33,7 @@ Class Utilisateur{
     //Récupère une instance d'utilisateur à partir de son ID.
     public static function getUtilisateurFromID($id){
         $PDO = myPdo::getInstance()->prepare(
-                "SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, passwd, colocation_id
+                "SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, passwd, colocation_id, avatar
                 FROM Utilisateurs
                 WHERE utilisateur_id = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
@@ -44,7 +45,7 @@ Class Utilisateur{
     //Récupère une instance d'utilisateur à partir de son pseudo. Chaque pseudo est censé être unique.
     public static function getUtilisateurFromPseudo($pseudo){
         $PDO = myPdo::getInstance()->prepare(
-                "SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, passwd, colocation_id
+                "SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, passwd, colocation_id, avatar
                 FROM Utilisateurs
                 WHERE pseudo = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
@@ -162,6 +163,10 @@ SQL
 
     public function setPass($value = null){
         $this->passwd = $value;
+    }
+
+    public function getAvatarPath(){
+        return "assets/uploaded_avatar/" . $this->avatar;
     }
 
     /*PDO Request Format

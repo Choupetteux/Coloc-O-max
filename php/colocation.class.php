@@ -109,7 +109,7 @@ Class Colocation{
 	//Retourne un array contenant chaque colocataire
 	public function getListeColocataire(){
 		$PDO = myPdo::getInstance()->prepare(
-			"SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, colocation_id
+			"SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, colocation_id, avatar
 			FROM Utilisateurs
 			WHERE colocation_id = ?");
 		$PDO->setFetchMode(PDO::FETCH_CLASS, "Utilisateur");
