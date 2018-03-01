@@ -141,7 +141,7 @@ $p->appendContent(<<<HTML
             <div class="col-lg-3"></div>
             <label id="choose-msg" class="col-lg-6 form-label"> Choisissez les personnes qui participent à cette dépense :</label>
             <div class="col-lg-3"></div>
-            <div class="col-lg-4"></div>
+            <div class="col-lg-3"></div>
             <label for="typeDep" id="participation-msg" class="col-lg-3 form-label">Elles participents à
             </label>
             <select class="col-lg-2" id="type-depense" type ="select" name="typeDep">
@@ -259,6 +259,8 @@ $p->appendJS(<<<JS
         if ($(this).val() === 'depense') {
             $("#choose-msg").empty();
             $("#choose-msg").append("Choisissez les personnes qui participent à cette dépense :");
+            $("#participation-msg").empty();
+            $("#participation-msg").append("Elles participent à");
         }
         else if($(this).val() === 'remboursement'){
             $("#choose-msg").empty();

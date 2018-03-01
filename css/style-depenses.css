@@ -212,7 +212,7 @@ input:checked + .tab {
   
   .col-centered{
     float: none;
-    margin: 0 auto;
+    margin: 0.1em auto;
   }
 
 .coloc-checkbox{
