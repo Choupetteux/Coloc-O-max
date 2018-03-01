@@ -67,26 +67,98 @@ if($_SESSION['user']->hasColocation()){
 $p->appendContent(<<<HTML
 <main>
   
-  <input id="tab1" type="radio" name="tabs" checked>
-  <label class="tab" for="tab1">Journal des dépenses</label>
+  <input class="tab-input" id="tab1" type="radio" name="tabs" checked>
+  <label class="tab" id="tab1-label" for="tab1">Journal des dépenses</label>
     
-  <input id="tab2" type="radio" name="tabs">
-  <label class="tab" for="tab2">Créer une nouvelle dépense</label>
+  <input class="tab-input" id="tab2" type="radio" name="tabs">
+  <label class="tab" id="tab2-label" for="tab2">Créer une nouvelle dépense</label>
     
-  <input id="tab3" type="radio" name="tabs">
-  <label class="tab" for="tab3">Créer une facture récurrente</label>
+  <input class="tab-input" id="tab3" type="radio" name="tabs">
+  <label class="tab" id="tab3-label" for="tab3">Créer une facture récurrente</label>
     
   <section id="content1">
     
   </section>
     
   <section id="content2">
-    <p>
-      Bacon ipsum dolor sit amet landjaeger sausage brisket, jerky drumstick fatback boudin ball tip turducken. Pork belly meatball t-bone bresaola tail filet mignon kevin turkey ribeye shank flank doner cow kielbasa shankle. Pig swine chicken hamburger, tenderloin turkey rump ball tip sirloin frankfurter meatloaf boudin brisket ham hock. Hamburger venison brisket tri-tip andouille pork belly ball tip short ribs biltong meatball chuck. Pork chop ribeye tail short ribs, beef hamburger meatball kielbasa rump corned beef porchetta landjaeger flank. Doner rump frankfurter meatball meatloaf, cow kevin pork pork loin venison fatback spare ribs salami beef ribs.
-    </p>
-    <p>
-      Jerky jowl pork chop tongue, kielbasa shank venison. Capicola shank pig ribeye leberkas filet mignon brisket beef kevin tenderloin porchetta. Capicola fatback venison shank kielbasa, drumstick ribeye landjaeger beef kevin tail meatball pastrami prosciutto pancetta. Tail kevin spare ribs ground round ham ham hock brisket shoulder. Corned beef tri-tip leberkas flank sausage ham hock filet mignon beef ribs pancetta turkey.
-    </p>
+      
+    <form method="POST">
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <h4 class="col-lg-4">Ajouter une dépense</h4> 
+            <div class="col-lg-4"></div>
+        </div>
+        <div class="col-lg-12">
+            <hr/>
+        </div>
+        <div class="align-items-center form-row">
+            <div class="col-lg-5"></div>
+            <select id="payeur" type='select' name='payeur' class="form-control col-lg-2 col-centered text-center">
+                <option value="{$_SESSION['user']->getId()}" > {$_SESSION['user']->getPseudo()} </option>
+HTML
+);
+$colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+foreach($colocataires as $key => $coloc){
+    if($coloc->getId() == $_SESSION['user']->getId()){
+        //Dun do nothin'
+    }
+    else{
+    $p->appendContent(<<<HTML
+                <option value="{$coloc->getId()}"> {$coloc->getPseudo()} </option>
+HTML
+    );
+    }
+}
+
+$p->appendContent(<<<HTML
+            </select>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <label class="col-lg-2 col-centered text-center form-label">a
+            <select class="col-lg-8" id="type-depense" type ="select" name="typeDep">
+                <option value="depense">dépensé</option>
+                <option value="remboursement">remboursé</option>
+                <option value="avance">avancé</option>
+            </select></label>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <div class="input-group col-lg-2">
+                <input class="form-control" id="montant" type="text" name="montant" pattern="[1-9]{1,9}">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">€</div>
+                </div>
+            </div>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <label class="col-lg-2 form-label"> pour : </label>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-4"></div>
+            <input class="form-control col-lg-4" id="raison" type="text" name="raison" placeholder="Raison" >
+            <div class="col-lg-4"></div>
+            <div class="col-lg-12">
+                <hr/>
+            </div>
+            <div class="col-lg-3"></div>
+            <label id="choose-msg" class="col-lg-6 form-label"> Choisissez les personnes qui participent à cette dépense :</label>
+            <div class="col-lg-3"></div>
+            <div id="dash-colocataires" class="row col-lg-12">
+HTML
+);
+  foreach($colocataires as $key => $coloc){
+    $p->appendContent(<<<HTML
+      <div class="col-lg-2 col-centered text-center">
+        <input class="coloc-checkbox" type="checkbox" id="{$coloc->getPseudo()}" name="{$coloc->getPseudo()}">
+        <label class="label-coloc" for="{$coloc->getPseudo()}"><img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"></img></label>
+        <div class="full-height"></div>
+        <p class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
+      </div>
+HTML
+    );
+  }
+
+//Fin de tag du div landing
+$p->appendContent(<<<HTML
+</div>
   </section>
     
   <section id="content3">
@@ -97,11 +169,6 @@ $p->appendContent(<<<HTML
       Brisket meatball turkey short loin boudin leberkas meatloaf chuck andouille pork loin pastrami spare ribs pancetta rump. Frankfurter corned beef beef tenderloin short loin meatloaf swine ground round venison.
     </p>
   </section>
-HTML
-);
-
-//Fin de tag du div landing
-$p->appendContent(<<<HTML
 HTML
 );
 }
@@ -168,6 +235,32 @@ $p->appendJS(<<<JS
     }
     });
 
+    $(window).resize(function(){
+        if(window.innerWidth < 1200) {
+            $(".tab").empty();
+        }
+        else{
+            $(".tab").empty();
+            $("#tab1-label").append("Journal des dépenses");
+            $("#tab2-label").append("Créer une nouvelle dépense");
+            $("#tab3-label").append("Créer une facture récurrente");
+        }
+    });
+
+    $('#type-depense').change(function() {
+        if ($(this).val() === 'depense') {
+            $("#choose-msg").empty();
+            $("#choose-msg").append("Choisissez les personnes qui participent à cette dépense :");
+        }
+        else if($(this).val() === 'remboursement'){
+            $("#choose-msg").empty();
+            $("#choose-msg").append("Choisissez la ou les personnes remboursées :");
+        }
+        else if($(this).val() === 'avance') {
+            $("#choose-msg").empty();
+            $("#choose-msg").append("Choisissez la ou les personnes avancées :");
+        }
+    });
     
   })
 JS
