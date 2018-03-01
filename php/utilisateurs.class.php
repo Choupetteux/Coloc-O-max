@@ -211,7 +211,6 @@ SQL
             WHERE utilisateur_id = ?"
         );
         $PDO->execute(array($this->date_de_naissance, $this->utilisateur_id));
-        $this->colocation_id = null;
     }
 
     /*PDO Request Format
