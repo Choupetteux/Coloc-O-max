@@ -79,7 +79,7 @@ HTML
 //Sinon si l'utilisateur n'as pas de colocation, afficher un message de bienvenue.
 else{
   $p->appendContent(<<<HTML
-<div class="landing-text">
+<div id="no-coloc" class="landing-text">
     <div class="row">
         <div class="col-lg-3"></div>
 
@@ -117,7 +117,7 @@ $p->appendJS(<<<JS
       $('#colocs').addClass("current-page");
       break;
     case 'depenses':
-      $('#depenses').addClass("current-page");
+      $('#depense').addClass("current-page");
       break;
     }
     
