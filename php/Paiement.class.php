@@ -55,7 +55,14 @@ Class Paiement{
      * @return array Liste des paiements émis par l'utilisateur
      */
     public static function getPaiementSentBy($idPayeur){
-
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT paiement_id, montant, raison, utilisateur_id_payeur, utilisateur_id_receveur
+            FROM Paiements
+            WHERE utilisateur_id_payeur = ?");
+        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
+        $PDO->execute(array($idReceveur));
+        $paiements = $PDO->fetchAll();
+        return $paiements;
     }
 
     public static function createNewPaiement($montant, $raison, $idPayeur, $idReceveur){
