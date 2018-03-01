@@ -29,7 +29,7 @@ class WebPage {
                         <div id="navbar" class="col-lg-6">
                             <div class="row">
                                 <h3 id="dashboard"><a href="dashboard.php" class="col-lg-2">Dashboard</a></h3>
-                                <h3 id="depense"><a href="" class="col-lg-2">Dépenses</a></h3>
+                                <h3 id="depense"><a href="depenses.php" class="col-lg-2">Dépenses</a></h3>
                                 <h3 id="colocs"><a href="colocs.php" class="col-lg-2">Colocs</a></h3>
                                 <h3 id="agenda"><a href="" class="col-lg-2">Agenda</a></h3>
                             </div>  
