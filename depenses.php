@@ -141,6 +141,14 @@ $p->appendContent(<<<HTML
             <div class="col-lg-3"></div>
             <label id="choose-msg" class="col-lg-6 form-label"> Choisissez les personnes qui participent à cette dépense :</label>
             <div class="col-lg-3"></div>
+            <div class="col-lg-4"></div>
+            <label for="typeDep" id="participation-msg" class="col-lg-3 form-label">Elles participents à
+            </label>
+            <select class="col-lg-2" id="type-depense" type ="select" name="typeDep">
+                <option value="partegale">parts égales</option>
+                <option value="montant">montants fixes</option>
+                <option value="pourcentage">pourcentage fixes</option>
+            </select>
             <div id="dash-colocataires" class="row col-lg-12">
 HTML
 );
@@ -255,10 +263,14 @@ $p->appendJS(<<<JS
         else if($(this).val() === 'remboursement'){
             $("#choose-msg").empty();
             $("#choose-msg").append("Choisissez la ou les personnes remboursées :");
+            $("#participation-msg").empty();
+            $("#participation-msg").append("Elles sont remboursées à");
         }
         else if($(this).val() === 'avance') {
             $("#choose-msg").empty();
             $("#choose-msg").append("Choisissez la ou les personnes avancées :");
+            $("#participation-msg").empty();
+            $("#participation-msg").append("Elles sont avancées à");
         }
     });
     
