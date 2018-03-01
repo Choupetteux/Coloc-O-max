@@ -173,6 +173,10 @@ SQL
         $this->passwd = $value;
     }
 
+    public function getSexe(){
+        return $this->sexe;
+    }
+
     /**
      * Récupérer la date de naissance
      * @param string $type le contenu de la date de naissance peut être 

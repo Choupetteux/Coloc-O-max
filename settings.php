@@ -21,16 +21,25 @@ if(!$loggedin){
 ================================================*/
 if(!is_null($_SESSION['user']->getDateDeNaissance())){
     $dateNais = explode("/", $_SESSION['user']->getDateDeNaissance());
-    $moisNais = array("", "", "", "", "", "", "", "", "", "", "", "", "");
-    foreach($moisNais as $i => $mois){
-        if($i == $dateNais[1]){
-            $moisNais[$i] = "selected";
-        }
-    }
 }
 else{
     $dateNais = null;
-    $moisNais = array("selected", "", "", "", "", "", "", "", "", "", "", "", "");
+}
+
+/* Filler variable pour genre pré-remplie
+================================================*/
+$male = $female = $other = '';
+if(!is_null($_SESSION['user']->getSexe())){
+    $sexe = $_SESSION['user']->getSexe();
+    if($sexe == 'M'){
+        $male = "checked";
+    }
+    elseif($sexe == 'F'){
+        $female = "checked";
+    }
+    else{
+        $other = "checked";
+    }
 }
 
 //===================================================================
@@ -46,7 +55,7 @@ if(isset($_POST['save'])){
     }
 
     //Si la partie Genre est remplie.
-    if(isset($_POST['gender'])){
+    if(isset($_POST['gender']) && $_POST['gender'] != $_SESSION['user']->getSexe()){
         $gender = htmlspecialchars($_POST['gender']);
         $_SESSION['user']->setSexe($gender);
     }
@@ -194,19 +203,19 @@ $p->appendContent(<<<HTML
             </div>
             <div class="col-lg-3">
                 <select id="moisNais" class="dateNais custom-select" name="moisNais">
-                    <option value="" disabled {$moisNais[0]}> - Mois - </option>
-                    <option value="01" {$moisNais[1]}>Janvier</option>
-                    <option value="02" {$moisNais[2]}>Février</option>
-                    <option value="03" {$moisNais[3]}>Mars</option>
-                    <option value="04" {$moisNais[4]}>Avril</option>
-                    <option value="05" {$moisNais[5]}>Mai</option>
-                    <option value="06" {$moisNais[6]}>Juin</option>
-                    <option value="07" {$moisNais[7]}>Juillet</option>
-                    <option value="08" {$moisNais[8]}>Août</option>
-                    <option value="09" {$moisNais[9]}>Septembre</option>
-                    <option value="10" {$moisNais[10]}>Octobre</option>
-                    <option value="11" {$moisNais[11]}>Novembre</option>
-                    <option value="12" {$moisNais[12]}>Decembre</option>
+                    <option value="" disabled selected> - Mois - </option>
+                    <option value="01">Janvier</option>
+                    <option value="02">Février</option>
+                    <option value="03">Mars</option>
+                    <option value="04">Avril</option>
+                    <option value="05">Mai</option>
+                    <option value="06">Juin</option>
+                    <option value="07">Juillet</option>
+                    <option value="08">Août</option>
+                    <option value="09">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Decembre</option>
                 </select>
             </div>
             <div class="col-lg-2">
@@ -217,15 +226,15 @@ $p->appendContent(<<<HTML
         <label class="form-label" for="gender">Votre genre :</label>
         <br/>
         <div class="form-check form-check-inline">
-            <input class="form-input form-check-input" type="radio" name="gender" id="gender-M" value="M">
+            <input class="form-input form-check-input" type="radio" name="gender" id="gender-M" value="M" {$male}>
             <label class="form-check-label" for="inlineRadio1">Masculin</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-input form-check-input" type="radio" name="gender" id="gender-F" value="F">
+            <input class="form-input form-check-input" type="radio" name="gender" id="gender-F" value="F" {$female}>
             <label class="form-check-label" for="inlineRadio2">Féminin</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-input form-check-input" type="radio" name="gender" id="gender-A" value="A">
+            <input class="form-input form-check-input" type="radio" name="gender" id="gender-A" value="A" {$other}>
             <label class="form-check-label" for="inlineRadio3">Autre</label>
         </div>
         <small id="genderHelpBlock" class="form-text text-muted"> Vous pourrez changez ce paramètres à tout moment.</small>
