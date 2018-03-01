@@ -1,6 +1,11 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
+h4{
+    font-family: "Open Sans", sans-serif !important;
+    text-align: center;
+}
+
 #no-coloc{
     color: #FFF;
 }
@@ -64,7 +69,7 @@ main {
   min-width: 50vw;
   max-width: 80vw;
   padding: 30px 50px 50px 50px;
-  margin: 5% auto;
+  margin: 2% auto;
   background: #fff;
   border-radius: 15px;
 }
@@ -75,13 +80,13 @@ section {
   border-top: 1px solid #ddd;
 }
 
-input {
+.tab-input {
     display: none;
 }
 
 .form-label{
-display: inline-block;
-  margin: 0 0 -1px;
+  display: inline-block;
+  margin-top:8px;
   font-weight: 600;
   text-align: center;
   color: #555;
@@ -99,6 +104,20 @@ display: inline-block;
   color: #bbb;
   border: 1px solid transparent;
 }
+
+@media (max-width: 1200px) {
+    .tab{
+        display: inline-block;
+        margin: 0 0 -1px;
+        width: auto;
+        padding: 15px 25px;
+        font-weight: 600;
+        text-align: center;
+        color: #bbb;
+        border: 1px solid transparent;
+    }
+  }
+
 
 .tab:before {
   font-family: fontawesome;
@@ -167,3 +186,57 @@ input:checked + .tab {
 .label-file:hover {
     color: #25a5c4;
 }
+
+#montant:after{
+    font-family: fontawesome;
+    content: '\f153';
+}
+
+#dash-colocataires .dash-avatar{
+    border-radius: 50%;
+    width: 80px;
+    vertical-align: middle;
+    align-content: center;
+}
+  
+  #dash-colocataires{
+    margin-top: 40px;
+  }
+  
+.name-avatar{
+    color:#474747;
+    font-weight:bold;
+    text-align: center;
+    font-family: "Open Sans", sans-serif;
+}
+  
+  .col-centered{
+    float: none;
+    margin: 0 auto;
+  }
+
+.coloc-checkbox{
+    display:none;
+}
+
+.label-coloc{
+    border-radius:50%;
+    border: 3px solid red;
+    transition: all 0.7s;
+    margin-bottom: 0;
+}
+
+:checked + .label-coloc{
+    border-radius:50%;
+    border: 3px solid green;
+    transition: all 0.7s;
+}
+
+#type-depense {
+    border: 0;
+    border-bottom: 1px dotted currentcolor; 
+    font-weight: 500;
+    border-radius: 0;
+    text-align:center;
+    padding: 0 !important;
+  }
