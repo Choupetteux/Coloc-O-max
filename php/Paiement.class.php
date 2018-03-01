@@ -24,11 +24,11 @@ Class Paiement{
     }
 
     public function getIdPayeur(){
-        return $this->utilisateur_id;
+        return $this->utilisateur_id_payeur;
     }
 
     public function getIdReceveur(){
-        return $this->utilisateur_receveur;
+        return $this->utilisateur_id_receveur;
     }
 
     public static function createNewPaiement($montant, $raison, $idPayeur, $idReceveur){
@@ -41,7 +41,7 @@ Class Paiement{
         else{
             try{
                 $PDO = myPdo::getInstance()->prepare(
-                    "INSERT INTO Paiement (montant, raison, utilisateur_id, utilisateur_receveur)
+                    "INSERT INTO Paiements (montant, raison, utilisateur_id, utilisateur_receveur)
                     VALUES (?, ?, ?, ?)");
                 $PDO->execute(array($montant, $raison, $idPayeur, $idReceveur));
             }
@@ -55,7 +55,7 @@ Class Paiement{
         $this->raison = $newRaison;
         try{
             $PDO = myPdo::getInstance()->prepare(
-                "UPDATE Paiement
+                "UPDATE Paiements
                 set raison = ?
                 WHERE paiement_id = ?"
             );
