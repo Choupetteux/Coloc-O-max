@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+
 #no-coloc{
     color: #FFF;
 }
@@ -44,4 +47,123 @@
       margin: 10px;
       border: 2px solid #fff;
       color: #fff;
+}
+
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+p {
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+main {
+  min-width: 50vw;
+  max-width: 80vw;
+  padding: 30px 50px 50px 50px;
+  margin: 5% auto;
+  background: #fff;
+  border-radius: 15px;
+}
+
+section {
+  display: none;
+  padding: 20px 0 0;
+  border-top: 1px solid #ddd;
+}
+
+input {
+    display: none;
+}
+
+.form-label{
+display: inline-block;
+  margin: 0 0 -1px;
+  font-weight: 600;
+  text-align: center;
+  color: #555;
+  border: 1px solid transparent;
+}
+
+.tab{
+  display: inline-block;
+  margin: 0 0 -1px;
+  /* width doit changer selon le nombre d'onglet (100 / nbr d'onglet)*/
+  width:33%;
+  padding: 15px 25px;
+  font-weight: 600;
+  text-align: center;
+  color: #bbb;
+  border: 1px solid transparent;
+}
+
+.tab:before {
+  font-family: fontawesome;
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+.tab[for*='1']:before {
+  content: '\f00b';
+}
+
+.tab[for*='2']:before {
+  content: "\f0d6";
+}
+
+.tab[for*='3']:before {
+  content: '\f133';
+}
+
+.tab:hover {
+  color: #888;
+  cursor: pointer;
+}
+
+.label-pic:after{
+    font-family: fontawesome;
+    content: '\f00c';
+}
+
+input:checked + .tab {
+  color: #555;
+  border: 1px solid #ddd;
+  border-top: 2px solid orange;
+  border-bottom: 1px solid #fff;
+}
+
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3,
+#tab4:checked ~ #content4 {
+  display: block;
+}
+
+@media screen and (max-width: 650px) {
+  label {
+    font-size: 0;
+  }
+
+  label:before {
+    margin: 0;
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 400px) {
+  label {
+    padding: 15px;
+  }
+}
+
+.label-file {
+    cursor: pointer;
+    color: #00b1ca;
+    font-weight: bold;
+    margin-left:5px;
+}
+.label-file:hover {
+    color: #25a5c4;
 }
