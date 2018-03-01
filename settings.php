@@ -17,6 +17,22 @@ if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
 
+/* Filler variable pour date de naissance pré-remplie
+================================================*/
+if(!is_null($_SESSION['user']->getDateDeNaissance())){
+    $dateNais = explode("/", $_SESSION['user']->getDateDeNaissance());
+    $moisNais = array("", "", "", "", "", "", "", "", "", "", "", "", "");
+    foreach($moisNais as $i => $mois){
+        if($i == $dateNais[1]){
+            $moisNais[$i] = "selected";
+        }
+    }
+}
+else{
+    $dateNais = null;
+    $moisNais = array("selected", "", "", "", "", "", "", "", "", "", "", "", "");
+}
+
 //===================================================================
 //================== Gestion du formulaire profile ==================
 //===================================================================
@@ -174,27 +190,27 @@ $p->appendContent(<<<HTML
         <br/>
         <div class="form-row">
             <div class="col-lg-2">
-                <input id="jourNais" class="form-control dateNais" type="text" name="jourNais" placeholder="Jour" pattern="[0-9]{1,2}">
+                <input id="jourNais" class="form-control dateNais" type="text" name="jourNais" placeholder="Jour" pattern="[0-9]{1,2}" value="{$dateNais[0]}">
             </div>
             <div class="col-lg-3">
-                <select id="moisNais" class="dateNais custom-select" name="moisNais" value="">
-                    <option value="" disabled selected> - Mois - </option>
-                    <option value="01">Janvier</option>
-                    <option value="02">Février</option>
-                    <option value="03">Mars</option>
-                    <option value="04">Avril</option>
-                    <option value="05">Mai</option>
-                    <option value="06">Juin</option>
-                    <option value="07">Juillet</option>
-                    <option value="08">Août</option>
-                    <option value="09">Septembre</option>
-                    <option value="10">Octobre</option>
-                    <option value="11">Novembre</option>
-                    <option value="12">Decembre</option>
+                <select id="moisNais" class="dateNais custom-select" name="moisNais">
+                    <option value="" disabled {$moisNais[0]}> - Mois - </option>
+                    <option value="01" {$moisNais[1]}>Janvier</option>
+                    <option value="02" {$moisNais[2]}>Février</option>
+                    <option value="03" {$moisNais[3]}>Mars</option>
+                    <option value="04" {$moisNais[4]}>Avril</option>
+                    <option value="05" {$moisNais[5]}>Mai</option>
+                    <option value="06" {$moisNais[6]}>Juin</option>
+                    <option value="07" {$moisNais[7]}>Juillet</option>
+                    <option value="08" {$moisNais[8]}>Août</option>
+                    <option value="09" {$moisNais[9]}>Septembre</option>
+                    <option value="10" {$moisNais[10]}>Octobre</option>
+                    <option value="11" {$moisNais[11]}>Novembre</option>
+                    <option value="12" {$moisNais[12]}>Decembre</option>
                 </select>
             </div>
             <div class="col-lg-2">
-                <input id="anneeNais" class="form-control dateNais" type="text" name="anneeNais" placeholder="Année" pattern="(?:19|20)[0-9]{2}">
+                <input id="anneeNais" class="form-control dateNais" type="text" name="anneeNais" placeholder="Année" pattern="(?:19|20)[0-9]{2}" value="{$dateNais[2]}">
             </div>
         </div>
         <hr/>
