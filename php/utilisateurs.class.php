@@ -33,7 +33,7 @@ Class Utilisateur{
     //Récupère une instance d'utilisateur à partir de son ID.
     public static function getUtilisateurFromID($id){
         $PDO = myPdo::getInstance()->prepare(
-                "SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, passwd, colocation_id, avatar
+                "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
                 FROM Utilisateurs
                 WHERE utilisateur_id = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
@@ -45,7 +45,7 @@ Class Utilisateur{
     //Récupère une instance d'utilisateur à partir de son pseudo. Chaque pseudo est censé être unique.
     public static function getUtilisateurFromPseudo($pseudo){
         $PDO = myPdo::getInstance()->prepare(
-                "SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, passwd, colocation_id, avatar
+                "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
                 FROM Utilisateurs
                 WHERE pseudo = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
@@ -161,8 +161,26 @@ SQL
         return $this->utilisateur_id;
     }
 
+    public function getAvatarPath(){
+        return "assets/uploaded_avatar/" . $this->avatar;
+    }
+
+    public function getAvatar(){
+        return $this->avatar;
+    }
+
     public function setPass($value = null){
         $this->passwd = $value;
+    }
+
+    /**
+     * Récupérer la date de naissance
+     * @param string $type le contenu de la date de naissance peut être 
+     *
+     * @return string La date de naissance au format "DD-MM-YYYY"
+     */
+    public function getDateDeNaissance(){
+        return $this->date_de_naissance;
     }
 
     public function setAvatar($name){
@@ -194,14 +212,6 @@ SQL
         );
         $PDO->execute(array($this->date_de_naissance, $this->utilisateur_id));
         $this->colocation_id = null;
-    }
-
-    public function getAvatarPath(){
-        return "assets/uploaded_avatar/" . $this->avatar;
-    }
-
-    public function getAvatar(){
-        return $this->avatar;
     }
 
     /*PDO Request Format
