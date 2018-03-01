@@ -222,14 +222,14 @@ input:checked + .tab {
 .label-coloc{
     border-radius:50%;
     border: 3px solid red;
-    transition: all 0.7s;
+    transition: all 0.5s;
     margin-bottom: 0;
 }
 
 :checked + .label-coloc{
     border-radius:50%;
     border: 3px solid green;
-    transition: all 0.7s;
+    transition: all 0.5s;
 }
 
 #type-depense {
