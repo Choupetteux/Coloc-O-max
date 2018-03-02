@@ -12,6 +12,9 @@ if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
 
+if(isset($_POST['submit'])){
+}
+
 $p = new WebPage($loggedin, "ColocOmax") ;
 
 $p->setTitle('Dépenses | ColocOmax') ;
@@ -159,7 +162,7 @@ HTML
         <label class="label-coloc" for="check-{$key}"><img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"></img></label>
         <div class="full-height"></div>
         <p class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
-        <input readonly class="form-control-plaintext money-avatar" name="montant-{$coloc->getId()}" style="opacity:0;" id="money-{$key}" pattern="([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])?€">
+        <input readonly class="form-control-plaintext money-avatar" name="montant-{$coloc->getId()}" style="opacity:0;" id="money-{$key}" pattern="([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])?€?">
         <div class="input-group" style="display:none;" id="percent-div-{$key}">
             <input class="form-control percent-avatar" id="percent-{$key}">
             <div class="input-group-prepend">
@@ -178,7 +181,11 @@ HTML
                 }
                 else{
                     $("#money-{$key}").fadeTo(200, 0);
+                    setTimeout(() => {
+                        $("#money-{$key}").val("0");
+                    }, 100);
                     $("#percent-div-{$key}").hide();
+                    
                 }
             })
         });
@@ -453,4 +460,7 @@ JS
 );
 
 echo $p->toHTML() ;
+
+
+var_dump($_POST);
 ?>
