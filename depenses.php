@@ -325,7 +325,26 @@ $p->appendJS(<<<JS
                 $("#save-btn").removeAttr("disabled");
             }
         }
-        if($("#type-participation").val() === "pourcentage"){
+        else if($("#type-participation").val() === "montant"){
+            var montantTotal = 0;
+            $("input:checkbox:checked").each(function() {
+                var key = $(this).attr('id').split("-")[1];
+                montantTotal = montantTotal + parseFloat($("#money-"+key).val());
+            });
+            $("#montant").val(montantTotal);
+            if(montantTotal === 0 || isNaN(montantTotal)){
+                $('#save-label').empty();
+                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
+                $('#save-label').show();
+                $("#save-btn").attr("disabled", true);
+            }
+            else{
+                $('#save-label').empty();
+                $('#save-label').hide();
+                $("#save-btn").removeAttr("disabled");
+            }
+        }
+        else if($("#type-participation").val() === "pourcentage"){
             var numberChecked = $("input:checkbox:checked").length;
             var montant = $("#montant").val();
             $("input:checkbox:checked").each(function() {
@@ -418,9 +437,6 @@ $p->appendJS(<<<JS
                 $('#save-label').append("Le total des montants ne peut-être égal a 0.");
                 $('#save-label').show();
                 $("#save-btn").attr("disabled", true);
-                
-                
-                console.log(montantTotal);
             }
             else{
                 $('#save-label').empty();
