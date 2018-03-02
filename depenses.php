@@ -123,7 +123,7 @@ $p->appendContent(<<<HTML
             <div class="col-lg-5"></div>
             <div class="col-lg-5"></div>
             <div class="input-group col-lg-2">
-                <input class="form-control" id="montant" type="text" name="montant" pattern="[1-9]{1,9}">
+                <input class="form-control" id="montant" type="text" name="montant" pattern="\d*(\.\d{2}$)?" required>
                 <div class="input-group-prepend">
                     <div class="input-group-text">€</div>
                 </div>
@@ -159,7 +159,13 @@ HTML
         <label class="label-coloc" for="check-{$key}"><img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"></img></label>
         <div class="full-height"></div>
         <p class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
-        <input readonly class="form-control-plaintext money-avatar" name="montant-{$coloc->getId()}" style="opacity:0;" id="money-{$key}">
+        <input readonly class="form-control-plaintext money-avatar" name="montant-{$coloc->getId()}" style="opacity:0;" id="money-{$key}" pattern="([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])?€">
+        <div class="input-group" style="display:none;" id="percent-div-{$key}">
+            <input class="form-control percent-avatar" id="percent-{$key}">
+            <div class="input-group-prepend">
+                    <div class="input-group-text">%</div>
+            </div>
+        </div>
       </div>
 HTML
     );
@@ -172,6 +178,7 @@ HTML
                 }
                 else{
                     $("#money-{$key}").fadeTo(200, 0);
+                    $("#percent-div-{$key}").hide();
                 }
             })
         });
@@ -181,7 +188,11 @@ JS
 
 //Fin de tag du div landing
 $p->appendContent(<<<HTML
+<label for="submit" class="form-label col-lg-12" id="save-label">Le total des pourcentages doit être égal à 100.</label>
+<input name="submit" type="submit" id="save-btn" class="btn btn-primary col-centered save-button" value="Enregistrer la dépense" disabled>
+</form>
 </div>
+
   </section>
     
   <section id="content3">
@@ -299,7 +310,23 @@ $p->appendJS(<<<JS
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
                 $("#money-"+key).val((montant / numberChecked).toFixed(2) + "€");
-            })
+            });
+            if($("input:checkbox:checked").length === 0){
+                $("#save-btn").attr("disabled", true);
+            }
+            else{
+                $("#save-btn").removeAttr("disabled");
+            }
+        }
+        if($("#type-participation").val() === "pourcentage"){
+            var numberChecked = $("input:checkbox:checked").length;
+            var montant = $("#montant").val();
+            $("input:checkbox:checked").each(function() {
+                var key = $(this).attr('id').split("-")[1];
+                var percentage = $("#percent-" + key).val();
+                $("#money-"+key).val(((montant * percentage) / 100).toFixed(2) + "€");
+                $("#percent-div-"+key).fadeTo(200, 1);
+            });
         }
     });
 
@@ -309,22 +336,65 @@ $p->appendJS(<<<JS
             var montant = $("#montant").val();
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
+                var percentage = $("#percent-" + key).val();
+                $("#money-"+key).val(((montant * percentage) / 100).toFixed(2) + "€");
                 $("#money-"+key).val((montant / numberChecked).toFixed(2) + "€");
             })
+            if($("input:checkbox:checked").length === 0){
+                $("#save-btn").attr("disabled", true);
+            }
+            else{
+                $("#save-btn").removeAttr("disabled");
+            }
         }
     });
 
 
     $("#type-participation").change(function() {
         if($("#type-participation").val() === "partegale"){
+            $('#save-label').empty();
+            $('#save-label').hide();
             $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext");
             $(".money-avatar").attr("readonly", true);
-            $("#montant").removeAttr("disabled");
+            $("#montant").removeAttr("readonly");
+            $("input:checkbox:checked").each(function() {
+                var key = $(this).attr('id').split("-")[1];
+                $("#money-"+key).removeAttr("required");
+                $("#percent-div-"+key).fadeTo(200, 0);
+            });
         }
         else if($("#type-participation").val() === "montant"){
             $(".money-avatar").removeClass("form-control-plaintext").addClass("form-control");
             $(".money-avatar").removeAttr("readonly");
-            $("#montant").attr("disabled", true);
+            $("#montant").attr("readonly", true);
+            var montantTotal = 0;
+            $("input:checkbox:checked").each(function() {
+                var key = $(this).attr('id').split("-")[1];
+                montantTotal = montantTotal + parseFloat($("#money-"+key).val());
+                $("#money-"+key).attr("required",true);
+                $("#percent-div-"+key).fadeTo(200, 0);
+            });
+            if(montantTotal === 0 || montantTotal === ""){
+                $('#save-label').empty();
+                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
+                $('#save-label').show();
+                $("#save-btn").attr("disabled", true);
+            }
+            else{
+                $('#save-label').empty();
+                $('#save-label').hide();
+                $("#save-btn").removeAttr("disabled");
+            }
+        }
+        else if($("#type-participation").val() === "pourcentage"){
+            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext");
+            $(".money-avatar").attr("readonly", true);
+            $("#montant").removeAttr("readonly");
+            $("input:checkbox:checked").each(function() {
+                var key = $(this).attr('id').split("-")[1];
+                $("#money-"+key).removeAttr("required");
+                $("#percent-div-"+key).fadeTo(200, 1);
+            });
         }
     })
 
@@ -333,11 +403,49 @@ $p->appendJS(<<<JS
             var montantTotal = 0;
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
-                montantTotal = montantTotal + parseInt($("#money-"+key).val());
-            })
+                montantTotal = montantTotal + parseFloat($("#money-"+key).val());
+            });
             $("#montant").val(montantTotal);
+            if(montantTotal === 0 || isNaN(montantTotal)){
+                $('#save-label').empty();
+                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
+                $('#save-label').show();
+                $("#save-btn").attr("disabled", true);
+                
+                
+                console.log(montantTotal);
+            }
+            else{
+                $('#save-label').empty();
+                $('#save-label').hide();
+                $("#save-btn").removeAttr("disabled");
+            }
         }
     })
+
+    $(".percent-avatar").on('keyup', function(){
+        var montant = $("#montant").val();
+        var percentageTotal = 0;
+        $("input:checkbox:checked").each(function() {
+            var key = $(this).attr('id').split("-")[1];
+            var percentage = $("#percent-" + key).val();
+            percentageTotal = percentageTotal + parseFloat(percentage);
+            $("#money-"+key).val(((montant * percentage) / 100).toFixed(2) + "€");
+        });
+        if(percentageTotal === 100){
+            $('#save-label').hide();
+            $("#save-btn").removeAttr("disabled");
+        }
+        else{
+            $('#save-label').show();
+            $('#save-label').empty();
+            $('#save-label').append("Le total des pourcentages doit être égal à 100.");
+            $("#save-btn").attr("disabled", true);
+        }
+    })
+
+    
+    
     
     
   })

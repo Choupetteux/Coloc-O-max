@@ -208,9 +208,17 @@ input:checked + .tab {
     font-weight:bold;
     text-align: center;
     font-family: "Open Sans", sans-serif;
+    margin-bottom: 0;
 }
 
 .money-avatar{
+  color:#474747;
+  font-weight:bold;
+  text-align: center;
+  font-family: "Open Sans", sans-serif;
+}
+
+.percent-avatar{
   color:#474747;
   font-weight:bold;
   text-align: center;
@@ -260,4 +268,12 @@ input:checked + .tab {
 
 #landing #participation-msg{
     text-align:right;
+}
+
+#save-label{
+  display: none;
+}
+
+.save-button{
+  margin-top:10px;
 }
