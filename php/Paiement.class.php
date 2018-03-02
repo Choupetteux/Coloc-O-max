@@ -45,6 +45,18 @@ Class Paiement{
         return $paiements;
     }
 
+    public static function getRemboursementsSentBy($utilisateur_id){
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT paiement_id, montant, raison, typePaiement, utilisateur_id
+            FROM Paiements
+            WHERE utilisateur_id = ?
+            AND typePaiement = ?");
+        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
+        $PDO->execute(array($id, "remboursement"));
+        $paiements = $PDO->fetchAll();
+        return $paiements;
+    }
+
     public static function createNewPaiement($montant, $raison, $typePaiement, $idCreateur){
         if($montant <= 0){
             throw new Exception("Le montant ne peut pas nul ou négatif.");
@@ -65,6 +77,8 @@ Class Paiement{
             }
         }
     }
+
+    
 
     public function setRaison($newRaison){
         $this->raison = $newRaison;
