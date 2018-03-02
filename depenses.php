@@ -155,14 +155,29 @@ HTML
   foreach($colocataires as $key => $coloc){
     $p->appendContent(<<<HTML
       <div class="col-lg-2 col-centered text-center">
-        <input class="coloc-checkbox" type="checkbox" id="{$coloc->getPseudo()}" name="{$coloc->getPseudo()}">
-        <label class="label-coloc" for="{$coloc->getPseudo()}"><img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"></img></label>
+        <input class="coloc-checkbox" type="checkbox" id="check-{$key}" name="{$coloc->getPseudo()}">
+        <label class="label-coloc" for="check-{$key}"><img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"></img></label>
         <div class="full-height"></div>
         <p class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
+        <p style="opacity:0;" class="name-avatar" id="money-{$key}">25€</p>
       </div>
 HTML
     );
-  }
+
+    $p->appendJs(<<<JS
+        $(document).ready(function() { 
+            $("#check-{$key}").change(function() {
+                if($(this).is(":checked")){
+                    $("#money-{$key}").fadeTo(200, 1);
+                }
+                else{
+                    $("#money-{$key}").fadeTo(200, 0);
+                }
+            })
+        });
+JS
+    );
+}
 
 //Fin de tag du div landing
 $p->appendContent(<<<HTML
@@ -275,6 +290,8 @@ $p->appendJS(<<<JS
             $("#participation-msg").append("Elles sont avancées à");
         }
     });
+
+
     
   })
 JS
