@@ -15,6 +15,7 @@ Class Utilisateur{
     private $passwd = null;
     private $colocation_id = null;
     private $avatar = null;
+    private $balance = null;
 
     //Sauvegarde l'instance d'utilisateur dans la session actuelle.
     public function saveIntoSession(){
@@ -177,6 +178,10 @@ SQL
         return $this->sexe;
     }
 
+    public function getBalance(){
+        return $this->balance;
+    }
+
     /**
      * Récupérer la date de naissance
      * @param string $type le contenu de la date de naissance peut être 
@@ -215,6 +220,14 @@ SQL
             WHERE utilisateur_id = ?"
         );
         $PDO->execute(array($this->date_de_naissance, $this->utilisateur_id));
+    }
+
+    public function setBalance($value){
+        $this->balance = $value;
+    }
+
+    public function calculateBalance(){
+        
     }
 
     /*PDO Request Format
