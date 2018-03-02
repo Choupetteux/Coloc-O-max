@@ -147,7 +147,7 @@ $p->appendContent(<<<HTML
             <div class="col-lg-5"></div>
             <div class="col-lg-5"></div>
             <div class="input-group col-lg-2">
-                <input class="form-control" id="montant" type="text" name="montant" pattern="\d*(\.\d{2}$)?" required>
+                <input class="form-control" id="montant" type="text" name="montant" pattern="[1-9]\d*(\.\d{2}$)?" required>
                 <div class="input-group-prepend">
                     <div class="input-group-text">€</div>
                 </div>
