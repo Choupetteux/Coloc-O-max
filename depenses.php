@@ -315,14 +315,29 @@ $p->appendJS(<<<JS
     });
 
 
-/*
     $("#type-participation").change(function() {
         if($("#type-participation").val() === "partegale"){
-            $("#")
+            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext");
+            $(".money-avatar").attr("readonly", true);
+            $("#montant").removeAttr("disabled");
+        }
+        else if($("#type-participation").val() === "montant"){
+            $(".money-avatar").removeClass("form-control-plaintext").addClass("form-control");
+            $(".money-avatar").removeAttr("readonly");
+            $("#montant").attr("disabled", true);
         }
     })
 
-    */
+    $(".money-avatar").on('keyup', function(){
+        if($("#type-participation").val() === "montant"){
+            var montantTotal = 0;
+            $("input:checkbox:checked").each(function() {
+                var key = $(this).attr('id').split("-")[1];
+                montantTotal = montantTotal + parseInt($("#money-"+key).val());
+            })
+            $("#montant").val(montantTotal);
+        }
+    })
     
     
   })
