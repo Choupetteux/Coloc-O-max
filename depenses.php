@@ -144,7 +144,7 @@ $p->appendContent(<<<HTML
             <div class="col-lg-3"></div>
             <label for="typeDep" id="participation-msg" class="col-lg-3 form-label">Elles participents à
             </label>
-            <select class="col-lg-2" id="type-depense" type ="select" name="typeDep">
+            <select class="col-lg-2" id="type-participation" type ="select" name="typePart">
                 <option value="partegale">parts égales</option>
                 <option value="montant">montants fixes</option>
                 <option value="pourcentage">pourcentage fixes</option>
@@ -290,8 +290,29 @@ $p->appendJS(<<<JS
             $("#participation-msg").append("Elles sont avancées à");
         }
     });
+    
+    $("input:checkbox").change(function() {
+        if($("#type-participation").val() === 'partegale'){
+            var numberChecked = $("input:checkbox:checked").length;
+            var montant = $("#montant").val();
+            $("input:checkbox:checked").each(function() {
+                var key = $(this).attr('id').split("-")[1];
+                $("#money-"+key).text((montant / numberChecked).toFixed(2) + "€");
+            })
+        }
+    });
 
-
+    $("#montant").on('keyup', function() {
+        if($("#type-participation").val() === "partegale"){
+            var numberChecked = $("input:checkbox:checked").length;
+            var montant = $("#montant").val();
+            $("input:checkbox:checked").each(function() {
+                var key = $(this).attr('id').split("-")[1];
+                $("#money-"+key).text((montant / numberChecked).toFixed(2) + "€");
+            })
+        }
+    });
+    
     
   })
 JS

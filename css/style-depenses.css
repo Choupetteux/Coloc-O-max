@@ -241,6 +241,16 @@ input:checked + .tab {
     padding: 0 !important;
   }
 
+#type-participation {
+    border: 0;
+    border-bottom: 1px dotted currentcolor; 
+    font-weight: 500;
+    border-radius: 0;
+    text-align:center;
+    padding: 0 !important;
+}
+
+
 #landing #participation-msg{
     text-align:right;
 }
