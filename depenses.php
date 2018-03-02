@@ -13,6 +13,23 @@ if(!$loggedin){
 }
 
 if(isset($_POST['submit'])){
+    $newpost = array_map ( 'htmlspecialchars' , $_POST );
+    $erreur = false;
+    if( !isset($newpost["payeur"])  ||
+        !isset($newpost["typeDep"]) ||
+        !isset($newpost["montant"]) ||
+        !isset($newpost["typePart"]) ) {
+            $erreur = true;
+    }
+    else{
+        $arrayName = [];
+        foreach($newpost as $i => $champ){
+            if($champ == 'on'){
+                $arrayParam[$i] = $newpost["montant-" . $i];
+            }
+        }
+        var_dump($arrayParam);
+    }
 }
 
 $p = new WebPage($loggedin, "ColocOmax") ;
@@ -162,7 +179,7 @@ HTML
         <label class="label-coloc" for="check-{$key}"><img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"></img></label>
         <div class="full-height"></div>
         <p class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
-        <input readonly class="form-control-plaintext money-avatar" name="montant-{$coloc->getId()}" style="opacity:0;" id="money-{$key}" pattern="([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])?€?">
+        <input readonly class="form-control-plaintext money-avatar" name="montant-{$coloc->getPseudo()}" style="opacity:0;" id="money-{$key}" pattern="([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])?€?" value="0" disabled>
         <div class="input-group" style="display:none;" id="percent-div-{$key}">
             <input class="form-control percent-avatar" id="percent-{$key}">
             <div class="input-group-prepend">
@@ -178,6 +195,7 @@ HTML
             $("#check-{$key}").change(function() {
                 if($(this).is(":checked")){
                     $("#money-{$key}").fadeTo(200, 1);
+                    $("#money-{$key}").removeAttr("disabled");
                 }
                 else{
                     $("#money-{$key}").fadeTo(200, 0);
@@ -467,9 +485,6 @@ $p->appendJS(<<<JS
         }
     })
 
-    
-    
-    
     
   })
 JS
