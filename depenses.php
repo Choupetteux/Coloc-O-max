@@ -159,7 +159,7 @@ HTML
         <label class="label-coloc" for="check-{$key}"><img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"></img></label>
         <div class="full-height"></div>
         <p class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
-        <p style="opacity:0;" class="name-avatar" id="money-{$key}">25€</p>
+        <input readonly class="form-control-plaintext money-avatar" style="opacity:0;" id="money-{$key}">
       </div>
 HTML
     );
@@ -290,14 +290,15 @@ $p->appendJS(<<<JS
             $("#participation-msg").append("Elles sont avancées à");
         }
     });
-    
+
+
     $("input:checkbox").change(function() {
         if($("#type-participation").val() === 'partegale'){
             var numberChecked = $("input:checkbox:checked").length;
             var montant = $("#montant").val();
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
-                $("#money-"+key).text((montant / numberChecked).toFixed(2) + "€");
+                $("#money-"+key).val((montant / numberChecked).toFixed(2) + "€");
             })
         }
     });
@@ -308,10 +309,20 @@ $p->appendJS(<<<JS
             var montant = $("#montant").val();
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
-                $("#money-"+key).text((montant / numberChecked).toFixed(2) + "€");
+                $("#money-"+key).val((montant / numberChecked).toFixed(2) + "€");
             })
         }
     });
+
+
+/*
+    $("#type-participation").change(function() {
+        if($("#type-participation").val() === "partegale"){
+            $("#")
+        }
+    })
+
+    */
     
     
   })

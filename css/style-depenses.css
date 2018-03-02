@@ -209,6 +209,13 @@ input:checked + .tab {
     text-align: center;
     font-family: "Open Sans", sans-serif;
 }
+
+.money-avatar{
+  color:#474747;
+  font-weight:bold;
+  text-align: center;
+  font-family: "Open Sans", sans-serif;
+}
   
   .col-centered{
     float: none;
