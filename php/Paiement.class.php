@@ -2,6 +2,7 @@
 
 require_once 'myPDO.mysql.colocomax.home.php';
 require_once 'utilisateurs.class.php';
+require_once 'Participer.class.php';
 
 Class Paiement{
 
@@ -57,6 +58,7 @@ Class Paiement{
                     "INSERT INTO Paiements (montant, raison, typePaiement, utilisateur_id)
                     VALUES (?, ?, ?, ?)");
                 $PDO->execute(array($montant, $raison, $typePaiement, $idCreateur));
+                return myPdo::getInstance()->lastInsertId();
             }
             catch(PDOException $e){
                 echo $e->getMessage();

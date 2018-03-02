@@ -4,6 +4,8 @@ require_once 'php/utilisateurs.class.php';
 require_once 'WebPage.Class.php' ;
 require_once 'php/session.class.php' ;
 require_once 'php/visiteur.php' ;
+require_once 'php/Paiement.class.php';
+require_once 'php/Participer.class.php';
 
 Session::start();
 
@@ -22,13 +24,15 @@ if(isset($_POST['submit'])){
             $erreur = true;
     }
     else{
-        $arrayName = [];
         foreach($newpost as $i => $champ){
             if($champ == 'on'){
-                $arrayParam[$i] = $newpost["montant-" . $i];
+                $arrayId[$i] = str_replace("€", "", $newpost["montant-" . $i]);
             }
         }
-        var_dump($arrayParam);
+        $paiement_id = Paiement::createNewPaiement($newpost['montant'], $newpost['raison'], $newpost['typeDep'], $newpost['payeur']);
+        foreach($arrayId as $id => $montant){
+            Participer::createNewParticipation($newpost['typePart'], $montant, $paiement_id, $id);
+        }
     }
 }
 
@@ -175,11 +179,11 @@ HTML
   foreach($colocataires as $key => $coloc){
     $p->appendContent(<<<HTML
       <div class="col-lg-2 col-centered text-center">
-        <input class="coloc-checkbox" type="checkbox" id="check-{$key}" name="{$coloc->getPseudo()}">
+        <input class="coloc-checkbox" type="checkbox" id="check-{$key}" name="{$coloc->getId()}">
         <label class="label-coloc" for="check-{$key}"><img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"></img></label>
         <div class="full-height"></div>
         <p class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
-        <input readonly class="form-control-plaintext money-avatar" name="montant-{$coloc->getPseudo()}" style="opacity:0;" id="money-{$key}" pattern="([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])?€?" value="0" disabled>
+        <input readonly class="form-control-plaintext money-avatar" name="montant-{$coloc->getId()}" style="opacity:0;" id="money-{$key}" pattern="([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])?€?" value="0" disabled>
         <div class="input-group" style="display:none;" id="percent-div-{$key}">
             <input class="form-control percent-avatar" id="percent-{$key}">
             <div class="input-group-prepend">
@@ -491,7 +495,4 @@ JS
 );
 
 echo $p->toHTML() ;
-
-
-var_dump($_POST);
 ?>
