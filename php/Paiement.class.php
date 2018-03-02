@@ -31,6 +31,40 @@ Class Paiement{
         return $this->utilisateur_id_receveur;
     }
 
+    /**
+     * Retourne les paiements envoyés à un utilisateur donné.
+     *
+     * @param string id de l'utilisateur qui a reçus les paiements
+     * @return array Liste des paiements reçus par l'utilisateur
+     */
+    public static function getPaiementSentTo($idReceveur){
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT paiement_id, montant, raison, utilisateur_id_payeur, utilisateur_id_receveur
+            FROM Paiements
+            WHERE utilisateur_id_receveur = ?");
+        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
+        $PDO->execute(array($idReceveur));
+        $paiements = $PDO->fetchAll();
+        return $paiements;
+    }
+
+    /**
+     * Retourne les paiements émis par un utilisateur donné.
+     *
+     * @param string id de l'utilisateur qui a émis les paiements
+     * @return array Liste des paiements émis par l'utilisateur
+     */
+    public static function getPaiementSentBy($idPayeur){
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT paiement_id, montant, raison, utilisateur_id_payeur, utilisateur_id_receveur
+            FROM Paiements
+            WHERE utilisateur_id_payeur = ?");
+        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
+        $PDO->execute(array($idReceveur));
+        $paiements = $PDO->fetchAll();
+        return $paiements;
+    }
+
     public static function createNewPaiement($montant, $raison, $idPayeur, $idReceveur){
         if($montant <= 0){
             throw new Exception("Le montant ne peut pas nul ou négatif.");
