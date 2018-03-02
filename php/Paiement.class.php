@@ -7,9 +7,9 @@ Class Paiement{
 
     private $paiement_id = null;
     private $montant = null;
-    private $raison = null;
-    private $utilisateur_id_payeur = null;
-    private $utilisateur_id_receveur = null;
+    private $raison = null; 
+    private $typePaiement = null;
+    private $utilisateur_id = null;
 
     public function getPaiementId(){
         return $this->paiement_id;
@@ -23,29 +23,8 @@ Class Paiement{
         return $this->raison;
     }
 
-    public function getIdPayeur(){
-        return $this->utilisateur_id_payeur;
-    }
-
-    public function getIdReceveur(){
-        return $this->utilisateur_id_receveur;
-    }
-
-    /**
-     * Retourne les paiements envoyés à un utilisateur donné.
-     *
-     * @param string id de l'utilisateur qui a reçus les paiements
-     * @return array Liste des paiements reçus par l'utilisateur
-     */
-    public static function getPaiementSentTo($idReceveur){
-        $PDO = myPdo::getInstance()->prepare(
-            "SELECT paiement_id, montant, raison, utilisateur_id_payeur, utilisateur_id_receveur
-            FROM Paiements
-            WHERE utilisateur_id_receveur = ?");
-        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
-        $PDO->execute(array($idReceveur));
-        $paiements = $PDO->fetchAll();
-        return $paiements;
+    public function getUtilisateurId(){
+        return $this->utilisateur_id;
     }
 
     /**
@@ -54,30 +33,30 @@ Class Paiement{
      * @param string id de l'utilisateur qui a émis les paiements
      * @return array Liste des paiements émis par l'utilisateur
      */
-    public static function getPaiementSentBy($idPayeur){
+    public static function getPaiementSentBy($id){
         $PDO = myPdo::getInstance()->prepare(
-            "SELECT paiement_id, montant, raison, utilisateur_id_payeur, utilisateur_id_receveur
+            "SELECT paiement_id, montant, raison, typePaiement, utilisateur_id
             FROM Paiements
-            WHERE utilisateur_id_payeur = ?");
+            WHERE utilisateur_id = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
-        $PDO->execute(array($idReceveur));
+        $PDO->execute(array($id));
         $paiements = $PDO->fetchAll();
         return $paiements;
     }
 
-    public static function createNewPaiement($montant, $raison, $idPayeur, $idReceveur){
+    public static function createNewPaiement($montant, $raison, $typePaiement, $idCreateur){
         if($montant <= 0){
             throw new Exception("Le montant ne peut pas nul ou négatif.");
         }
-        elseif(is_null(Utilisateur::getUtilisateurFromID($idPayeur)) || is_null(Utilisateur::getUtilisateurFromID($idReceveur))){
-            throw new Exception("Le payeur ou le receveur n'existe pas.");
+        elseif(is_null(Utilisateur::getUtilisateurFromID($idCreateur))){
+            throw new Exception("Le créateur du paiement n'existe pas");
         }
         else{
             try{
                 $PDO = myPdo::getInstance()->prepare(
-                    "INSERT INTO Paiements (montant, raison, utilisateur_id, utilisateur_receveur)
+                    "INSERT INTO Paiements (montant, raison, typePaiement, utilisateur_id)
                     VALUES (?, ?, ?, ?)");
-                $PDO->execute(array($montant, $raison, $idPayeur, $idReceveur));
+                $PDO->execute(array($montant, $raison, $typePaiement, $idCreateur));
             }
             catch(PDOException $e){
                 echo $e->getMessage();
