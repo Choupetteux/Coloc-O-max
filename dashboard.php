@@ -13,6 +13,8 @@ if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
 
+$_SESSION['user']->saveLogTime();
+
 $p = new WebPage($loggedin, "ColocOmax") ;
 
 $p->setTitle('ColocOmax') ;
@@ -74,14 +76,25 @@ HTML
 //Création du html affichant chaque colocataire et le script jquery associé
   $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
   foreach($colocataires as $key => $coloc){
-    $p->appendContent(<<<HTML
-      <div class="col-lg-2 col-centered text-center">
-        <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
-        <div class="full-height"></div>
-        <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
-      </div>
+    if($coloc->isOnline()){
+      $p->appendContent(<<<HTML
+        <div class="col-lg-2 col-centered text-center">
+          <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
+          <div class="full-height"></div>
+          <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
+        </div>
 HTML
-  );
+    );
+    }
+    else{
+      $p->appendContent(<<<HTML
+        <div class="col-lg-2 col-centered text-center">
+          <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
+          <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
+        </div>
+HTML
+    );
+    }
     //Append le Jquery pour afficher le pseudo on hover pour chaque bloc de colocataire
     $p->appendJs(<<<JS
       $(document).ready(function() { 
