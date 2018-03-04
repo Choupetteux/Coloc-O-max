@@ -194,11 +194,47 @@ SQL
         $PDO = myPdo::getInstance()->prepare(
                 "SELECT utilisateur_id
 				FROM `utilisateurs`
-                WHERE TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP, LASTTIMESEEN) < 300
+                WHERE TIMESTAMPDIFF(SECOND, LASTTIMESEEN, CURRENT_TIMESTAMP) < 300
                 AND utilisateur_id = ?");
         $PDO->execute(array($this->utilisateur_id));
         $pseudo = $PDO->fetch();
         return $pseudo;
+    }
+
+    public function getBalanceEnvers($utilisateur_id){
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT SUM(par.montant) AS \"montant\"
+             FROM   Participer par, Paiements pai
+             WHERE  par.paiement_id = pai.paiement_id
+             AND    par.utilisateur_id = ?
+             AND    pai.utilisateur_id = ?
+             AND    pai.typePaiement = 'depense'");
+        $PDO->execute(array($this->utilisateur_id, $utilisateur_id));
+        $dette = $PDO->fetch()['montant'];
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT SUM(par.montant) AS \"montant\"
+             FROM   Participer par, Paiements pai
+             WHERE  par.paiement_id = pai.paiement_id
+             AND    par.utilisateur_id = ?
+             AND    pai.utilisateur_id = ?
+             AND    pai.typePaiement IN ('remboursement', 'avance')");
+        $PDO->execute(array($utilisateur_id, $this->utilisateur_id));
+        $pretThis = $PDO->fetch()['montant'];
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT SUM(par.montant) AS \"montant\"
+             FROM   Participer par, Paiements pai
+             WHERE  par.paiement_id = pai.paiement_id
+             AND    par.utilisateur_id = ?
+             AND    pai.utilisateur_id = ?
+             AND    pai.typePaiement IN ('remboursement', 'avance')");
+        $PDO->execute(array($this->utilisateur_id,$utilisateur_id));
+        $pretUser = $PDO->fetch()['montant'];
+        if($dette - $pretThis < 0){
+            return $pretUser - $dette;
+        }
+        else{
+            return $dette-$pretThis;
+        }
     }
 
     /**

@@ -122,50 +122,67 @@ $p->appendContent(<<<HTML
   
 
   <div class="col-lg-3 box-event" id="box-1">
-    <h2 class="box-title">Dépenses</h2>
+    <h2 class="box-title">Sommaire</h2>
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
 
-    <!--Structure à foreach-->
+HTML
+);
+
+foreach($colocataires as $i => $coloc){
+  $balance = $_SESSION['user']->getBalanceEnvers($coloc->getId());
+  if($coloc->getId() != $_SESSION['user']->getId()){
+    if($balance < 0){
+      $balance = str_replace("-", "", $balance);
+      $p->appendContent(<<<HTML
+        <div class="dep-row">
+          <div class="row">
+            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"></img></div>
+            <div class="col-lg-6 dash-event"><p class="text-event">{$coloc->getPseudo()} vous doit :</p></div>
+            <div class="col-lg-3 dash-event"><span class="span-event positive">{$balance}€</span></div>
+          </div>
+        </div>
+        <hr/>
+HTML
+    );
+    }
+    elseif($balance > 0){
+      $p->appendContent(<<<HTML
+        <div class="dep-row">
+          <div class="row">
+            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"></img></div>
+            <div class="col-lg-6 dash-event"><p class="text-event">Vous devez à {$coloc->getPseudo()} :</p></div>
+            <div class="col-lg-3 dash-event"><span class="span-event negative">{$balance}€</span></div>
+          </div>
+        </div>
+        <hr/>
+HTML
+    );
+    }
+    elseif($balance == 0){
+      $p->appendContent(<<<HTML
     <div class="dep-row">
-      <div class="row">
-        <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="img/lily.jpg"></img></div>
-        <div class="col-lg-6 dash-event"><p class="text-event">Vous devez à Lilypichu :</p></div>
-        <div class="col-lg-3 dash-event"><span class="span-event negative">20€</span></div>
+        <div class="row">
+          <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"></img></div>
+          <div class="col-lg-8 dash-event"><p class="text-event">Vous ne devez rien à {$coloc->getPseudo()}</p></div>
+        </div>
       </div>
-    </div>
-    <hr>
-    <div class="dep-row">
-      <div class="row">
-        <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="img/lily.jpg"></img></div>
-        <div class="col-lg-6 dash-event"><p class="text-event">Fedmyster vous doit :</p></div>
-        <div class="col-lg-3 dash-event"><span class="span-event positive">10€</span></div>
-      </div>
-    </div>
-    <hr>
-    <div class="dep-row">
-      <div class="row">
-        <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="img/lily.jpg"></img></div>
-        <div class="col-lg-9 dash-event"><p class="text-event-refund">Vous ne devez plus d'argent à Pokimane !</p></div>
-      </div>
-    </div>
-    <hr>
-    <div class="dep-row">
-      <div class="row">
-        <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="img/lily.jpg"></img></div>
-        <div class="col-lg-9 dash-event"><p class="text-event-refund">Vous ne devez plus d'argent à Pokimane !</p></div>
-      </div>
-    </div>
-  </div>
+      <hr/>
+HTML
+    );
+    }
+  }
+}
   
 
-
+$p->appendContent(<<<HTML
+</div>
   <div class="col-lg-3 box-event">
     <h2 class="box-title">Activités</h2>
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
   </div>
   <div class="col-lg-3 box-event">
     <h2 class="box-title">Agenda</h2>
-    <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
+ <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
   </div>
 </div>
 HTML
@@ -235,4 +252,6 @@ JS
 );
 
 echo $p->toHTML() ;
+
+$_SESSION['user']->getBalanceEnvers(6);
 ?>
