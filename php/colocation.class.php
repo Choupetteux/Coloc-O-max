@@ -118,4 +118,6 @@ Class Colocation{
 		return $colocataires;
 	}
 
+	
+
 }

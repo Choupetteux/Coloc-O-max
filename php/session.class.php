@@ -46,6 +46,7 @@ class Session {
             throw new SessionException('Session disabled');
             break;
           case PHP_SESSION_ACTIVE:
+              
             break;
           case PHP_SESSION_NONE:
             if(headers_sent($file, $line)){

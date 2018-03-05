@@ -10,6 +10,7 @@ Session::start();
 
 $loggedin = isset($_SESSION['loggedin']);
 
+
 $p = new WebPage($loggedin, "Connexion | ColocOmax") ;
 
 $p->setTitle('Connexion | ColocOmax') ;

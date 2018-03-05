@@ -17,6 +17,8 @@ if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
 
+$_SESSION['user']->saveLogTime();
+
 /* Filler variable pour date de naissance pré-remplie
 ================================================*/
 if(!is_null($_SESSION['user']->getDateDeNaissance())){

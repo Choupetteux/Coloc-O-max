@@ -16,6 +16,8 @@ if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
 
+$_SESSION['user']->saveLogTime();
+
 //Gestion formulaire rejoindre colocation
 if(isset($_POST['join']) && isset($_POST['code'])){
   if(Colocation::getColocationFromPass($_POST['code']) != false){

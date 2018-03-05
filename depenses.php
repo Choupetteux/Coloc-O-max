@@ -14,6 +14,8 @@ if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
 
+$_SESSION['user']->saveLogTime();
+
 if(isset($_POST['submit'])){
     $newpost = array_map ( 'htmlspecialchars' , $_POST );
     $erreur = false;
