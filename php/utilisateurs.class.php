@@ -1,6 +1,6 @@
 <?php
 
-require_once 'myPDO.mysql.colocomax.home.php';
+require_once 'myPDO.mysql.colocomax.php';
 require_once 'colocation.class.php';
 
 
@@ -35,7 +35,7 @@ Class Utilisateur{
     public static function getUtilisateurFromID($id){
         $PDO = myPdo::getInstance()->prepare(
                 "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
-                FROM Utilisateurs
+                FROM utilisateurs
                 WHERE utilisateur_id = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
         $PDO->execute(array($id));
@@ -47,7 +47,7 @@ Class Utilisateur{
     public static function getUtilisateurFromPseudo($pseudo){
         $PDO = myPdo::getInstance()->prepare(
                 "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
-                FROM Utilisateurs
+                FROM utilisateurs
                 WHERE pseudo = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
         $PDO->execute(array($pseudo));
@@ -119,7 +119,7 @@ SQL
     //Permet de rejoindre une colocation à partir du pass de cette colocation.
     public function rejoindreColocation($pass){
         $PDO = myPdo::getInstance()->prepare(
-            "UPDATE Utilisateurs
+            "UPDATE utilisateurs
             set colocation_id = ?
             WHERE utilisateur_id = ?");
         $PDO->execute(array(Colocation::getColocationFromPass($pass)->getColocationId(), $this->utilisateur_id));
@@ -129,7 +129,7 @@ SQL
     //Fais quitter la colocation à l'utilisateur actuelle.
     public function quitterColocation(){
         $PDO = myPdo::getInstance()->prepare(
-            "UPDATE Utilisateurs
+            "UPDATE utilisateurs
             set colocation_id = null
             WHERE utilisateur_id = ?"
         );
@@ -184,7 +184,7 @@ SQL
 
     public function saveLogTime(){
         $PDO = myPdo::getInstance()->prepare(
-                "UPDATE Utilisateurs
+                "UPDATE utilisateurs
                  SET LASTTIMESEEN = CURRENT_TIMESTAMP()
                  WHERE utilisateur_id = ?");
         $PDO->execute(array($this->utilisateur_id));
@@ -204,7 +204,7 @@ SQL
     public function getBalanceEnvers($utilisateur_id){
         $PDO = myPdo::getInstance()->prepare(
             "SELECT SUM(par.montant) AS \"montant\"
-             FROM   Participer par, Paiements pai
+             FROM   participer par, paiements pai
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
              AND    pai.utilisateur_id = ?
@@ -213,7 +213,7 @@ SQL
         $dette = $PDO->fetch()['montant'];
         $PDO = myPdo::getInstance()->prepare(
             "SELECT SUM(par.montant) AS \"montant\"
-             FROM   Participer par, Paiements pai
+             FROM   participer par, paiements pai
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
              AND    pai.utilisateur_id = ?
@@ -222,7 +222,7 @@ SQL
         $pretThis = $PDO->fetch()['montant'];
         $PDO = myPdo::getInstance()->prepare(
             "SELECT SUM(par.montant) AS \"montant\"
-             FROM   Participer par, Paiements pai
+             FROM   participer par, paiements pai
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
              AND    pai.utilisateur_id = ?
@@ -250,7 +250,7 @@ SQL
     public function setAvatar($name){
         $this->avatar = $name;
         $PDO = myPdo::getInstance()->prepare(
-            "UPDATE Utilisateurs
+            "UPDATE utilisateurs
             set avatar = ?
             WHERE utilisateur_id = ?"
         );
@@ -260,7 +260,7 @@ SQL
     public function setSexe($sex){
         $this->sexe = $sex;
         $PDO = myPdo::getInstance()->prepare(
-            "UPDATE Utilisateurs
+            "UPDATE utilisateurs
             set sexe = ?
             WHERE utilisateur_id = ?"
         );
@@ -270,7 +270,7 @@ SQL
     public function setDateDeNaissance($jourNais, $moisNais, $anneeNais){
         $this->date_de_naissance = $jourNais . "/" . $moisNais . "/" . $anneeNais;
         $PDO = myPdo::getInstance()->prepare(
-            "UPDATE Utilisateurs
+            "UPDATE utilisateurs
             set date_de_naissance = STR_TO_DATE(?, '%d/%m/%Y')
             WHERE utilisateur_id = ?"
         );

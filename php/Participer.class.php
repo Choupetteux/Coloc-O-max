@@ -1,6 +1,6 @@
 <?php
 
-require_once 'myPDO.mysql.colocomax.home.php';
+require_once 'myPDO.mysql.colocomax.php';
 require_once 'utilisateurs.class.php';
 require_once 'Paiement.class.php';
 
@@ -30,7 +30,7 @@ Class Participer{
     public static function createNewParticipation($type, $montant, $paiement_id, $utilisateur_id){
         try{
             $PDO = myPdo::getInstance()->prepare(
-                "INSERT INTO Participer (type, montant, paiement_id, utilisateur_id)
+                "INSERT INTO participer (type, montant, paiement_id, utilisateur_id)
                 VALUES (?, ?, ?, ?)");
             $PDO->execute(array($type, $montant, $paiement_id, $utilisateur_id));
         }
@@ -42,7 +42,7 @@ Class Participer{
     public static function getEveryParticipation($utilisateur_id){
         $PDO = myPdo::getInstance()->prepare(
             "SELECT type, montant, paiement_id, utilisateur_id
-            FROM Participer
+            FROM participer
             WHERE utilisateur_id = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
         $PDO->execute(array($id));

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'myPDO.mysql.colocomax.home.php';
+require_once 'myPDO.mysql.colocomax.php';
 require_once 'utilisateurs.class.php';
 
 Class Colocation{
@@ -43,7 +43,7 @@ Class Colocation{
 	public static function getColocationFromPass($pass) {
 	$PDO = myPdo::getInstance()->prepare(
 		"SELECT colocation_id, colocation_nom, adresse, ville, colocation_pass, colocation_creator
-		FROM Colocations
+		FROM colocations
 		WHERE colocation_pass = ?");
 	$PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
 	$PDO->execute(array($pass));
@@ -57,7 +57,7 @@ Class Colocation{
 	public static function getColocationFromId($id) {
 		$PDO = myPdo::getInstance()->prepare(
 			"SELECT colocation_id, colocation_nom, adresse, ville, colocation_pass, colocation_creator
-			FROM Colocations
+			FROM colocations
 			WHERE colocation_id = ?");
 		$PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
 		$PDO->execute(array($id));
@@ -73,13 +73,13 @@ Class Colocation{
 		$pass = Colocation::generateColocationPass();
 		if(!empty($adresse)){
 			$PDO = myPdo::getInstance()->prepare(
-				"INSERT INTO Colocations (colocation_nom, adresse, ville, colocation_pass, colocation_creator)
+				"INSERT INTO colocations (colocation_nom, adresse, ville, colocation_pass, colocation_creator)
 				VALUES (?, ?, ?, ?, ?)");
 			$PDO->execute(array($nom, $adresse, $ville, $pass, $idUser));
 		}
 		else{
 			$PDO = myPdo::getInstance()->prepare(
-				"INSERT INTO Colocations (colocation_nom, adresse, ville, colocation_pass, colocation_creator)
+				"INSERT INTO colocations (colocation_nom, adresse, ville, colocation_pass, colocation_creator)
 				VALUES (?, ?, ?, ?, ?)");
 			$PDO->execute(array($nom, NULL, $ville, $pass, $idUser));
 		}
@@ -110,7 +110,7 @@ Class Colocation{
 	public function getListeColocataire(){
 		$PDO = myPdo::getInstance()->prepare(
 			"SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, colocation_id, avatar
-			FROM Utilisateurs
+			FROM utilisateurs
 			WHERE colocation_id = ?");
 		$PDO->setFetchMode(PDO::FETCH_CLASS, "Utilisateur");
 		$PDO->execute(array($this->colocation_id));

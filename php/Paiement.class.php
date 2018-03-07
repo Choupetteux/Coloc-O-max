@@ -1,6 +1,6 @@
 <?php
 
-require_once 'myPDO.mysql.colocomax.home.php';
+require_once 'myPDO.mysql.colocomax.php';
 require_once 'utilisateurs.class.php';
 require_once 'Participer.class.php';
 
@@ -37,7 +37,7 @@ Class Paiement{
     public static function getPaiementSentBy($id){
         $PDO = myPdo::getInstance()->prepare(
             "SELECT paiement_id, montant, raison, typePaiement, utilisateur_id
-            FROM Paiements
+            FROM paiements
             WHERE utilisateur_id = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
         $PDO->execute(array($id));
@@ -48,7 +48,7 @@ Class Paiement{
     public static function getRemboursementsSentBy($utilisateur_id){
         $PDO = myPdo::getInstance()->prepare(
             "SELECT paiement_id, montant, raison, typePaiement, utilisateur_id
-            FROM Paiements
+            FROM paiements
             WHERE utilisateur_id = ?
             AND typePaiement = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
@@ -67,7 +67,7 @@ Class Paiement{
         else{
             try{
                 $PDO = myPdo::getInstance()->prepare(
-                    "INSERT INTO Paiements (montant, raison, typePaiement, utilisateur_id)
+                    "INSERT INTO paiements (montant, raison, typePaiement, utilisateur_id)
                     VALUES (?, ?, ?, ?)");
                 $PDO->execute(array($montant, $raison, $typePaiement, $idCreateur));
                 return myPdo::getInstance()->lastInsertId();
@@ -84,7 +84,7 @@ Class Paiement{
         $this->raison = $newRaison;
         try{
             $PDO = myPdo::getInstance()->prepare(
-                "UPDATE Paiements
+                "UPDATE paiements
                 set raison = ?
                 WHERE paiement_id = ?"
             );
