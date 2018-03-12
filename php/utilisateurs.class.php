@@ -224,7 +224,7 @@ SQL
             return $pret - $remboursement;
         }
         elseif ($pret < $remboursement) {
-            return -$remboursement - $pret;
+            return -($remboursement - $pret);
         }
     }
 
