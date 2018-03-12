@@ -1,5 +1,5 @@
 <?php
-require_once 'myPDO.mysql.colocomax.home.php';
+require_once 'myPDO.mysql.colocomax.php';
 require_once 'utilisateurs.class.php';
 
 Class Dette{

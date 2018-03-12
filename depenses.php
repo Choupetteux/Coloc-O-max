@@ -220,9 +220,10 @@ JS
 //Fin de tag du div landing
 $p->appendContent(<<<HTML
 <label for="submit" class="form-label col-lg-12" id="save-label">Le total des pourcentages doit être égal à 100.</label>
+
+</div>
 <input name="submit" type="submit" id="save-btn" class="btn btn-primary col-centered save-button" value="Enregistrer la dépense" disabled>
 </form>
-</div>
 
   </section>
     
