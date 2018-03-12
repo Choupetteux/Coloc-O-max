@@ -63,7 +63,7 @@ Class Utilisateur{
             if(!self::getUtilisateurFromPseudo($pseudo)){
                 $hashPass = password_hash($mdp, PASSWORD_DEFAULT);
                 $PDO = myPdo::getInstance()->prepare(<<<SQL
-                    INSERT INTO Utilisateurs (nom, prenom, pseudo, passwd) values (?, ?, ?, ?);
+                    INSERT INTO utilisateurs (nom, prenom, pseudo, passwd) values (?, ?, ?, ?);
 SQL
                  );
                  $PDO->execute(array($nom, $prenom, $pseudo, $hashPass));
@@ -208,32 +208,23 @@ SQL
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
              AND    pai.utilisateur_id = ?
-             AND    pai.typePaiement = 'depense'");
+             AND    pai.typePaiement IN ('depense', 'remboursement', 'avance')");
         $PDO->execute(array($this->utilisateur_id, $utilisateur_id));
-        $dette = $PDO->fetch()['montant'];
+        $pret = $PDO->fetch()['montant'];
         $PDO = myPdo::getInstance()->prepare(
             "SELECT SUM(par.montant) AS \"montant\"
              FROM   participer par, paiements pai
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
              AND    pai.utilisateur_id = ?
-             AND    pai.typePaiement IN ('remboursement', 'avance')");
+             AND    pai.typePaiement IN ('depense', 'remboursement', 'avance')");
         $PDO->execute(array($utilisateur_id, $this->utilisateur_id));
-        $pretThis = $PDO->fetch()['montant'];
-        $PDO = myPdo::getInstance()->prepare(
-            "SELECT SUM(par.montant) AS \"montant\"
-             FROM   participer par, paiements pai
-             WHERE  par.paiement_id = pai.paiement_id
-             AND    par.utilisateur_id = ?
-             AND    pai.utilisateur_id = ?
-             AND    pai.typePaiement IN ('remboursement', 'avance')");
-        $PDO->execute(array($this->utilisateur_id,$utilisateur_id));
-        $pretUser = $PDO->fetch()['montant'];
-        if($dette - $pretThis < 0){
-            return $pretUser - $dette;
+        $remboursement = $PDO->fetch()['montant'];
+        if($pret > $remboursement){
+            return $pret - $remboursement;
         }
-        else{
-            return $dette-$pretThis;
+        elseif ($pret < $remboursement) {
+            return -$remboursement - $pret;
         }
     }
 
