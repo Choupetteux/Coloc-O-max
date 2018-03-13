@@ -274,11 +274,13 @@ SQL
 
     public function getPaiementsHistory(){
         $PDO = myPdo::getInstance()->prepare(
-            "SELECT *
+            "SELECT DISTINCT pai.paiement_id, pai.montant, pai.raison, pai.typePaiement, pai.utilisateur_id
              FROM   participer par, paiements pai
              WHERE  par.paiement_id = pai.paiement_id
-             AND    par.utilisateur_id = ?");
-        $PDO->execute(array($this->utilisateur_id));
+             AND    par.utilisateur_id = ?
+             OR     pai.utilisateur_id = ?");
+        $PDO->setFetchMode(PDO::FETCH_CLASS,'Paiement');
+        $PDO->execute(array($this->utilisateur_id, $this->utilisateur_id));
         $history = $PDO->fetchAll();
         return $history;
     }

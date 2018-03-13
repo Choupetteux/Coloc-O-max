@@ -56,7 +56,6 @@ Class Participer{
             FROM  participer par
             WHERE par.utilisateur_id = ?
             AND   par.paiement_id = ?");
-        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
         $PDO->execute(array($utilisateur_id, $paiement_id));
         $participation = $PDO->fetch();
         return $participation;

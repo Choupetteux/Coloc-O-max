@@ -291,3 +291,7 @@ input:checked + .tab {
 .negative{
   color:red;
 }
+
+em{
+  font-weight: bold;
+}

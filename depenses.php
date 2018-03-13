@@ -110,22 +110,33 @@ HTML
 $historique = $_SESSION['user']->getPaiementsHistory();
 if(!empty($historique)){
     $i = 0;
-    $max = 15;
+    $max = 10;
+
+    var_dump($historique);
     foreach($historique as $key => $paiement){
         if($i < $max){
-            $user = Paiement::getUtilisateurFromPaiementId($paiement['paiement_id']);
-            $participationMontant = Participer::getParticipationFromIds($paiement['paiement_id'], $_SESSION['user']->getId())->getMontant();
-            if($paiement['typePaiement'] == 'Dépense'){
-                $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement['montant'] . ' €';
+            $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());
+            $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+
+            //Si payeur différent de nous même TODO
+            
+            if($paiement->getTypePaiement() == 'Dépense'){
+                $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
                 $sign = 'negative';
             }
-            elseif($paiement['typePaiement'] == 'Remboursement'){
+            elseif($paiement->getTypePaiement() == 'Remboursement'){
                 $msg = 'Vous avez été remboursé d\'un montant de ' . $participationMontant . ' €';
-                $sign = 'positive';
+                $sign = 'negative';
             }
-            elseif($paiement['typePaiement'] == 'Avance'){
+            elseif($paiement->getTypePaiement() == 'Avance'){
                 $msg = 'Vous avez été avancé d\'un montant de ' . $participationMontant . ' €';
-                $sign = 'positive';
+                $sign = 'negative';
+            }
+            if(!empty($paiement->getRaison())){
+                $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+            }
+            else{
+                $raison = '';
             }
 
             $p->appendContent(<<<HTML
@@ -133,14 +144,15 @@ if(!empty($historique)){
                 <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
                         <button class="btn btn-link col-lg-12" data-toggle="collapse" data-target="#collapse-{$key}" aria-expanded="true" aria-controls="collapse-{$key}">
-                        <span class="float-left">{$paiement['typePaiement']} de la part de {$user->getPseudo()}</span><span class="float-right {$sign}">{$participationMontant} €</span>
+                        <span class="float-left">{$paiement->getTypePaiement()} de la part de {$user->getPseudo()}</span><span class="float-right {$sign}">{$participationMontant} €</span>
                         </button>
                     </h5>
                 </div>
 
                 <div id="collapse-{$key}" class="collapse hide" aria-labelledby="heading-{$key}" data-parent="#accordion">
                     <div class="card-body">
-                        <p class="depense-msg">{$msg}</p>
+                        <p class="depense-msg">{$msg} {$raison}</p>
+                        
 
                     </div>
                 </div>
