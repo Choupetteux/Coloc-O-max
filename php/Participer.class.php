@@ -39,15 +39,27 @@ Class Participer{
         }
     }
 
-    public static function getEveryParticipation($utilisateur_id){
+    public static function getEveryParticipation($paiement_id){
         $PDO = myPdo::getInstance()->prepare(
             "SELECT type, montant, paiement_id, utilisateur_id
             FROM participer
-            WHERE utilisateur_id = ?");
+            WHERE paiement_id = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
-        $PDO->execute(array($id));
+        $PDO->execute(array($paiement_id));
         $participations = $PDO->fetchAll();
         return $participations;
+    }
+
+    public static function getParticipationFromIds($paiement_id, $utilisateur_id){
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT par.type, par.montant, par.paiement_id, par.utilisateur_id
+            FROM  participer par
+            WHERE par.utilisateur_id = ?
+            AND   par.paiement_id = ?");
+        $PDO->setFetchMode(PDO::FETCH_CLASS,__CLASS__);
+        $PDO->execute(array($utilisateur_id, $paiement_id));
+        $participation = $PDO->fetch();
+        return $participation;
     }
 
 }

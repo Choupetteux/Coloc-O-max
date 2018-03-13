@@ -272,8 +272,15 @@ SQL
         $this->balance = $value;
     }
 
-    public function calculateBalance(){
-        
+    public function getPaiementsHistory(){
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT *
+             FROM   participer par, paiements pai
+             WHERE  par.paiement_id = pai.paiement_id
+             AND    par.utilisateur_id = ?");
+        $PDO->execute(array($this->utilisateur_id));
+        $history = $PDO->fetchAll();
+        return $history;
     }
 
     /*PDO Request Format

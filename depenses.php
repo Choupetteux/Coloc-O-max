@@ -101,9 +101,62 @@ $p->appendContent(<<<HTML
     
   <input class="tab-input" id="tab3" type="radio" name="tabs">
   <label class="tab" id="tab3-label" for="tab3">Créer une facture récurrente</label>
-    
+
+<!--Historique des paiements -->
   <section id="content1">
-    
+  <div id="accordion" class="col-lg-10 col-centered">
+HTML
+);
+$historique = $_SESSION['user']->getPaiementsHistory();
+if(!empty($historique)){
+    $i = 0;
+    $max = 15;
+    foreach($historique as $key => $paiement){
+        if($i < $max){
+            $user = Paiement::getUtilisateurFromPaiementId($paiement['paiement_id']);
+            $participationMontant = Participer::getParticipationFromIds($paiement['paiement_id'], $_SESSION['user']->getId())->getMontant();
+            if($paiement['typePaiement'] == 'Dépense'){
+                $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement['montant'] . ' €';
+                $sign = 'negative';
+            }
+            elseif($paiement['typePaiement'] == 'Remboursement'){
+                $msg = 'Vous avez été remboursé d\'un montant de ' . $participationMontant . ' €';
+                $sign = 'positive';
+            }
+            elseif($paiement['typePaiement'] == 'Avance'){
+                $msg = 'Vous avez été avancé d\'un montant de ' . $participationMontant . ' €';
+                $sign = 'positive';
+            }
+
+            $p->appendContent(<<<HTML
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link col-lg-12" data-toggle="collapse" data-target="#collapse-{$key}" aria-expanded="true" aria-controls="collapse-{$key}">
+                        <span class="float-left">{$paiement['typePaiement']} de la part de {$user->getPseudo()}</span><span class="float-right {$sign}">{$participationMontant} €</span>
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapse-{$key}" class="collapse hide" aria-labelledby="heading-{$key}" data-parent="#accordion">
+                    <div class="card-body">
+                        <p class="depense-msg">{$msg}</p>
+
+                    </div>
+                </div>
+        </div>
+HTML
+            );
+            $i++;
+        }
+        else{
+            break;
+        }
+    }
+}
+
+$p->appendContent(<<<HTML
+    </div>
   </section>
     
   <section id="content2">
@@ -123,6 +176,7 @@ $p->appendContent(<<<HTML
                 <option value="{$_SESSION['user']->getId()}" > {$_SESSION['user']->getPseudo()} </option>
 HTML
 );
+
 $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
 foreach($colocataires as $key => $coloc){
     if($coloc->getId() == $_SESSION['user']->getId()){
@@ -142,9 +196,9 @@ $p->appendContent(<<<HTML
             <div class="col-lg-5"></div>
             <label class="col-lg-2 col-centered text-center form-label">a
             <select class="col-lg-8" id="type-depense" type ="select" name="typeDep">
-                <option value="depense">dépensé</option>
-                <option value="remboursement">remboursé</option>
-                <option value="avance">avancé</option>
+                <option value="Dépense">dépensé</option>
+                <option value="Remboursement">remboursé</option>
+                <option value="Avance">avancé</option>
             </select></label>
             <div class="col-lg-5"></div>
             <div class="col-lg-5"></div>
@@ -498,4 +552,7 @@ JS
 );
 
 echo $p->toHTML() ;
+
+
+$_SESSION['user']->getPaiementsHistory();
 ?>

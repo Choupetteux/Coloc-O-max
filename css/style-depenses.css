@@ -275,3 +275,19 @@ input:checked + .tab {
 .save-button{
   margin-top:10px;
 }
+
+.btn-link{
+  color:#474747 !important;
+}
+
+.depense-msg{
+  text-align:center;
+}
+
+.positive{
+  color:green;
+}
+
+.negative{
+  color:red;
+}
