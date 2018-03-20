@@ -115,11 +115,12 @@ if(!empty($historique)){
    
     foreach($historique as $key => $paiement){
         if($i < $max){
+            //
+            // TODO : Faire une méthode qui permettrait de gérer plus proprement l'historique.
+            //
             $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());
-
-            //Si payeur différent de nous même TODO
+            //Si autre utilisateur reponsable du paiement
             if ($paiement->getUtilisateurId() != $_SESSION['user']->getId()){
-
             $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
                 if ($paiement->getTypePaiement() == 'Dépense'){
                     $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
@@ -140,8 +141,8 @@ if(!empty($historique)){
                     $raison = '';
                 }
             }
+            //Si l'utilisateur est responsable du paiement
             elseif($paiement->getUtilisateurId() == $_SESSION['user']->getId()){
-
                 if ($paiement->getTypePaiement() == 'Dépense'){
                     $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
                     $name = 'Vous avez créé une dépense';
