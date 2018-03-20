@@ -112,7 +112,7 @@ if(!empty($historique)){
     $i = 0;
     $max = 10;
 
-    var_dump($historique);
+   
     foreach($historique as $key => $paiement){
         if($i < $max){
             $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());

@@ -19,14 +19,7 @@ if(!$loggedin){
 
 $_SESSION['user']->saveLogTime();
 
-/* Filler variable pour date de naissance pré-remplie
-================================================*/
-if(!is_null($_SESSION['user']->getDateDeNaissance())){
-    $dateNais = explode("/", $_SESSION['user']->getDateDeNaissance());
-}
-else{
-    $dateNais = null;
-}
+
 
 /* Filler variable pour genre pré-remplie
 ================================================*/
@@ -53,7 +46,11 @@ if(isset($_POST['save'])){
         $jourNais = htmlspecialchars($_POST['jourNais']);
         $moisNais = htmlspecialchars($_POST['moisNais']);
         $anneeNais = htmlspecialchars($_POST['anneeNais']);
-        $_SESSION['user']->setDateDeNaissance($jourNais, $moisNais, $anneeNais);
+        $dateNais = explode("/", $_SESSION['user']->getDateDeNaissance());
+        if($jourNais === $dateNais[0] && $moisNais === $dateNais[1] && $anneeNais === $dateNais[2]){
+        } else{
+            $_SESSION['user']->setDateDeNaissance($jourNais, $moisNais, $anneeNais);
+        }
     }
 
     //Si la partie Genre est remplie.
@@ -120,9 +117,27 @@ if(isset($_POST['save'])){
         }
     }
 }
+
+/* Filler variable pour date de naissance pré-remplie
+================================================*/
+if(!is_null($_SESSION['user']->getDateDeNaissance())){
+    $dateNais = explode("/", $_SESSION['user']->getDateDeNaissance());
+    $moisArray = array("", "", "", "", "", "", "", "", "", "", "", "", "");
+    foreach($moisArray as $i => $mois){
+        if($i == $dateNais[1]){
+            $moisArray[$i] = "selected";
+        }
+    }
+}
+else{
+    $dateNais = null;
+    $moisArray = array("selected", "", "", "", "", "", "", "", "", "", "", "", "");
+}
 //===================================================================
 //=============== Fin Gestion du formulaire profil ==================
 //===================================================================
+
+
 
 $p = new WebPage($loggedin, "Paramètres | ColocOmax") ;
 
@@ -204,20 +219,20 @@ $p->appendContent(<<<HTML
                 <input id="jourNais" class="form-control dateNais" type="text" name="jourNais" placeholder="Jour" pattern="[0-9]{1,2}" value="{$dateNais[0]}">
             </div>
             <div class="col-lg-3">
-                <select id="moisNais" class="dateNais custom-select" name="moisNais">
-                    <option value="" disabled selected> - Mois - </option>
-                    <option value="01">Janvier</option>
-                    <option value="02">Février</option>
-                    <option value="03">Mars</option>
-                    <option value="04">Avril</option>
-                    <option value="05">Mai</option>
-                    <option value="06">Juin</option>
-                    <option value="07">Juillet</option>
-                    <option value="08">Août</option>
-                    <option value="09">Septembre</option>
-                    <option value="10">Octobre</option>
-                    <option value="11">Novembre</option>
-                    <option value="12">Decembre</option>
+            <select id="moisNais" class="dateNais custom-select" name="moisNais">
+                    <option value="" disabled {$moisArray[0]}> - Mois - </option>
+                    <option value="01" {$moisArray[1]}>Janvier</option>
+                    <option value="02" {$moisArray[2]}>Février</option>
+                    <option value="03" {$moisArray[3]}>Mars</option>
+                    <option value="04" {$moisArray[4]}>Avril</option>
+                    <option value="05" {$moisArray[5]}>Mai</option>
+                    <option value="06" {$moisArray[6]}>Juin</option>
+                    <option value="07" {$moisArray[7]}>Juillet</option>
+                    <option value="08" {$moisArray[8]}>Août</option>
+                    <option value="09" {$moisArray[9]}>Septembre</option>
+                    <option value="10" {$moisArray[10]}>Octobre</option>
+                    <option value="11" {$moisArray[11]}>Novembre</option>
+                    <option value="12" {$moisArray[12]}>Decembre</option>
                 </select>
             </div>
             <div class="col-lg-2">
@@ -306,4 +321,5 @@ JS
 
 
 echo $p->toHTML() ;
+var_dump($moisNais);
 ?>
