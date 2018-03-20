@@ -116,27 +116,53 @@ if(!empty($historique)){
     foreach($historique as $key => $paiement){
         if($i < $max){
             $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());
-            $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
 
             //Si payeur différent de nous même TODO
-            
-            if($paiement->getTypePaiement() == 'Dépense'){
-                $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
-                $sign = 'negative';
+            if ($paiement->getUtilisateurId() != $_SESSION['user']->getId()){
+
+            $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+                if ($paiement->getTypePaiement() == 'Dépense'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Remboursement'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez été remboursé d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'positive';
+                } elseif ($paiement->getTypePaiement() == 'Avance'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez été avancé d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'positive';
+                }
+                if (!empty($paiement->getRaison())){
+                    $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+                } else{
+                    $raison = '';
+                }
             }
-            elseif($paiement->getTypePaiement() == 'Remboursement'){
-                $msg = 'Vous avez été remboursé d\'un montant de ' . $participationMontant . ' €';
-                $sign = 'negative';
-            }
-            elseif($paiement->getTypePaiement() == 'Avance'){
-                $msg = 'Vous avez été avancé d\'un montant de ' . $participationMontant . ' €';
-                $sign = 'negative';
-            }
-            if(!empty($paiement->getRaison())){
-                $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
-            }
-            else{
-                $raison = '';
+            elseif($paiement->getUtilisateurId() == $_SESSION['user']->getId()){
+
+                if ($paiement->getTypePaiement() == 'Dépense'){
+                    $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+                    $name = 'Vous avez créé une dépense';
+                    $msg = 'Vous avez créé une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Remboursement'){
+                    $participationMontant = $paiement->getMontant();
+                    $name = 'Vous avez envoyé un remboursement.';
+                    $msg = 'Vous avez envoyé un remboursement d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Avance'){
+                    $participationMontant = $paiement->getMontant();
+                    $name = 'Vous avez avancé de l\'argent';
+                    $msg = 'Vous avez avancé un montant de ' . $participationMontant . ' €';
+                    $sign = 'negative';
+                }
+                if (!empty($paiement->getRaison())){
+                    $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+                } else{
+                    $raison = '';
+                }
             }
 
             $p->appendContent(<<<HTML
@@ -144,7 +170,7 @@ if(!empty($historique)){
                 <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
                         <button class="btn btn-link col-lg-12" data-toggle="collapse" data-target="#collapse-{$key}" aria-expanded="true" aria-controls="collapse-{$key}">
-                        <span class="float-left">{$paiement->getTypePaiement()} de la part de {$user->getPseudo()}</span><span class="float-right {$sign}">{$participationMontant} €</span>
+                        <span class="float-left">{$name}</span><span class="float-right {$sign}">{$participationMontant} €</span>
                         </button>
                     </h5>
                 </div>
