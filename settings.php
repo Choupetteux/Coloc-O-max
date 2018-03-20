@@ -338,18 +338,10 @@ $p->appendJS(<<<JS
         $("#label-pic").append("Votre photo est prête à être envoyée  ")
         $("#label-pic").addClass("label-pic");
      });
-
-/* $("moisNais").on("change", function()
-{
-	event.preventDefault();
-var valNaiss = $(this).val();
-$("#inputMoisNais").val(valNaiss);
-}); */
   })
 JS
 );
 
 
 echo $p->toHTML() ;
-var_dump($moisNais);
 ?>
