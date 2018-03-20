@@ -52,6 +52,7 @@ if(isset($_POST['save'])){
             $_SESSION['user']->setDateDeNaissance($jourNais, $moisNais, $anneeNais);
         }
     }
+   
 
     //Si la partie Genre est remplie.
     if(isset($_POST['gender']) && $_POST['gender'] != $_SESSION['user']->getSexe()){
@@ -261,11 +262,32 @@ $p->appendContent(<<<HTML
     
   <section id="content2">
     <p>
-      Bacon ipsum dolor sit amet landjaeger sausage brisket, jerky drumstick fatback boudin ball tip turducken. Pork belly meatball t-bone bresaola tail filet mignon kevin turkey ribeye shank flank doner cow kielbasa shankle. Pig swine chicken hamburger, tenderloin turkey rump ball tip sirloin frankfurter meatloaf boudin brisket ham hock. Hamburger venison brisket tri-tip andouille pork belly ball tip short ribs biltong meatball chuck. Pork chop ribeye tail short ribs, beef hamburger meatball kielbasa rump corned beef porchetta landjaeger flank. Doner rump frankfurter meatball meatloaf, cow kevin pork pork loin venison fatback spare ribs salami beef ribs.
+      	Vous pouvez avoir recours à nos services pour toutes sortes de raisons : pour rechercher et partager des informations, pour communiquer avec d'autres personnes ou pour créer des contenus. En nous transmettant des informations, par exemple en créant un compte, vous nous permettez d'améliorer nos services. Nous pouvons notamment afficher des annonces et des résultats de recherche plus pertinents et vous aider à échanger avec d'autres personnes ou à simplifier et accélérer le partage avec d'autres internautes. Nous souhaitons que vous, en tant qu'utilisateur de nos services, compreniez comment nous utilisons vos données et de quelles manières vous pouvez protéger votre vie privée. 
     </p>
     <p>
-      Jerky jowl pork chop tongue, kielbasa shank venison. Capicola shank pig ribeye leberkas filet mignon brisket beef kevin tenderloin porchetta. Capicola fatback venison shank kielbasa, drumstick ribeye landjaeger beef kevin tail meatball pastrami prosciutto pancetta. Tail kevin spare ribs ground round ham ham hock brisket shoulder. Corned beef tri-tip leberkas flank sausage ham hock filet mignon beef ribs pancetta turkey.
+	Nos Règles de confidentialité expliquent&nbsp; :
+	
+			<ul classe = "pull-left" style = "margin:auto 10%">
+			<li>
+    			les données que nous collectons et les raisons de cette collecte.
+			</li> 
+			
+			
+			<li>
+    			la façon dont nous utilisons ces données.
+			</li>
+		
+			
+			<li>
+    			les fonctionnalités que nous vous proposons, y compris comment accéder à vos données et comment les mettre à jour.
+			</li>
+	</ul>
+			
     </p>
+    <p>
+	Nous nous efforçons d’être le plus clair possible. Toutefois, si vous n’êtes pas familier, par exemple, des termes “cookies”, “adresses IP” ou “navigateurs”, renseignez-vous préalablement sur ces termes clés. nous sommes soucieux de préserver la confidentialité de vos données privées. Ainsi, que vous soyez nouvel utilisateur ou un habitué, prenez le temps de découvrir nos pratiques et, si vous avez des questions, n’hésitez pas à nous contacter. 
+    </p>
+     
   </section>
     
   <section id="content3">
@@ -292,6 +314,7 @@ $p->appendJS(<<<JS
       $('#colocs').addClass("current-page");
       break;
     }
+	
 
     $(window).scroll(function() {
     if ($(this).scrollTop() > 50) {
@@ -315,6 +338,13 @@ $p->appendJS(<<<JS
         $("#label-pic").append("Votre photo est prête à être envoyée  ")
         $("#label-pic").addClass("label-pic");
      });
+
+/* $("moisNais").on("change", function()
+{
+	event.preventDefault();
+var valNaiss = $(this).val();
+$("#inputMoisNais").val(valNaiss);
+}); */
   })
 JS
 );
