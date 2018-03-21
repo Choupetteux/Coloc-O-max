@@ -278,7 +278,8 @@ SQL
              FROM   participer par, paiements pai
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
-             OR     pai.utilisateur_id = ?");
+             OR     pai.utilisateur_id = ?
+             ORDER BY pai.datePaiement DESC");
         $PDO->setFetchMode(PDO::FETCH_CLASS,'Paiement');
         $PDO->execute(array($this->utilisateur_id, $this->utilisateur_id));
         $history = $PDO->fetchAll();
