@@ -111,8 +111,6 @@ $historique = $_SESSION['user']->getPaiementsHistory();
 if(!empty($historique)){
     $i = 0;
     $max = 10;
-
-   
     foreach($historique as $key => $paiement){
         if($i < $max){
             //
@@ -192,6 +190,13 @@ HTML
             break;
         }
     }
+}
+
+else{
+    $p->appendContent(<<<HTML
+        <p>Vous n'avez pas encore créé ou participé à une dépenses.</p>  
+HTML
+);
 }
 
 $p->appendContent(<<<HTML
