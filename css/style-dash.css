@@ -194,3 +194,10 @@ Dashboard event CSS*/
   border: 1px solid white;
   border-radius: 50%;
 }
+
+.bubble-disclaimer{
+  width: 60px;
+  vertical-align: middle;
+  align-content: center;
+  margin: 0 auto;
+}
