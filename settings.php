@@ -19,14 +19,7 @@ if(!$loggedin){
 
 $_SESSION['user']->saveLogTime();
 
-/* Filler variable pour date de naissance pré-remplie
-================================================*/
-if(!is_null($_SESSION['user']->getDateDeNaissance())){
-    $dateNais = explode("/", $_SESSION['user']->getDateDeNaissance());
-}
-else{
-    $dateNais = null;
-}
+
 
 /* Filler variable pour genre pré-remplie
 ================================================*/
@@ -53,7 +46,11 @@ if(isset($_POST['save'])){
         $jourNais = htmlspecialchars($_POST['jourNais']);
         $moisNais = htmlspecialchars($_POST['moisNais']);
         $anneeNais = htmlspecialchars($_POST['anneeNais']);
-        $_SESSION['user']->setDateDeNaissance($jourNais, $moisNais, $anneeNais);
+        $dateNais = explode("/", $_SESSION['user']->getDateDeNaissance());
+        if($jourNais === $dateNais[0] && $moisNais === $dateNais[1] && $anneeNais === $dateNais[2]){
+        } else{
+            $_SESSION['user']->setDateDeNaissance($jourNais, $moisNais, $anneeNais);
+        }
     }
    
 
@@ -121,9 +118,27 @@ if(isset($_POST['save'])){
         }
     }
 }
+
+/* Filler variable pour date de naissance pré-remplie
+================================================*/
+if(!is_null($_SESSION['user']->getDateDeNaissance())){
+    $dateNais = explode("/", $_SESSION['user']->getDateDeNaissance());
+    $moisArray = array("", "", "", "", "", "", "", "", "", "", "", "", "");
+    foreach($moisArray as $i => $mois){
+        if($i == $dateNais[1]){
+            $moisArray[$i] = "selected";
+        }
+    }
+}
+else{
+    $dateNais = null;
+    $moisArray = array("selected", "", "", "", "", "", "", "", "", "", "", "", "");
+}
 //===================================================================
 //=============== Fin Gestion du formulaire profil ==================
 //===================================================================
+
+
 
 $p = new WebPage($loggedin, "Paramètres | ColocOmax") ;
 
@@ -205,23 +220,20 @@ $p->appendContent(<<<HTML
                 <input id="jourNais" class="form-control dateNais" type="text" name="jourNais" placeholder="Jour" pattern="[0-9]{1,2}" value="{$dateNais[0]}">
             </div>
             <div class="col-lg-3">
-                <select id="moisNais" class="dateNais custom-select" name="moisNais">
-                    <!-- <option value="" disabled selected> - Mois - </option> -->
-		    <!-- <option value="{$dateNais[1]}" disable selected> {$dateNais[1]}</option> -->
-                    <option value="01" <?php if(isset($dateNais[1])==1) echo "selected='selected'"; ?>Janvier</option> 
-                    <option value="02" <?php if(isset($dateNais[1])==2) echo "selected='selected'"; ?>Février</option> 
-                    <option value="03" <?php if($moisNais==3) echo "selected";?>Mars</option> 
-                    <option value="04" <?php if($moisNais==4) echo "selected";?>Avril</option> 
-                    <option value="05" <?php if($moisNais==5) echo "selected";?>Mai</option> 
-                    <option value="06" <?php if($moisNais==6) echo "selected";?>Juin</option> 
-                    <option value="07" <?php if($moisNais==7) echo "selected";?>Juillet</option> 
-                    <option value="08" <?php if($moisNais==8) echo "selected";?>Août</option> 
-                    <option value="09" <?php if($moisNais==9) echo "selected";?>Septembre</option> 
-                    <option value="10" <?php if($moisNais==10) echo "selected";?>Octobre</option> 
-                    <option value="11" <?php if($moisNais==11) echo "selected";?>Novembre</option> 
-                    <option value="12" <?php if($moisNais==12) echo "selected";?>Decembre</option> 
-                    
-                    
+            <select id="moisNais" class="dateNais custom-select" name="moisNais">
+                    <option value="" disabled {$moisArray[0]}> - Mois - </option>
+                    <option value="01" {$moisArray[1]}>Janvier</option>
+                    <option value="02" {$moisArray[2]}>Février</option>
+                    <option value="03" {$moisArray[3]}>Mars</option>
+                    <option value="04" {$moisArray[4]}>Avril</option>
+                    <option value="05" {$moisArray[5]}>Mai</option>
+                    <option value="06" {$moisArray[6]}>Juin</option>
+                    <option value="07" {$moisArray[7]}>Juillet</option>
+                    <option value="08" {$moisArray[8]}>Août</option>
+                    <option value="09" {$moisArray[9]}>Septembre</option>
+                    <option value="10" {$moisArray[10]}>Octobre</option>
+                    <option value="11" {$moisArray[11]}>Novembre</option>
+                    <option value="12" {$moisArray[12]}>Decembre</option>
                 </select>
             </div>
             <div class="col-lg-2">
@@ -326,13 +338,6 @@ $p->appendJS(<<<JS
         $("#label-pic").append("Votre photo est prête à être envoyée  ")
         $("#label-pic").addClass("label-pic");
      });
-
-/* $("moisNais").on("change", function()
-{
-	event.preventDefault();
-var valNaiss = $(this).val();
-$("#inputMoisNais").val(valNaiss);
-}); */
   })
 JS
 );
