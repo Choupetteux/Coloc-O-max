@@ -33,12 +33,22 @@ $p->appendJsUrl("lib/wow/wow.min.js");
 $s = WebPage::escapeString('Vous êtes à la fin de <body>.') ;
 
 $mauvais="";
+$rememberPseudo = "";
 if(isset($_POST['signin'])){
     if($_SESSION['user']->connexion($_POST['pseudo'], $_POST['mdp'])){
         $_SESSION['user']->redirection('index.php');
     }
     else{
-        $mauvais = "Mauvais pseudo ou mot de passe.<br/>";
+        $rememberPseudo = $_POST['pseudo'];
+        $mauvais = <<<HTML
+            <div id="error-div" class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4 error animated fadeIn" >
+            <h3 style='text-align:center;color:#2B2735;font-size:1.5em;' class='sign-up-confirm'> Mauvais pseudo ou mot de passe. </h3>
+            </div>
+            <div class"col-lg-4"</div>
+        </div>
+HTML;
     }
 }
 
@@ -77,10 +87,10 @@ $p->appendContent(<<<HTML
     
     <div class="row">
         <div class="col-xs-2 col-lg-5"></div>
-        <div class="col-xs-8 col-lg-2 form-div animated flipInX">
+        <div class="col-xs-8 col-lg-2 form-div animated fadeIn">
             <form id="form-sign-in" method="post">
                 <label for="pseudo">Pseudo :</label><br>
-                <input name="pseudo" id="pseudo" type="text" required>
+                <input name="pseudo" id="pseudo" type="text" value="{$rememberPseudo}" required>
                 <br>
                 <label for="mdp">Mot de passe :</label><br>
                 <input name="mdp" id="mdp" type="password" required>
