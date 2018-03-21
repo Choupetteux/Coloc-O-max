@@ -172,6 +172,85 @@ HTML
     }
   }
 }
+
+$historique = $_SESSION['user']->getPaiementsHistory();
+if(!empty($historique)){
+    $i = 0;
+    $max = 10;
+    foreach($historique as $key => $paiement){
+      var_dump($paiement);
+        if($i < $max){
+            //
+            // TODO : Faire une méthode qui permettrait de gérer plus proprement l'historique.
+            //
+            //Si autre utilisateur reponsable du paiement
+            if ($paiement->getUtilisateurId() != $_SESSION['user']->getId()){
+            $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+            $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());
+                if ($paiement->getTypePaiement() == 'Dépense'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Remboursement'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez été remboursé d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'positive';
+                } elseif ($paiement->getTypePaiement() == 'Avance'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez été avancé d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'positive';
+                }
+                if (!empty($paiement->getRaison())){
+                    $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+                } else{
+                    $raison = '';
+                }
+            }
+            //Si l'utilisateur est responsable du paiement
+            elseif($paiement->getUtilisateurId() == $_SESSION['user']->getId()){
+                $user = $_SESSION['user'];
+                if ($paiement->getTypePaiement() == 'Dépense'){
+                    $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+                    $name = 'Vous avez créé une dépense';
+                    $msg = 'Vous avez créé une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Remboursement'){
+                    $participationMontant = $paiement->getMontant();
+                    $name = 'Vous avez envoyé un remboursement.';
+                    $msg = 'Vous avez envoyé un remboursement d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Avance'){
+                    $participationMontant = $paiement->getMontant();
+                    $name = 'Vous avez avancé de l\'argent';
+                    $msg = 'Vous avez avancé un montant de ' . $participationMontant . ' €';
+                    $sign = 'negative';
+                }
+                if (!empty($paiement->getRaison())){
+                    $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+                } else{
+                    $raison = '';
+                }
+            }
+
+          $p->appendContent(<<<HTML
+          <div class="dep-row">
+          <div class="row">
+            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$user->getAvatar()}"></img></div>
+            <div class="col-lg-6 dash-event"><p class="text-event">{$name}</p></div>
+            <div class="col-lg-3 dash-event"><span class="span-event {$sign}">{$participationMontant}€</span></div>
+          </div>
+        </div>
+        <hr/>
+HTML
+);
+      $i++;
+      }
+      else{
+          break;
+      }
+    }
+  }
+        
   
 
 $p->appendContent(<<<HTML
