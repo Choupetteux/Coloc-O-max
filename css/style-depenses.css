@@ -225,10 +225,10 @@ input:checked + .tab {
   font-family: "Open Sans", sans-serif;
 }
   
-  .col-centered{
-    float: none;
-    margin: 0.1em auto;
-  }
+.col-centered{
+  float: none;
+  margin: 0.1em auto;
+}
 
 .coloc-checkbox{
     display:none;
