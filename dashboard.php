@@ -102,7 +102,7 @@ HTML
       $(document).ready(function() { 
         $("#avatar-{$key}").on({
           mouseenter: function () {
-              $("#name-{$key}").stop(true, true).fadeTo(200, 1);
+            $("#name-{$key}").stop(true, true).fadeTo(200, 1);
           },
           mouseleave: function () {
               $("#name-{$key}").fadeTo(200, 0);
@@ -179,7 +179,7 @@ HTML
 
 $p->appendContent(<<<HTML
 </div>
-  <div class="col-lg-3 box-event">
+  <div class="col-lg-3 box-event" id="box-2">
     <h2 class="box-title">Activités</h2>
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
 HTML
@@ -277,7 +277,7 @@ HTML
 
 $p->appendContent(<<<HTML
 </div>
-  <div class="col-lg-3 box-event">
+  <div class="col-lg-3 box-event" id="box-3">
     <h2 class="box-title">Agenda</h2>
  <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
   </div>
