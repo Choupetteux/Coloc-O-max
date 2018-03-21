@@ -162,6 +162,14 @@ SQL
         return $this->utilisateur_id;
     }
 
+    public function getNom(){
+        return $this->nom;
+    }
+
+    public function getPrenom(){
+        return $this->prenom;
+    }
+
     public function getAvatarPath(){
         return "assets/uploaded_avatar/" . $this->avatar;
     }
