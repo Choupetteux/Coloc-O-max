@@ -16,6 +16,10 @@ if(!$loggedin){
 
 $_SESSION['user']->saveLogTime();
 
+if(isset($_POST['delete'])){
+    Paiement::supprimerPaiement($_POST['paiement']);
+}
+
 if(isset($_POST['submit'])){
     $newpost = array_map ( 'htmlspecialchars' , $_POST );
     $erreur = false;
@@ -119,7 +123,8 @@ if(!empty($historique)){
             $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());
             //Si autre utilisateur reponsable du paiement
             if ($paiement->getUtilisateurId() != $_SESSION['user']->getId()){
-            $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+                $deletebtn = "";
+                $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
                 if ($paiement->getTypePaiement() == 'Dépense'){
                     $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
                     $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
@@ -141,6 +146,13 @@ if(!empty($historique)){
             }
             //Si l'utilisateur est responsable du paiement
             elseif($paiement->getUtilisateurId() == $_SESSION['user']->getId()){
+                $deletebtn = <<<HTML
+                <form method="post">
+                <input type="hidden" name="paiement" value="{$paiement->getPaiementId()}"/>
+                <input name="delete" type="submit" id="delete-btn" class="btn btn-danger col-centered float-right" value="Supprimer">
+                </form>
+HTML
+;
                 if ($paiement->getTypePaiement() == 'Dépense'){
                     $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
                     $name = 'Vous avez créé une dépense';
@@ -177,8 +189,7 @@ if(!empty($historique)){
                 <div id="collapse-{$key}" class="collapse hide" aria-labelledby="heading-{$key}" data-parent="#accordion">
                     <div class="card-body">
                         <p class="depense-msg">{$msg} {$raison}</p>
-                        
-
+                        {$deletebtn}
                     </div>
                 </div>
         </div>
