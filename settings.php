@@ -143,52 +143,20 @@ else{
          // tu récupère lancien mot de passe dans la bdd
 		$result=false;
 
-        if(isset($_POST['submit'])){
-        	
-        $passwd_old=$_POST['passwd_old'];
-        $new_passwd=$_POST['new_passwd'];
-        $new_passwd_conf=$_POST['new_passwd_conf'];
-        $pseudo = $_SESSION['user'] -> getPseudo();
-
-        $PDO = myPdo::getInstance()->prepare(
-                "SELECT passwd FROM utilisateurs WHERE pseudo='$pseudo'");
-        $PDO -> setFetchMode(PDO::FETCH_ASSOC);
-        $PDO -> execute();
-        while ($pass_act = $PDO->fetch()) {
-        	//echo $pass_act['passwd'];
-
-        	$passwd_old = password_hash($passwd_old, PASSWORD_DEFAULT);
-
-
-            if (($passwd_old!='')&&($new_passwd!='')&&($new_passwd_conf!='')) {
-                if (password_verify(var_dump($passwd_old,$pass_act['passwd']))) {
-                    if($new_passwd==$new_passwd_conf){
-
-                    		$sql="UPDATE utilisateurs SET passwd='$new_passwd' WHERE pseudo= '$pseudo'";
-                    		$result=mysql_query($sql);
-
-                    		echo 'Modification du mot de passe effectuee avec succes';
-                    		$_pass_act = password_hash($new_passwd, PASSWORD_DEFAULT);
-                    } 
-
-                    else {
-                        echo 'Erreur entre le nouveau mot de passe entr&eacute; et la verification';
-                   		 }
-                	} 
-                else {
-                    echo 'Le mot de passe actuel n\'est pas valide';
-                     }
-            } 
-            else 
-            {
-                echo 'Veuillez remplir tous les champs';
+        if(isset($_POST['change']) && isset($_POST['passwd_old']) && isset($_POST['new_passwd']) && isset($_POST['new_passwd_conf'])){
+            $passwd_old=htmlspecialchars($_POST['passwd_old']);
+            $new_passwd=htmlspecialchars($_POST['new_passwd']);
+            $new_passwd_conf=htmlspecialchars($_POST['new_passwd_conf']);
+            if($new_passwd === $new_passwd_conf){
+                $_SESSION['user']->changePassword($passwd_old, $new_passwd);
             }
-        } 
-
+            else{
+                $result = 'Les mots de passes ne sont pas identiques';
+            }
         }
-
-       $PDO -> closeCursor();
-       
+        else {
+            $result = 'Veuillez remplir tous les champs';
+        }
         
       /*	$request = "SELECT passwd FROM utilisateurs WHERE pseudo='$pseudo'";
 		$reponse -> mysql_query($request);
@@ -360,7 +328,7 @@ $p->appendContent(<<<HTML
   <section id="content3">
 		<form action="" method="post">
 		<fieldset classe = "pull-left" style = "margin:auto 10%">
-		<legend>Modifier votre mot de passe dés à prèsent :</legend>
+		<legend>Modifier votre mot de passe : </legend>
 
 
 			Mot de passe actuel : <input type="password"  name="passwd_old" class="form-control mot_de_passe" required><br />
@@ -372,7 +340,7 @@ $p->appendContent(<<<HTML
 		</fieldset>
 
 			<div align="center">
-				<input type="submit" name="submit"  class="btn btn-primary float-right" value="Changer mon mot de passe" />
+				<input type="submit" name="change"  class="btn btn-primary float-right" value="Changer mon mot de passe" />
 			</div>
 		</form><!-- Fin du formulaire -->
  </section>
