@@ -288,6 +288,28 @@ SQL
         return $history;
     }
 
+    public function changePassword($old_pwd, $new_pwd){
+        try{
+            $PDO = myPdo::getInstance()->prepare(
+                "SELECT passwd
+                FROM utilisateurs
+                WHERE utilisateur_id = ?");
+            $PDO->execute(array($this->utilisateur_id));
+            $pass = $PDO->fetch();
+            if(PASSWORD_VERIFY($old_pwd, $pass['passwd'])){
+                $PDO = myPdo::getInstance()->prepare(
+                    "UPDATE utilisateurs
+                    set passwd = ?
+                    WHERE utilisateur_id = ?"
+                );
+                $PDO->execute(array(password_hash($new_pwd, PASSWORD_DEFAULT), $this->utilisateur_id));
+            }
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
     /*PDO Request Format
     $PDO = myPdo::getInstance()->prepare(***REQUEST***);
     $PDO->execute(array($idAnn, $this->NUMMEMB, $texte));
