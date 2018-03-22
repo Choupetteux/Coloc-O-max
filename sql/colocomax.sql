@@ -66,8 +66,10 @@ CREATE TABLE IF NOT EXISTS `paiements` (
   `montant` float NOT NULL,
   `raison` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `typePaiement` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `paiement_id` int(11) NOT NULL,
-  `utilisateur_id` int(11) NOT NULL
+  --`paiement_id` int(11) NOT NULL,
+  `utilisateur_id` int(11) NOT NULL,
+  `datePaiement` Timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

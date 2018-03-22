@@ -1,8 +1,10 @@
 <?php
 
 require_once 'php/utilisateurs.class.php';
+require_once 'php/myPDO.mysql.colocomax.php';
 require_once 'php/colocation.class.php';
 require_once 'php/ImageManipulator.class.php';
+
 
 require_once 'WebPage.Class.php' ;
 require_once 'php/session.class.php' ;
@@ -134,6 +136,71 @@ else{
     $dateNais = null;
     $moisArray = array("selected", "", "", "", "", "", "", "", "", "", "", "", "");
 }
+
+/* redéfinition des mots de passes dans l'onglet de sécurité
+================================================*/
+
+         // tu récupère lancien mot de passe dans la bdd
+		$result=false;
+
+        if(isset($_POST['submit'])){
+        	
+        $passwd_old=$_POST['passwd_old'];
+        $new_passwd=$_POST['new_passwd'];
+        $new_passwd_conf=$_POST['new_passwd_conf'];
+        $pseudo = $_SESSION['user'] -> getPseudo();
+
+        $PDO = myPdo::getInstance()->prepare(
+                "SELECT passwd FROM utilisateurs WHERE pseudo='$pseudo'");
+        $PDO -> setFetchMode(PDO::FETCH_ASSOC);
+        $PDO -> execute();
+        while ($pass_act = $PDO->fetch()) {
+        	//echo $pass_act['passwd'];
+
+        	$passwd_old = password_hash($passwd_old, PASSWORD_DEFAULT);
+
+
+            if (($passwd_old!='')&&($new_passwd!='')&&($new_passwd_conf!='')) {
+                if (password_verify(var_dump($passwd_old,$pass_act['passwd']))) {
+                    if($new_passwd==$new_passwd_conf){
+
+                    		$sql="UPDATE utilisateurs SET passwd='$new_passwd' WHERE pseudo= '$pseudo'";
+                    		$result=mysql_query($sql);
+
+                    		echo 'Modification du mot de passe effectuee avec succes';
+                    		$_pass_act = password_hash($new_passwd, PASSWORD_DEFAULT);
+                    } 
+
+                    else {
+                        echo 'Erreur entre le nouveau mot de passe entr&eacute; et la verification';
+                   		 }
+                	} 
+                else {
+                    echo 'Le mot de passe actuel n\'est pas valide';
+                     }
+            } 
+            else 
+            {
+                echo 'Veuillez remplir tous les champs';
+            }
+        } 
+
+        }
+
+       $PDO -> closeCursor();
+       
+        
+      /*	$request = "SELECT passwd FROM utilisateurs WHERE pseudo='$pseudo'";
+		$reponse -> mysql_query($request);
+		while ($pass_act = $reponse->fetch())
+		{
+    		echo $pass_act['passwd'] . '<br />';
+		}
+   
+		$reponse->closeCursor(); */
+
+		
+    
 //===================================================================
 //=============== Fin Gestion du formulaire profil ==================
 //===================================================================
@@ -291,13 +358,24 @@ $p->appendContent(<<<HTML
   </section>
     
   <section id="content3">
-    <p>
-      Bacon ipsum dolor sit amet beef venison beef ribs kielbasa. Sausage pig leberkas, t-bone sirloin shoulder bresaola. Frankfurter rump porchetta ham. Pork belly prosciutto brisket meatloaf short ribs.
-    </p>
-    <p>
-      Brisket meatball turkey short loin boudin leberkas meatloaf chuck andouille pork loin pastrami spare ribs pancetta rump. Frankfurter corned beef beef tenderloin short loin meatloaf swine ground round venison.
-    </p>
-  </section>
+		<form action="" method="post">
+		<fieldset classe = "pull-left" style = "margin:auto 10%">
+		<legend>Modifier votre mot de passe dés à prèsent :</legend>
+
+
+			Mot de passe actuel : <input type="password"  name="passwd_old" class="form-control mot_de_passe" required><br />
+
+			Nouveau mot de passe : <input type="password"  name="new_passwd" class="form-control mot_de_passe" required><br />
+
+			Confirmez votre nouveau mot de passe : <input type="password" name="new_passwd_conf" class="form-control mot_de_passe" required><br />
+		
+		</fieldset>
+
+			<div align="center">
+				<input type="submit" name="submit"  class="btn btn-primary float-right" value="Changer mon mot de passe" />
+			</div>
+		</form><!-- Fin du formulaire -->
+ </section>
 
 HTML
 );

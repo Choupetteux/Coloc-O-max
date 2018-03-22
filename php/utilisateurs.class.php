@@ -272,6 +272,8 @@ SQL
         $this->balance = $value;
     }
 
+
+
     public function getPaiementsHistory(){
         $PDO = myPdo::getInstance()->prepare(
             "SELECT DISTINCT pai.paiement_id, pai.montant, pai.raison, pai.typePaiement, pai.utilisateur_id
