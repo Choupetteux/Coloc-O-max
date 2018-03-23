@@ -6,6 +6,7 @@ require_once 'php/session.class.php' ;
 require_once 'php/visiteur.php' ;
 require_once 'php/Paiement.class.php';
 require_once 'php/Participer.class.php';
+require_once 'php/Facture.class.php';
 
 Session::start();
 
@@ -13,7 +14,7 @@ $loggedin = isset($_SESSION['loggedin']);
 if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
-
+//TODO: Facture::createFacture("Electricité", 150, 6, "now", array(3 => 100,6 => 50));
 $_SESSION['user']->saveLogTime();
 
 if(isset($_POST['delete'])){
