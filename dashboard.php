@@ -5,6 +5,8 @@ require_once 'php/utilisateurs.class.php';
 require_once 'WebPage.Class.php' ;
 require_once 'php/session.class.php' ;
 require_once 'php/visiteur.php' ;
+require_once 'php/Paiement.class.php';
+require_once 'php/Participer.class.php';
 
 Session::start();
 
@@ -100,7 +102,7 @@ HTML
       $(document).ready(function() { 
         $("#avatar-{$key}").on({
           mouseenter: function () {
-              $("#name-{$key}").stop(true, true).fadeTo(200, 1);
+            $("#name-{$key}").stop(true, true).fadeTo(200, 1);
           },
           mouseleave: function () {
               $("#name-{$key}").fadeTo(200, 0);
@@ -172,13 +174,22 @@ HTML
     }
   }
 }
+        
+  
 
+$p->appendContent(<<<HTML
+</div>
+  <div class="col-lg-3 box-event" id="box-2">
+    <h2 class="box-title">Activités</h2>
+    <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
+HTML
+);
+//Remplissage de la partie Activités
 $historique = $_SESSION['user']->getPaiementsHistory();
 if(!empty($historique)){
     $i = 0;
     $max = 10;
     foreach($historique as $key => $paiement){
-      var_dump($paiement);
         if($i < $max){
             //
             // TODO : Faire une méthode qui permettrait de gérer plus proprement l'historique.
@@ -236,8 +247,8 @@ if(!empty($historique)){
           <div class="dep-row">
           <div class="row">
             <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$user->getAvatar()}"></img></div>
-            <div class="col-lg-6 dash-event"><p class="text-event">{$name}</p></div>
-            <div class="col-lg-3 dash-event"><span class="span-event {$sign}">{$participationMontant}€</span></div>
+            <div class="col-lg-7 dash-event"><p class="text-event">{$name}</p></div>
+            <div class="col-lg-2 dash-event"><span class="span-event {$sign}">{$participationMontant}€</span></div>
           </div>
         </div>
         <hr/>
@@ -249,17 +260,24 @@ HTML
           break;
       }
     }
-  }
-        
-  
+}
+else{
+  $p->appendContent(<<<HTML
+      <div class="dep-row">
+          <div class="row">
+            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid bubble-disclaimer" src="img/speech-bubble.png"></img></div>
+            <div class="col-lg-9 dash-event"><p class="text-event">Pas d'activités récentes</p></div>
+          </div>
+        </div>
+HTML
+);
+}
+
+
 
 $p->appendContent(<<<HTML
 </div>
-  <div class="col-lg-3 box-event">
-    <h2 class="box-title">Activités</h2>
-    <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
-  </div>
-  <div class="col-lg-3 box-event">
+  <div class="col-lg-3 box-event" id="box-3">
     <h2 class="box-title">Agenda</h2>
  <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
   </div>

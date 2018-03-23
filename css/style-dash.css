@@ -35,7 +35,7 @@ p {
   Landing css */
 #landing {
     width: 100%;
-    height: 110vh;
+    height: 100vh;
     position: relative;
 }
 
@@ -116,7 +116,7 @@ Dashboard event CSS*/
 }
 
 .box-event{
-    margin: 7% auto;
+    margin: 5% auto;
     background-color: #f2f3eb;
     height:50vh;
     border-radius: 10px;
@@ -193,4 +193,11 @@ Dashboard event CSS*/
   height: 20px;
   border: 1px solid white;
   border-radius: 50%;
+}
+
+.bubble-disclaimer{
+  width: 60px;
+  vertical-align: middle;
+  align-content: center;
+  margin: 0 auto;
 }

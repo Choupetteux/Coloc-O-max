@@ -111,6 +111,19 @@ Class Paiement{
         }
     }
 
+    public static function supprimerPaiement($paiement_id){
+        try{
+            $PDO = myPdo::getInstance()->prepare(
+                "DELETE FROM paiements
+                WHERE paiement_id = ?"
+            );
+            $PDO->execute(array($paiement_id));
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
 
 }
 
