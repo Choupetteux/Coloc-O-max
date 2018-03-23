@@ -1,0 +1,72 @@
+/* profil bloc */
+
+.box-profil {
+    border-radius: 45px;
+    background-color: #f2f3eb;
+    border : 0;
+    margin-top : 5%;
+    box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
+}
+
+ .box-title {
+    margin-top: 10%;
+    font-family: "Open Sans", sans-serif;
+    text-align: center;
+    text-decoration : none;
+    color: rgba(0,0,0,.85);
+    font-weight: bold;
+}
+
+.avatar-pic {
+    width : 100%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    margin-left : 5%;
+    border-radius : 100%;
+    box-shadow: -10px 13px 39px 1px rgba(0,0,0,0.59);
+}
+
+.profil-infos{
+    margin-top : 10%;
+    margin-left : 10%;
+}
+
+table {
+    font-family: "Open Sans", sans-serif;
+    font-size : 17px;
+}
+
+th {
+    padding : 20px;
+    font-weight: bold;
+}
+
+tr {
+    font-family: "Open Sans", sans-serif;
+}
+
+.date-member {
+    font-family: "Open Sans", sans-serif;
+    color: grey;
+    margin-top : 30%;
+    text-align: center;
+}
+
+.error {
+    margin: 5%;
+    font-family: "Open Sans", sans-serif;
+    text-align: center;
+    text-decoration : none;
+    color: rgba(0,0,0,.85);
+    font-weight: bold;
+}
+
+.balance-négative {
+    color : red;
+    font-weight: bold;
+}
+
+.balance-positive {
+    color : green;
+    font-weight: bold;
+}

@@ -236,8 +236,7 @@ HTML
                         $raison = '';
                     }
                 }
-
-                $p->appendContent(<<<HTML
+          $p->appendContent(<<<HTML
           <div class="dep-row">
           <div class="row">
             <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$user->getAvatar()}"/></div>
