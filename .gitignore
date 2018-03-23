@@ -6,3 +6,4 @@ assets/uploaded_avatar/
 vendor/
 composer.json
 composer.lock
+.idea/

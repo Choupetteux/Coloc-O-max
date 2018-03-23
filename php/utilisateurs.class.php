@@ -1,11 +1,9 @@
 <?php
-
 require_once 'myPDO.mysql.colocomax.php';
 require_once 'colocation.class.php';
 
 class Utilisateur
 {
-
     private $utilisateur_id = null;
     private $nom = null;
     private $prenom = null;
@@ -33,13 +31,16 @@ class Utilisateur
         }
     }
 
-    //Récupère une instance d'utilisateur à partir de son ID.
+    /**
+     * Récupère une instance d'utilisateur à partir de son ID.
+     */
     public static function getUtilisateurFromID($id)
     {
         $PDO = myPdo::getInstance()->prepare(
             "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
                 FROM utilisateurs
-                WHERE utilisateur_id = ?");
+                WHERE utilisateur_id = ?"
+        );
         $PDO->setFetchMode(PDO::FETCH_CLASS, __CLASS__);
         $PDO->execute(array($id));
         $user = $PDO->fetch();
@@ -52,7 +53,8 @@ class Utilisateur
         $PDO = myPdo::getInstance()->prepare(
             "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
                 FROM utilisateurs
-                WHERE pseudo = ?");
+                WHERE pseudo = ?"
+        );
         $PDO->setFetchMode(PDO::FETCH_CLASS, __CLASS__);
         $PDO->execute(array($pseudo));
         $user = $PDO->fetch();
@@ -66,8 +68,10 @@ class Utilisateur
         try {
             if (!self::getUtilisateurFromPseudo($pseudo)) {
                 $hashPass = password_hash($mdp, PASSWORD_DEFAULT);
-                $PDO = myPdo::getInstance()->prepare(<<<SQL
-                    INSERT INTO utilisateurs (nom, prenom, pseudo, passwd) values (?, ?, ?, ?);
+                $PDO = myPdo::getInstance()->prepare(
+                    <<<SQL
+                    INSERT INTO utilisateurs (nom, prenom, pseudo, passwd) 
+                    VALUES (?, ?, ?, ?);
 SQL
                 );
                 $PDO->execute(array($nom, $prenom, $pseudo, $hashPass));
@@ -126,7 +130,8 @@ SQL
         $PDO = myPdo::getInstance()->prepare(
             "UPDATE utilisateurs
             set colocation_id = ?
-            WHERE utilisateur_id = ?");
+            WHERE utilisateur_id = ?"
+        );
         $PDO->execute(array(Colocation::getColocationFromPass($pass)->getColocationId(), $this->utilisateur_id));
         $this->colocation_id = Colocation::getColocationFromPass($pass)->getColocationId();
     }
@@ -200,7 +205,8 @@ SQL
         $PDO = myPdo::getInstance()->prepare(
             "UPDATE utilisateurs
                  SET LASTTIMESEEN = CURRENT_TIMESTAMP()
-                 WHERE utilisateur_id = ?");
+                 WHERE utilisateur_id = ?"
+        );
         $PDO->execute(array($this->utilisateur_id));
     }
 
@@ -210,7 +216,8 @@ SQL
             "SELECT utilisateur_id
 				FROM `utilisateurs`
                 WHERE TIMESTAMPDIFF(SECOND, LASTTIMESEEN, CURRENT_TIMESTAMP) < 300
-                AND utilisateur_id = ?");
+                AND utilisateur_id = ?"
+        );
         $PDO->execute(array($this->utilisateur_id));
         $pseudo = $PDO->fetch();
         return $pseudo;
@@ -224,7 +231,8 @@ SQL
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
              AND    pai.utilisateur_id = ?
-             AND    pai.typePaiement IN ('depense', 'remboursement', 'avance')");
+             AND    pai.typePaiement IN ('depense', 'remboursement', 'avance')"
+        );
         $PDO->execute(array($this->utilisateur_id, $utilisateur_id));
         $pret = $PDO->fetch()['montant'];
         $PDO = myPdo::getInstance()->prepare(
@@ -233,7 +241,8 @@ SQL
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
              AND    pai.utilisateur_id = ?
-             AND    pai.typePaiement IN ('depense', 'remboursement', 'avance')");
+             AND    pai.typePaiement IN ('depense', 'remboursement', 'avance')"
+        );
         $PDO->execute(array($utilisateur_id, $this->utilisateur_id));
         $remboursement = $PDO->fetch()['montant'];
         if ($pret > $remboursement) {
@@ -245,6 +254,7 @@ SQL
 
     /**
      * Récupérer la date de naissance
+     *
      * @param string $type le contenu de la date de naissance peut être
      *
      * @return string La date de naissance au format "DD-MM-YYYY"
@@ -300,7 +310,8 @@ SQL
              WHERE  par.paiement_id = pai.paiement_id
              AND    par.utilisateur_id = ?
              OR     pai.utilisateur_id = ?
-             ORDER BY pai.datePaiement DESC");
+             ORDER BY pai.datePaiement DESC"
+        );
         $PDO->setFetchMode(PDO::FETCH_CLASS, 'Paiement');
         $PDO->execute(array($this->utilisateur_id, $this->utilisateur_id));
         $history = $PDO->fetchAll();
@@ -313,7 +324,8 @@ SQL
             $PDO = myPdo::getInstance()->prepare(
                 "SELECT passwd
                 FROM utilisateurs
-                WHERE utilisateur_id = ?");
+                WHERE utilisateur_id = ?"
+            );
             $PDO->execute(array($this->utilisateur_id));
             $pass = $PDO->fetch();
             if (PASSWORD_VERIFY($old_pwd, $pass['passwd'])) {
@@ -330,7 +342,7 @@ SQL
     }
 
     /*PDO Request Format
-$PDO = myPdo::getInstance()->prepare(***REQUEST***);
-$PDO->execute(array($idAnn, $this->NUMMEMB, $texte));
- */
+    $PDO = myPdo::getInstance()->prepare(***REQUEST***);
+    $PDO->execute(array($idAnn, $this->NUMMEMB, $texte));
+     */
 }

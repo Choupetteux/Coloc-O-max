@@ -1,7 +1,6 @@
 <?php
 
 require_once 'php/utilisateurs.class.php';
-
 require_once 'WebPage.Class.php' ;
 require_once 'php/session.class.php' ;
 require_once 'php/visiteur.php' ;
@@ -70,35 +69,34 @@ HTML
 
 //Ajoute le premier tag du div landing
 if($_SESSION['user']->hasColocation()){
-$p->appendContent(<<<HTML
+    $p->appendContent(<<<HTML
 <div id="dash-colocataires" class="row">
 HTML
-);
+    );
 
 //Création du html affichant chaque colocataire et le script jquery associé
-  $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
-  foreach($colocataires as $key => $coloc){
-    if($coloc->isOnline()){
-      $p->appendContent(<<<HTML
+    $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+    foreach ($colocataires as $key => $coloc) {
+        if ($coloc->isOnline()) {
+            $p->appendContent(<<<HTML
         <div class="col-lg-2 col-centered text-center">
           <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
           <div class="full-height"></div>
           <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
         </div>
 HTML
-    );
-    }
-    else{
-      $p->appendContent(<<<HTML
+            );
+        } else {
+            $p->appendContent(<<<HTML
         <div class="col-lg-2 col-centered text-center">
           <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
           <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
         </div>
 HTML
-    );
-    }
-    //Append le Jquery pour afficher le pseudo on hover pour chaque bloc de colocataire
-    $p->appendJs(<<<JS
+            );
+        }
+        //Append le Jquery pour afficher le pseudo on hover pour chaque bloc de colocataire
+        $p->appendJs(<<<JS
       $(document).ready(function() { 
         $("#avatar-{$key}").on({
           mouseenter: function () {
@@ -110,16 +108,16 @@ HTML
         });
       });
 JS
-    );
-}
+        );
+    }
 //Fin de tag du div landing
-$p->appendContent(<<<HTML
+    $p->appendContent(<<<HTML
 </div>
 HTML
-);
+    );
 
 //Afficher les 3 blocs contenant les dépenses, activités, agenda
-$p->appendContent(<<<HTML
+    $p->appendContent(<<<HTML
 <div class="row box-wrapper">
   
 
@@ -128,154 +126,147 @@ $p->appendContent(<<<HTML
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
 
 HTML
-);
+    );
 
-foreach($colocataires as $i => $coloc){
-  $balance = $_SESSION['user']->getBalanceEnvers($coloc->getId());
-  if($coloc->getId() != $_SESSION['user']->getId()){
-    if($balance < 0){
-      $balance = str_replace("-", "", $balance);
-      $p->appendContent(<<<HTML
+    foreach ($colocataires as $i => $coloc) {
+        $balance = $_SESSION['user']->getBalanceEnvers($coloc->getId());
+        if ($coloc->getId() != $_SESSION['user']->getId()) {
+            if ($balance < 0) {
+                $balance = str_replace("-", "", $balance);
+                $p->appendContent(<<<HTML
         <div class="dep-row">
           <div class="row">
-            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"></img></div>
+            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"/></div>
             <div class="col-lg-6 dash-event"><p class="text-event">{$coloc->getPseudo()} vous doit :</p></div>
             <div class="col-lg-3 dash-event"><span class="span-event positive">{$balance}€</span></div>
           </div>
         </div>
         <hr/>
 HTML
-    );
-    }
-    elseif($balance > 0){
-      $p->appendContent(<<<HTML
+                );
+            } elseif ($balance > 0) {
+                $p->appendContent(<<<HTML
         <div class="dep-row">
           <div class="row">
-            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"></img></div>
+            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"/></div>
             <div class="col-lg-6 dash-event"><p class="text-event">Vous devez à {$coloc->getPseudo()} :</p></div>
             <div class="col-lg-3 dash-event"><span class="span-event negative">{$balance}€</span></div>
           </div>
         </div>
         <hr/>
 HTML
-    );
-    }
-    elseif($balance == 0){
-      $p->appendContent(<<<HTML
+                );
+            } elseif ($balance == 0) {
+                $p->appendContent(<<<HTML
     <div class="dep-row">
         <div class="row">
-          <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"></img></div>
+          <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$coloc->getAvatar()}"/></div>
           <div class="col-lg-8 dash-event"><p class="text-event">Vous ne devez rien à {$coloc->getPseudo()}</p></div>
         </div>
       </div>
       <hr/>
 HTML
-    );
+                );
+            }
+        }
     }
-  }
-}
-        
-  
 
-$p->appendContent(<<<HTML
+
+    $p->appendContent(<<<HTML
 </div>
   <div class="col-lg-3 box-event" id="box-2">
     <h2 class="box-title">Activités</h2>
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
 HTML
-);
+    );
 //Remplissage de la partie Activités
-$historique = $_SESSION['user']->getPaiementsHistory();
-if(!empty($historique)){
-    $i = 0;
-    $max = 10;
-    foreach($historique as $key => $paiement){
-        if($i < $max){
-            //
-            // TODO : Faire une méthode qui permettrait de gérer plus proprement l'historique.
-            //
-            //Si autre utilisateur reponsable du paiement
-            if ($paiement->getUtilisateurId() != $_SESSION['user']->getId()){
-            $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
-            $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());
-                if ($paiement->getTypePaiement() == 'Dépense'){
-                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
-                    $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
-                    $sign = 'negative';
-                } elseif ($paiement->getTypePaiement() == 'Remboursement'){
-                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
-                    $msg = 'Vous avez été remboursé d\'un montant de ' . $participationMontant . ' €';
-                    $sign = 'positive';
-                } elseif ($paiement->getTypePaiement() == 'Avance'){
-                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
-                    $msg = 'Vous avez été avancé d\'un montant de ' . $participationMontant . ' €';
-                    $sign = 'positive';
-                }
-                if (!empty($paiement->getRaison())){
-                    $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
-                } else{
-                    $raison = '';
-                }
-            }
-            //Si l'utilisateur est responsable du paiement
-            elseif($paiement->getUtilisateurId() == $_SESSION['user']->getId()){
-                $user = $_SESSION['user'];
-                if ($paiement->getTypePaiement() == 'Dépense'){
+    $historique = $_SESSION['user']->getPaiementsHistory();
+    if (!empty($historique)) {
+        $i = 0;
+        $max = 10;
+        foreach ($historique as $key => $paiement) {
+            if ($i < $max) {
+                //
+                // TODO : Faire une méthode qui permettrait de gérer plus proprement l'historique.
+                //
+                //Si autre utilisateur reponsable du paiement
+                if ($paiement->getUtilisateurId() != $_SESSION['user']->getId()) {
                     $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
-                    $name = 'Vous avez créé une dépense';
-                    $msg = 'Vous avez créé une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
-                    $sign = 'negative';
-                } elseif ($paiement->getTypePaiement() == 'Remboursement'){
-                    $participationMontant = $paiement->getMontant();
-                    $name = 'Vous avez envoyé un remboursement.';
-                    $msg = 'Vous avez envoyé un remboursement d\'un montant de ' . $participationMontant . ' €';
-                    $sign = 'negative';
-                } elseif ($paiement->getTypePaiement() == 'Avance'){
-                    $participationMontant = $paiement->getMontant();
-                    $name = 'Vous avez avancé de l\'argent';
-                    $msg = 'Vous avez avancé un montant de ' . $participationMontant . ' €';
-                    $sign = 'negative';
+                    $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());
+                    if ($paiement->getTypePaiement() == 'Dépense') {
+                        $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                        $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
+                        $sign = 'negative';
+                    } elseif ($paiement->getTypePaiement() == 'Remboursement') {
+                        $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                        $msg = 'Vous avez été remboursé d\'un montant de ' . $participationMontant . ' €';
+                        $sign = 'positive';
+                    } elseif ($paiement->getTypePaiement() == 'Avance') {
+                        $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                        $msg = 'Vous avez été avancé d\'un montant de ' . $participationMontant . ' €';
+                        $sign = 'positive';
+                    }
+                    if (!empty($paiement->getRaison())) {
+                        $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+                    } else {
+                        $raison = '';
+                    }
+                } //Si l'utilisateur est responsable du paiement
+                elseif ($paiement->getUtilisateurId() == $_SESSION['user']->getId()) {
+                    $user = $_SESSION['user'];
+                    if ($paiement->getTypePaiement() == 'Dépense') {
+                        $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+                        $name = 'Vous avez créé une dépense';
+                        $msg = 'Vous avez créé une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
+                        $sign = 'negative';
+                    } elseif ($paiement->getTypePaiement() == 'Remboursement') {
+                        $participationMontant = $paiement->getMontant();
+                        $name = 'Vous avez envoyé un remboursement.';
+                        $msg = 'Vous avez envoyé un remboursement d\'un montant de ' . $participationMontant . ' €';
+                        $sign = 'negative';
+                    } elseif ($paiement->getTypePaiement() == 'Avance') {
+                        $participationMontant = $paiement->getMontant();
+                        $name = 'Vous avez avancé de l\'argent';
+                        $msg = 'Vous avez avancé un montant de ' . $participationMontant . ' €';
+                        $sign = 'negative';
+                    }
+                    if (!empty($paiement->getRaison())) {
+                        $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+                    } else {
+                        $raison = '';
+                    }
                 }
-                if (!empty($paiement->getRaison())){
-                    $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
-                } else{
-                    $raison = '';
-                }
-            }
 
-          $p->appendContent(<<<HTML
+                $p->appendContent(<<<HTML
           <div class="dep-row">
           <div class="row">
-            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$user->getAvatar()}"></img></div>
+            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid avatar-event" src="assets/uploaded_avatar/{$user->getAvatar()}"/></div>
             <div class="col-lg-7 dash-event"><p class="text-event">{$name}</p></div>
             <div class="col-lg-2 dash-event"><span class="span-event {$sign}">{$participationMontant}€</span></div>
           </div>
         </div>
         <hr/>
 HTML
-);
-      $i++;
-      }
-      else{
-          break;
-      }
-    }
-}
-else{
-  $p->appendContent(<<<HTML
+                );
+                $i++;
+            } else {
+                break;
+            }
+        }
+    } else {
+        $p->appendContent(<<<HTML
       <div class="dep-row">
           <div class="row">
-            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid bubble-disclaimer" src="img/speech-bubble.png"></img></div>
+            <div class="col-lg-3 dash-event-avatar"><img class="img-fluid bubble-disclaimer" src="img/speech-bubble.png"/></div>
             <div class="col-lg-9 dash-event"><p class="text-event">Pas d'activités récentes</p></div>
           </div>
         </div>
 HTML
-);
-}
+        );
+    }
 
 
-
-$p->appendContent(<<<HTML
+    $p->appendContent(<<<HTML
 </div>
   <div class="col-lg-3 box-event" id="box-3">
     <h2 class="box-title">Agenda</h2>
@@ -283,12 +274,12 @@ $p->appendContent(<<<HTML
   </div>
 </div>
 HTML
-);
+    );
 
 }
 //Sinon si l'utilisateur n'as pas de colocation, afficher un message de bienvenue.
 else{
-  $p->appendContent(<<<HTML
+    $p->appendContent(<<<HTML
 <div class="landing-text">
     <div class="row">
         <div class="col-lg-3"></div>
@@ -311,7 +302,7 @@ else{
 </div>
 
 HTML
-);
+    );
 }
 
 
@@ -351,4 +342,3 @@ JS
 echo $p->toHTML() ;
 
 $_SESSION['user']->getBalanceEnvers(6);
-?>
