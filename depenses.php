@@ -115,6 +115,7 @@ $historique = $_SESSION['user']->getPaiementsHistory();
 if(!empty($historique)){
     $i = 0;
     $max = 10;
+    /** @var Paiement $paiement */
     foreach($historique as $key => $paiement){
         if($i < $max){
             //
@@ -424,22 +425,16 @@ $p->appendJS(<<<JS
 
     $('#type-depense').change(function() {
         if ($(this).val() === 'depense') {
-            $("#choose-msg").empty();
-            $("#choose-msg").append("Choisissez les personnes qui participent à cette dépense :");
-            $("#participation-msg").empty();
-            $("#participation-msg").append("Elles participent à");
+            $("#choose-msg").empty().append("Choisissez les personnes qui participent à cette dépense :");
+            $("#participation-msg").empty().append("Elles participent à");
         }
         else if($(this).val() === 'remboursement'){
-            $("#choose-msg").empty();
-            $("#choose-msg").append("Choisissez la ou les personnes remboursées :");
-            $("#participation-msg").empty();
-            $("#participation-msg").append("Elles sont remboursées à");
+            $("#choose-msg").empty().append("Choisissez la ou les personnes remboursées :");
+            $("#participation-msg").empty().append("Elles sont remboursées à");
         }
         else if($(this).val() === 'avance') {
-            $("#choose-msg").empty();
-            $("#choose-msg").append("Choisissez la ou les personnes avancées :");
-            $("#participation-msg").empty();
-            $("#participation-msg").append("Elles sont avancées à");
+            $("#choose-msg").empty().append("Choisissez la ou les personnes avancées :");
+            $("#participation-msg").empty().append("Elles sont avancées à");
         }
     });
 
@@ -467,14 +462,11 @@ $p->appendJS(<<<JS
             });
             $("#montant").val(montantTotal);
             if(montantTotal === 0 || isNaN(montantTotal)){
-                $('#save-label').empty();
-                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
-                $('#save-label').show();
+                $('#save-label').empty().append("Le total des montants ne peut-être égal a 0.").show();
                 $("#save-btn").attr("disabled", true);
             }
             else{
-                $('#save-label').empty();
-                $('#save-label').hide();
+                $('#save-label').empty().hide();
                 $("#save-btn").removeAttr("disabled");
             }
         }
@@ -512,10 +504,8 @@ $p->appendJS(<<<JS
 
     $("#type-participation").change(function() {
         if($("#type-participation").val() === "partegale"){
-            $('#save-label').empty();
-            $('#save-label').hide();
-            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext");
-            $(".money-avatar").attr("readonly", true);
+            $('#save-label').empty().hide();
+            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext").attr("readonly", true);
             $("#montant").removeAttr("readonly");
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
@@ -524,8 +514,7 @@ $p->appendJS(<<<JS
             });
         }
         else if($("#type-participation").val() === "montant"){
-            $(".money-avatar").removeClass("form-control-plaintext").addClass("form-control");
-            $(".money-avatar").removeAttr("readonly");
+            $(".money-avatar").removeClass("form-control-plaintext").addClass("form-control").removeAttr("readonly");
             $("#montant").attr("readonly", true);
             var montantTotal = 0;
             $("input:checkbox:checked").each(function() {
@@ -535,20 +524,16 @@ $p->appendJS(<<<JS
                 $("#percent-div-"+key).fadeTo(200, 0);
             });
             if(montantTotal === 0 || montantTotal === ""){
-                $('#save-label').empty();
-                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
-                $('#save-label').show();
+                $('#save-label').empty().append("Le total des montants ne peut-être égal a 0.").show();
                 $("#save-btn").attr("disabled", true);
             }
             else{
-                $('#save-label').empty();
-                $('#save-label').hide();
+                $('#save-label').empty().hide();
                 $("#save-btn").removeAttr("disabled");
             }
         }
         else if($("#type-participation").val() === "pourcentage"){
-            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext");
-            $(".money-avatar").attr("readonly", true);
+            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext").attr("readonly", true);
             $("#montant").removeAttr("readonly");
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
@@ -567,14 +552,11 @@ $p->appendJS(<<<JS
             });
             $("#montant").val(montantTotal);
             if(montantTotal === 0 || isNaN(montantTotal)){
-                $('#save-label').empty();
-                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
-                $('#save-label').show();
+                $('#save-label').empty().append("Le total des montants ne peut-être égal a 0.").show();
                 $("#save-btn").attr("disabled", true);
             }
             else{
-                $('#save-label').empty();
-                $('#save-label').hide();
+                $('#save-label').empty().hide();
                 $("#save-btn").removeAttr("disabled");
             }
         }
@@ -594,9 +576,7 @@ $p->appendJS(<<<JS
             $("#save-btn").removeAttr("disabled");
         }
         else{
-            $('#save-label').show();
-            $('#save-label').empty();
-            $('#save-label').append("Le total des pourcentages doit être égal à 100.");
+            $('#save-label').show().empty().append("Le total des pourcentages doit être égal à 100.");
             $("#save-btn").attr("disabled", true);
         }
     })
