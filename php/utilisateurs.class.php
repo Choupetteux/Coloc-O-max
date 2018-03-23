@@ -90,7 +90,9 @@ SQL
         }
     }
 
-    //Permet à l'utilisateur de se connecter à partir de son pseudo et son mot de passe.
+    /**Permet à l'utilisateur de se connecter à partir de son pseudo et son mot de passe.
+     * @return boolean
+     * */
     public function connexion($pseudo, $mdp)
     {
         try {
@@ -272,8 +274,6 @@ SQL
     /**
      * Récupérer la date de naissance
      *
-     * @param string $type le contenu de la date de naissance peut être
-     *
      * @return string La date de naissance au format "DD-MM-YYYY"
      */
     public function getDateDeNaissance()
@@ -295,23 +295,31 @@ SQL
     public function setSexe($sex)
     {
         $this->sexe = $sex;
-        $PDO = myPdo::getInstance()->prepare(
-            "UPDATE utilisateurs
-            set sexe = ?
-            WHERE utilisateur_id = ?"
-        );
-        $PDO->execute(array($sex, $this->utilisateur_id));
+        try {
+            $PDO = myPDO::getInstance()->prepare(
+                "UPDATE utilisateurs
+                SET sexe = ?
+                WHERE utilisateur_id = ?"
+            );
+            $PDO->execute(array($sex, $this->utilisateur_id));
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function setDateDeNaissance($jourNais, $moisNais, $anneeNais)
     {
         $this->date_de_naissance = $jourNais . "/" . $moisNais . "/" . $anneeNais;
-        $PDO = myPdo::getInstance()->prepare(
-            "UPDATE utilisateurs
-            set date_de_naissance = STR_TO_DATE(?, '%d/%m/%Y')
-            WHERE utilisateur_id = ?"
-        );
-        $PDO->execute(array($this->date_de_naissance, $this->utilisateur_id));
+        try {
+            $PDO = myPdo::getInstance()->prepare(
+                "UPDATE utilisateurs
+                SET date_de_naissance = STR_TO_DATE(?, '%d/%m/%Y')
+                WHERE utilisateur_id = ?"
+            );
+            $PDO->execute(array($this->date_de_naissance, $this->utilisateur_id));
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function setBalance($value)
@@ -319,20 +327,27 @@ SQL
         $this->balance = $value;
     }
 
+    /**
+     * @return array historique des paiements
+     */
     public function getPaiementsHistory()
     {
-        $PDO = myPdo::getInstance()->prepare(
-            "SELECT DISTINCT pai.paiement_id, pai.montant, pai.raison, pai.typePaiement, pai.utilisateur_id
-             FROM   participer par, paiements pai
-             WHERE  par.paiement_id = pai.paiement_id
-             AND    par.utilisateur_id = ?
-             OR     pai.utilisateur_id = ?
-             ORDER BY pai.datePaiement DESC"
-        );
-        $PDO->setFetchMode(PDO::FETCH_CLASS, 'Paiement');
-        $PDO->execute(array($this->utilisateur_id, $this->utilisateur_id));
-        $history = $PDO->fetchAll();
-        return $history;
+        try {
+            $PDO = myPdo::getInstance()->prepare(
+                "SELECT DISTINCT pai.paiement_id, pai.montant, pai.raison, pai.typePaiement, pai.utilisateur_id
+                 FROM   participer par, paiements pai
+                 WHERE  par.paiement_id = pai.paiement_id
+                 AND    par.utilisateur_id = ?
+                 OR     pai.utilisateur_id = ?
+                 ORDER BY pai.datePaiement DESC"
+            );
+            $PDO->setFetchMode(PDO::FETCH_CLASS, 'Paiement');
+            $PDO->execute(array($this->utilisateur_id, $this->utilisateur_id));
+            $history = $PDO->fetchAll();
+            return $history;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function changePassword($old_pwd, $new_pwd)

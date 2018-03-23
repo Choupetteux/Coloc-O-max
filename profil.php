@@ -63,6 +63,7 @@ HTML
 $user = null;
 if (isset($_GET['id'])) {
     $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+    /** @var Utilisateur $coloc */
     foreach($colocataires as $key => $coloc){
         if($coloc->getId() == $_GET['id']){
             $user = $coloc;
@@ -94,7 +95,7 @@ if ($user != null ) {
         <div class="col-lg-6 box-profil"> 
             <div class="row">
                 <div class="col-lg-6 profil-avatar">
-                    <img class="avatar-pic" src="{$user->getAvatarPath()}"></img>
+                    <img class="avatar-pic" src="{$user->getAvatarPath()}"/>
                 </div>
                 <div class="col-lg-6">
                     <h2 class="box-title">{$user->getPseudo()} ({$coloc->getColocation()->getColocationNom()})</h2>
@@ -177,5 +178,4 @@ HTML
 }
 
 echo $p->toHTML() ;
-?>
 

@@ -105,10 +105,4 @@ $p->appendContent(<<<HTML
 HTML
 );
 
-
-
-
 echo $p->toHTML() ;
-
-
-?>

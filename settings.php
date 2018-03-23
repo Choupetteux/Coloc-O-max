@@ -287,7 +287,7 @@ $p->appendContent(<<<HTML
     <p>
 	Nos Règles de confidentialité expliquent&nbsp; :
 
-			<ul classe = "pull-left" style = "margin:auto 10%">
+			<ul>
 			<li>
     			les données que nous collectons et les raisons de cette collecte.
 			</li>
@@ -312,7 +312,7 @@ $p->appendContent(<<<HTML
 
   <section id="content3">
 		<form action="" method="post">
-		<fieldset classe = "pull-left" style = "margin:auto 10%">
+		<fieldset>
 		<legend>Modifier votre mot de passe : </legend>
 
 

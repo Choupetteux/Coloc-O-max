@@ -2,7 +2,7 @@
 
 final class myPDO {
     /**
-     * @var myPDO $_PDOInstance Instance unique.
+     * @var PDO $_PDOInstance Instance unique.
      */
     private static $_PDOInstance   = null ;
 
@@ -41,7 +41,7 @@ final class myPDO {
      * L'instance est créée au premier appel et réutilisée aux appels suivants.
      * @throws Exception si la configuration n'a pas été effectuée.
      *
-     * @return myPDO instance unique
+     * @return PDO instance unique
      */
     public static function getInstance() {
         if (is_null(self::$_PDOInstance)) {

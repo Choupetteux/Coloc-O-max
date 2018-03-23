@@ -7,7 +7,11 @@ require_once 'php/visiteur.php' ;
 require_once 'php/Paiement.class.php';
 require_once 'php/Participer.class.php';
 
-Session::start();
+try {
+    Session::start();
+} catch (SessionException $e) {
+    echo $e->getMessage();
+}
 
 $loggedin = isset($_SESSION['loggedin']);
 if(!$loggedin){
@@ -76,13 +80,14 @@ HTML
 
 //Création du html affichant chaque colocataire et le script jquery associé
     $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+    /** @var Utilisateur $coloc */
     foreach ($colocataires as $key => $coloc) {
         if ($coloc->isOnline()) {
             $p->appendContent(<<<HTML
         <div class="col-lg-2 col-centered text-center">
           <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
           <div class="full-height"></div>
-          <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
+          <p style="opacity:0;" class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
         </div>
 HTML
             );
@@ -90,7 +95,7 @@ HTML
             $p->appendContent(<<<HTML
         <div class="col-lg-2 col-centered text-center">
           <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
-          <p style="opacity:0;"class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
+          <p style="opacity:0;" class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
         </div>
 HTML
             );
@@ -184,6 +189,7 @@ HTML
     if (!empty($historique)) {
         $i = 0;
         $max = 10;
+        /** @var Paiement $paiement */
         foreach ($historique as $key => $paiement) {
             if ($i < $max) {
                 //
@@ -338,6 +344,10 @@ $p->appendJS(<<<JS
 JS
 );
 
-echo $p->toHTML() ;
+try {
+    echo $p->toHTML();
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 $_SESSION['user']->getBalanceEnvers(6);
