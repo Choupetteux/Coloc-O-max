@@ -16,6 +16,7 @@ class Utilisateur
     private $colocation_id = null;
     private $avatar = null;
     private $balance = null;
+    private $dateInscription = null;
 
     //Sauvegarde l'instance d'utilisateur dans la session actuelle.
     public function saveIntoSession()
@@ -37,7 +38,9 @@ class Utilisateur
     public static function getUtilisateurFromID($id)
     {
         $PDO = myPdo::getInstance()->prepare(
-            "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
+            "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') 
+                AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar, 
+                    DATE_FORMAT(FROM_UNIXTIME(UNIX_TIMESTAMP(dateInscription)), '%d/%m/%Y') AS \"dateInscription\"
                 FROM utilisateurs
                 WHERE utilisateur_id = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS, __CLASS__);
@@ -50,7 +53,9 @@ class Utilisateur
     public static function getUtilisateurFromPseudo($pseudo)
     {
         $PDO = myPdo::getInstance()->prepare(
-            "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
+            "SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') 
+                AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar, 
+                    DATE_FORMAT(FROM_UNIXTIME(UNIX_TIMESTAMP(dateInscription)), '%d/%m/%Y') AS \"dateInscription\"
                 FROM utilisateurs
                 WHERE pseudo = ?");
         $PDO->setFetchMode(PDO::FETCH_CLASS, __CLASS__);
@@ -200,6 +205,10 @@ SQL
     public function getBalance()
     {
         return $this->balance;
+    }
+
+    public function getDateInscription() {
+        return $this->dateInscription;
     }
 
     public function saveLogTime()

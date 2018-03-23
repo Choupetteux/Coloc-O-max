@@ -49,3 +49,12 @@ tr {
     margin-top : 30%;
     text-align: center;
 }
+
+.error {
+    margin: 5%;
+    font-family: "Open Sans", sans-serif;
+    text-align: center;
+    text-decoration : none;
+    color: rgba(0,0,0,.85);
+    font-weight: bold;
+}

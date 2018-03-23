@@ -57,53 +57,81 @@ HTML
 // exemple récupération donnée utilisateur
 // <h1>{$_SESSION['user']->getId()}</h1>
 
+
+// serie de tests sur les informations renseignées
+
+$user = null;
 if (isset($_GET['id'])) {
-    $user = $_GET['id'];
-} else {
-    $user = null;
+    $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+    foreach($colocataires as $key => $coloc){
+        if($coloc->getId() == $_GET['id']){
+            $user = $coloc;
+        }
+        else{
+            $erreur = "Vous ne pouvez voir que les profils de vos colocs !";
+        }
+    }
 }
 
-$coloc = $_SESSION['user']->getColocation()->getColocationNom();
-if($coloc == null){
-    $coloc = "Pas encore de coloc'";
-}
 
-$p->appendContent(<<<HTML
-<div class="row">
-    <div class="col-lg-3"></div>
+if ($user != null ) {
 
-    <div class="col-lg-6 box-profil"> 
-        <div class="row">
-            <div class="col-lg-6 profil-avatar">
-                <img class="avatar-pic" src="{$_SESSION['user']->getAvatarPath()}"></img>
-            </div>
-            <div class="col-lg-6">
-                <h2 class="box-title">{$_SESSION['user']->getPseudo()} ({$coloc})</h2>
-                <hr style="border-top:2px solid rgba(0,0,0,.85); margin-right: 3%;">
-                <div class="profil-infos">
-                    <table>
-                        <tr>
-                            <th class="box-content" scope="row">Nom : </th>
-                            <td>{$_SESSION['user']->getNom()}</td>
-                        </tr>
-                        <tr>
-                            <th class="box-content" scope="row">Prénom : </th>
-                            <td>{$_SESSION['user']->getPrenom()}</td>
-                        </tr>
-                        <tr>
-                            <th class="box-content" scope="row">Date de naissance : </th>
-                            <td>{$_SESSION['user']->getDateDeNaissance()}</td>
-                        </tr>
-                    </table>
-                    <p class="date-member">Membre depuis le ...</p>
+    if(is_null($user->getDateDeNaissance())) {
+        $dateNaissance = "Non renseignée";
+    } else {
+        $dateNaissance = $user->getDateDeNaissance();
+    }
+
+    $p->appendContent(<<<HTML
+    <div class="row">
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-6 box-profil"> 
+            <div class="row">
+                <div class="col-lg-6 profil-avatar">
+                    <img class="avatar-pic" src="{$user->getAvatarPath()}"></img>
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="box-title">{$user->getPseudo()} ({$coloc->getColocation()->getColocationNom()})</h2>
+                    <hr style="border-top:2px solid rgba(0,0,0,.85); margin-right: 3%;">
+                    <div class="profil-infos">
+                        <table>
+                            <tr>
+                                <th class="box-content" scope="row">Nom : </th>
+                                <td>{$user->getNom()}</td>
+                            </tr>
+                            <tr>
+                                <th class="box-content" scope="row">Prénom : </th>
+                                <td>{$user->getPrenom()}</td>
+                            </tr>
+                            <tr>
+                                <th class="box-content" scope="row">Date de naissance : </th>
+                                <td>{$dateNaissance}</td>
+                            </tr>
+                        </table>
+                        <p class="date-member">Membre depuis le {$user->getDateInscription()}</p>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col-lg-3"></div>
     </div>
-    <div class="col-lg-3"></div>
-</div>
 HTML
 );
+} else {
+    $p->appendContent(<<<HTML
+    <div class="row">
+        <div class="col-lg-3"></div>
+            <div class="col-lg-6 box-profil"> 
+                 <p class="error"> {$erreur} </p>
+            </div>
+        </div>
+        <div class="col-lg-3"></div>
+    </div>
+HTML
+);
+}
 
 echo $p->toHTML() ;
 ?>
+
