@@ -242,7 +242,6 @@ if(!empty($historique)){
                     $raison = '';
                 }
             }
-
           $p->appendContent(<<<HTML
           <div class="dep-row">
           <div class="row">

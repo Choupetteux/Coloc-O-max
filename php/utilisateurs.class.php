@@ -2,6 +2,7 @@
 
 require_once 'myPDO.mysql.colocomax.php';
 require_once 'colocation.class.php';
+require_once 'Paiement.class.php';
 
 class Utilisateur
 {

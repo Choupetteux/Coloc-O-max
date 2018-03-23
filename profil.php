@@ -68,11 +68,12 @@ if (isset($_GET['id'])) {
             $user = $coloc;
         }
         else{
-            $erreur = "Vous ne pouvez voir que les profils de vos colocs !";
+            $erreur = "Vous ne pouvez voir que les profils de vos colocs' !";
         }
     }
 }
 
+$balance = null;
 
 if ($user != null ) {
 
@@ -80,6 +81,10 @@ if ($user != null ) {
         $dateNaissance = "Non renseignée";
     } else {
         $dateNaissance = $user->getDateDeNaissance();
+    }
+
+    if ($user->getId() != $_SESSION['user']->getId()){
+        $balance = $user->getBalanceEnvers($_SESSION['user']->getId());
     }
 
     $p->appendContent(<<<HTML
@@ -108,14 +113,53 @@ if ($user != null ) {
                                 <th class="box-content" scope="row">Date de naissance : </th>
                                 <td>{$dateNaissance}</td>
                             </tr>
+HTML
+);
+        if(!is_null($balance)){
+            if ($balance > 0) {
+                $p->appendContent(<<<HTML
+                <tr>
+                    <th class="box-content" scope="row"> Vous doit : </th>
+                    <td class="balance-positive">{$balance} €</td>
+                </tr>
+            </table>
+HTML
+);
+            } elseif($balance < 0) {
+                $balance = abs($balance);
+                $p->appendContent(<<<HTML
+                <tr>
+                    <th class="box-content" scope="row"> Vous lui devez : </th>
+                    <td class="balance-négative">{$balance} €</td>
+                </tr>
+            </table>
+HTML
+);
+            }
+        } else {
+            if ($user->getId() == $_SESSION['user']->getId()) {
+                $p->appendContent(<<<HTML
+                </table>
+HTML
+);
+            } else {
+                    $p->appendContent(<<<HTML
                         </table>
-                        <p class="date-member">Membre depuis le {$user->getDateInscription()}</p>
+                        <p class="balance-neutre">{$user->getPseudo()} ne vous doit rien !</p>
+HTML
+);
+        }
+    }
+
+
+        $p->appendContent(<<<HTML
+                            <p class="date-member">Membre depuis le {$user->getDateInscription()}</p>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3"></div>
         </div>
-        <div class="col-lg-3"></div>
-    </div>
 HTML
 );
 } else {
