@@ -14,11 +14,10 @@ $loggedin = isset($_SESSION['loggedin']);
 if(!$loggedin){
     $_SESSION['user']->redirection("index.php");
 }
-//TODO: Facture::createFacture("Electricité", 150, 6, "now", array(3 => 100,6 => 50));
+
 $_SESSION['user']->saveLogTime();
 
 $colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
-
 
 if(isset($_POST['delete'])){
     Paiement::supprimerPaiement($_POST['paiement']);
@@ -28,7 +27,7 @@ if(isset($_POST['submit-fac']) && !empty($_POST['montant-facture']) && !empty($_
     $newpost = array_map ( 'htmlspecialchars' , $_POST );
     $arrayUser = [];
     foreach($colocataires as $key => $coloc){
-        $arrayUser[$coloc->getId()] = ($newpost['montant-facture'] / sizeof($colocataires));
+        $arrayUser[$coloc->getId()] = number_format(($newpost['montant-facture'] / sizeof($colocataires)), 2);
     }
     Facture::createFacture($newpost['libelle-facture'], $newpost['montant-facture'], $_SESSION['user']->getId(), $newpost['date-fac'], $arrayUser);
 }

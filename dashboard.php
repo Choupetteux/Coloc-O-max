@@ -84,7 +84,7 @@ HTML
     foreach ($colocataires as $key => $coloc) {
         if ($coloc->isOnline()) {
             $p->appendContent(<<<HTML
-        <div class="col-lg-2 col-centered text-center">
+        <div class="col-lg-2 col-centered text-center avatar-bloc" id="avatar-bloc-{$key}">
           <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
           <div class="full-height"></div>
           <p style="opacity:0;" class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
@@ -93,16 +93,18 @@ HTML
             );
         } else {
             $p->appendContent(<<<HTML
-        <div class="col-lg-2 col-centered text-center">
+        <div class="col-lg-2 col-centered text-center avatar-bloc" id="avatar-bloc-{$key}">
           <img class="img-fluid dash-avatar" id="avatar-{$key}" src="{$coloc->getAvatarPath()}"><a href=#></a></img>
           <p style="opacity:0;" class="name-avatar" id="name-{$key}">{$coloc->getPseudo()}</p>
         </div>
 HTML
             );
         }
+
         //Append le Jquery pour afficher le pseudo on hover pour chaque bloc de colocataire
         $p->appendJs(<<<JS
-      $(document).ready(function() { 
+      $(document).ready(function() {
+         var profileShown{$key} = false;
         $("#avatar-{$key}").on({
           mouseenter: function () {
             $("#name-{$key}").stop(true, true).fadeTo(200, 1);
@@ -111,6 +113,31 @@ HTML
               $("#name-{$key}").fadeTo(200, 0);
           }
         });
+        
+        $("#avatar-{$key}").on("click", function() {
+                var calc = ({$key} * - 60) + 100;
+                $('#box-2').removeClass('animated fadeInUp').addClass('animated fadeOutDown');
+                $('#box-1').removeClass('animated fadeInLeft').addClass('animated fadeOutLeft');
+                $('#box-3').removeClass('animated fadeInRight').addClass('animated fadeOutRight');
+                setTimeout(() => {
+                    $('#profile-{$key}').removeClass('fadeOut').addClass('animated fadeIn').show();
+                }, 700);
+                $("#avatar-bloc-{$key}").css('transform',"translate(" + calc + "%, 354%)");
+        });
+        
+         $("#big-avatar-{$key}").on("click", function() {
+            $('#profile-{$key}').removeClass('animated fadeIn').addClass('animated fadeOut');
+            setTimeout(() => {
+                $('#profile-{$key}').hide();
+            }, 700);
+            setTimeout(() => {
+                $('#box-2').removeClass('animated fadeOutDown').addClass('animated fadeInUp');
+                $('#box-1').removeClass('animated fadeOutLeft').addClass('animated fadeInLeft');
+                $('#box-3').removeClass('animated fadeOutRight').addClass('animated fadeInRight');
+            }, 700);
+            $("#avatar-bloc-{$key}").css('transform','none');
+        });
+        
       });
 JS
         );
@@ -121,11 +148,101 @@ JS
 HTML
     );
 
+    foreach ($colocataires as $i => $coloc) {
+        $balance = null;
+        if ($coloc != null) {
+            $user = $coloc;
+            if (is_null($user->getDateDeNaissance())) {
+                $dateNaissance = "Non renseignée";
+            } else {
+                $dateNaissance = $user->getDateDeNaissance();
+            }
+
+            if ($user->getId() != $_SESSION['user']->getId()) {
+                $balance = $user->getBalanceEnvers($_SESSION['user']->getId());
+            }
+
+            $p->appendContent(<<<HTML
+    <div class="row" style="display:none" id="profile-{$i}">
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-6 box-profil"> 
+            <div class="row">
+                <div class="col-lg-6 profil-avatar">
+                    <img class="avatar-pic" id="big-avatar-{$i}" src="{$user->getAvatarPath()}"/>
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="box-title-profil">{$user->getPseudo()} ({$user->getColocation()->getColocationNom()})</h2>
+                    <hr style="border-top:2px solid rgba(0,0,0,.85); margin-right: 3%;">
+                    <div class="profil-infos">
+                        <table>
+                            <tr>
+                                <th class="box-content" scope="row">Nom : </th>
+                                <td>{$user->getNom()}</td>
+                            </tr>
+                            <tr>
+                                <th class="box-content" scope="row">Prénom : </th>
+                                <td>{$user->getPrenom()}</td>
+                            </tr>
+                            <tr>
+                                <th class="box-content" scope="row">Date de naissance : </th>
+                                <td>{$dateNaissance}</td>
+                            </tr>
+HTML
+            );
+            if (!is_null($balance)) {
+                if ($balance > 0) {
+                    $p->appendContent(<<<HTML
+                <tr>
+                    <th class="box-content" scope="row"> Vous doit : </th>
+                    <td class="balance-positive">{$balance} €</td>
+                </tr>
+            </table>
+HTML
+                    );
+                } elseif ($balance < 0) {
+                    $balance = abs($balance);
+                    $p->appendContent(<<<HTML
+                <tr>
+                    <th class="box-content" scope="row"> Vous lui devez : </th>
+                    <td class="balance-négative">{$balance} €</td>
+                </tr>
+            </table>
+HTML
+                    );
+                }
+            } else {
+                if ($user->getId() == $_SESSION['user']->getId()) {
+                    $p->appendContent(<<<HTML
+                </table>
+HTML
+                    );
+                } else {
+                    $p->appendContent(<<<HTML
+                        </table>
+                        <p class="balance-neutre">{$user->getPseudo()} ne vous doit rien !</p>
+HTML
+                    );
+                }
+            }
+        }
+
+
+        $p->appendContent(<<<HTML
+                            <p class="date-member">Membre depuis le {$user->getDateInscription()}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+HTML
+        );
+    }
+
 //Afficher les 3 blocs contenant les dépenses, activités, agenda
     $p->appendContent(<<<HTML
 <div class="row box-wrapper">
-  
-
   <div class="col-lg-3 box-event" id="box-1">
     <h2 class="box-title">Sommaire</h2>
     <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
@@ -332,14 +449,7 @@ $p->appendJS(<<<JS
       $('#header').removeClass('header-fixed');
     }
     });
-
-    $("#box1").scroll(function() {
-    if ($(this).scrollTop() < 100) {
-      $('#header').addClass('header-fixed');
-    } else {
-      $('#header').removeClass('header-fixed');
-    }
-    });
+    
   })
 JS
 );
