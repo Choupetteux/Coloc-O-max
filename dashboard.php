@@ -225,7 +225,7 @@ HTML
                     );
                 }
             }
-        }
+        } 
 
 
         $p->appendContent(<<<HTML
@@ -251,6 +251,10 @@ HTML
     );
 
     foreach ($colocataires as $i => $coloc) {
+        $activity = false;
+        if($coloc->getId() != $_SESSION['user']->getId()){
+            $activity = true;
+        }
         $balance = $_SESSION['user']->getBalanceEnvers($coloc->getId());
         if ($coloc->getId() != $_SESSION['user']->getId()) {
             if ($balance < 0) {
@@ -291,6 +295,18 @@ HTML
                 );
             }
         }
+    }
+    
+    if(!$activity){
+            $p->appendContent(<<<HTML
+          <div class="dep-row">
+              <div class="row">
+                <div class="col-lg-3 dash-event-avatar"><img class="img-fluid bubble-disclaimer" src="img/speech-bubble.png"/></div>
+                <div class="col-lg-9 dash-event"><p class="text-event">Pas d'activités récentes</p></div>
+              </div>
+            </div>
+HTML
+            );
     }
 
 
@@ -393,8 +409,14 @@ HTML
   <div class="col-lg-3 box-event" id="box-3">
     <h2 class="box-title">Agenda</h2>
  <hr style="border-top:2px solid rgba(0,0,0,.85); margin-top:0;">
-  </div>
-</div>
+          <div class="dep-row">
+              <div class="row">
+                <div class="col-lg-3 dash-event-avatar"><img class="img-fluid bubble-disclaimer" src="img/speech-bubble.png"/></div>
+                <div class="col-lg-9 dash-event"><p class="text-event">Pas d'activités récentes</p></div>
+              </div>
+            </div>
+        </div>
+    </div>
 HTML
     );
 
@@ -459,5 +481,3 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
-
-$_SESSION['user']->getBalanceEnvers(6);
