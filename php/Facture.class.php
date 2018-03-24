@@ -39,7 +39,7 @@ class Facture
             $PDO = myPdo::getInstance()->prepare(
                 <<<SQL
                     CREATE EVENT `Facture-{$lastId}` ON SCHEDULE
-                    EVERY 10 SECOND STARTS ?
+                    EVERY 1 MONTH STARTS ?
                     ON COMPLETION PRESERVE
                     DO
                      BEGIN

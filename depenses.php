@@ -17,9 +17,22 @@ if(!$loggedin){
 //TODO: Facture::createFacture("Electricité", 150, 6, "now", array(3 => 100,6 => 50));
 $_SESSION['user']->saveLogTime();
 
+$colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+
+
 if(isset($_POST['delete'])){
     Paiement::supprimerPaiement($_POST['paiement']);
 }
+
+if(isset($_POST['submit-fac']) && !empty($_POST['montant-facture']) && !empty($_POST['libelle-facture'])){
+    $newpost = array_map ( 'htmlspecialchars' , $_POST );
+    $arrayUser = [];
+    foreach($colocataires as $key => $coloc){
+        $arrayUser[$coloc->getId()] = ($newpost['montant-facture'] / sizeof($colocataires));
+    }
+    Facture::createFacture($newpost['libelle-facture'], $newpost['montant-facture'], $_SESSION['user']->getId(), $newpost['date-fac'], $arrayUser);
+}
+
 
 if(isset($_POST['submit'])){
     $newpost = array_map ( 'htmlspecialchars' , $_POST );
@@ -42,6 +55,8 @@ if(isset($_POST['submit'])){
         }
     }
 }
+
+
 
 $p = new WebPage($loggedin, "ColocOmax") ;
 
@@ -225,7 +240,7 @@ $p->appendContent(<<<HTML
             <div class="col-lg-4"></div>
         </div>
         <div class="col-lg-12">
-            <hr/>
+            <br/>
         </div>
         <div class="align-items-center form-row">
             <div class="col-lg-5"></div>
@@ -234,7 +249,6 @@ $p->appendContent(<<<HTML
 HTML
 );
 
-$colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
 foreach($colocataires as $key => $coloc){
     if($coloc->getId() == $_SESSION['user']->getId()){
         //Dun do nothin'
@@ -337,15 +351,65 @@ $p->appendContent(<<<HTML
 </form>
 
   </section>
-    
+
+
+<!-- DEBUT ONGLET 3 -->
   <section id="content3">
-    <p>
-      Bacon ipsum dolor sit amet beef venison beef ribs kielbasa. Sausage pig leberkas, t-bone sirloin shoulder bresaola. Frankfurter rump porchetta ham. Pork belly prosciutto brisket meatloaf short ribs.
-    </p>
-    <p>
-      Brisket meatball turkey short loin boudin leberkas meatloaf chuck andouille pork loin pastrami spare ribs pancetta rump. Frankfurter corned beef beef tenderloin short loin meatloaf swine ground round venison.
-    </p>
-  </section>
+    <form method="POST">
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <h4 class="col-lg-4">Ajouter une facture</h4> 
+            <div class="col-lg-4"></div>
+        </div>
+        <div class="col-lg-12">
+            <br/>
+        </div>
+        <div class="align-items-center form-row">
+            <div class="col-lg-5"></div>
+HTML
+);
+
+$colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+$p->appendContent(<<<HTML
+            </select>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <label class="col-lg-2 col-centered text-center form-label">Montant de la facture :</label>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <div class="input-group col-lg-2">
+                <input class="form-control" id="montant-facture" type="text" name="montant-facture" pattern="[1-9]\d*(\.\d{2}$)?" required>
+                <div class="input-group-prepend">
+                    <div class="input-group-text">€</div>
+                </div>
+            </div>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <label class="col-lg-2 form-label"> pour : </label>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-4"></div>
+            <input class="form-control col-lg-4" id="libelle-facture" type="text" name="libelle-facture" placeholder="Nom de la facture" required>
+            
+            <div class="col-lg-4"></div>
+            <div class="col-lg-5"></div>
+            <label class="col-lg-2 form-label"> qui prendra effet le : </label>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-4"></div>
+            <input class="col-lg-4" name="date-fac" id="datetime" type="datetime-local">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-12">
+                <hr/>
+            </div>
+            <div class="col-lg-3"></div>
+            <label id="choose-msg" class="col-lg-6 form-label"> Tous les colocataires participeront à la facture </label>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3"></div>
+            <label id="choose-msg" class="col-lg-6 form-label"> (Coming soon : Selection avancée des colocataires qui contribuent à la facture)</label>
+            <div class="col-lg-3"></div>
+            <input name="submit-fac" type="submit" class="btn btn-primary col-centered save-button" value="Enregistrer la facture">
+            </form>
+            </div>
+<section>
 HTML
 );
 }
@@ -587,8 +651,10 @@ $p->appendJS(<<<JS
 JS
 );
 
+
 echo $p->toHTML() ;
 
 
-$_SESSION['user']->getPaiementsHistory();
-?>
+
+
+var_dump($_POST);
