@@ -27,7 +27,7 @@ if(isset($_POST['submit-fac']) && !empty($_POST['montant-facture']) && !empty($_
     $newpost = array_map ( 'htmlspecialchars' , $_POST );
     $arrayUser = [];
     foreach($colocataires as $key => $coloc){
-        $arrayUser[$coloc->getId()] = number_format(($newpost['montant-facture'] / sizeof($colocataires)), 2);
+        $arrayUser[$coloc->getId()] = round(($newpost['montant-facture'] / sizeof($colocataires)), 2);
     }
     Facture::createFacture($newpost['libelle-facture'], $newpost['montant-facture'], $_SESSION['user']->getId(), $newpost['date-fac'], $arrayUser);
 }
@@ -48,9 +48,9 @@ if(isset($_POST['submit'])){
                 $arrayId[$i] = str_replace("€", "", $newpost["montant-" . $i]);
             }
         }
-        $paiement_id = Paiement::createNewPaiement($newpost['montant'], $newpost['raison'], $newpost['typeDep'], $newpost['payeur']);
+        $paiement_id = Paiement::createNewPaiement(round($newpost['montant'],2) , $newpost['raison'], $newpost['typeDep'], $newpost['payeur']);
         foreach($arrayId as $id => $montant){
-            Participer::createNewParticipation($newpost['typePart'], $montant, $paiement_id, $id);
+            Participer::createNewParticipation($newpost['typePart'], round($montant, 2), $paiement_id, $id);
         }
     }
 }

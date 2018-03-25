@@ -158,7 +158,7 @@ HTML
             } else {
                 $dateNaissance = $user->getDateDeNaissance();
             }
-
+            
             if ($user->getId() != $_SESSION['user']->getId()) {
                 $balance = $user->getBalanceEnvers($_SESSION['user']->getId());
             }

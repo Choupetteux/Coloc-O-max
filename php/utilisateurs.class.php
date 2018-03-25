@@ -14,7 +14,6 @@ class Utilisateur
     private $passwd = null;
     private $colocation_id = null;
     private $avatar = null;
-    private $balance = null;
     private $dateInscription = null;
 
     //Sauvegarde l'instance d'utilisateur dans la session actuelle.
@@ -265,7 +264,7 @@ SQL
         $PDO->execute(array($utilisateur_id, $this->utilisateur_id));
         $remboursement = $PDO->fetch()['montant'];
         if ($pret > $remboursement) {
-            return $pret - $remboursement;
+            return  $pret - $remboursement;
         } elseif ($pret < $remboursement) {
             return -($remboursement - $pret);
         }
