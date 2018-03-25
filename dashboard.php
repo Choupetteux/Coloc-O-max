@@ -122,7 +122,7 @@ HTML
                 setTimeout(() => {
                     $('#profile-{$key}').removeClass('fadeOut').addClass('animated fadeIn').show();
                 }, 700);
-                $("#avatar-bloc-{$key}").css('transform',"translate(" + calc + "%, 354%)");
+                $("#avatar-bloc-{$key}").addClass('animated fadeOut').css('transform',"translate(" + calc + "%, 354%)");
         });
         
          $("#big-avatar-{$key}").on("click", function() {
@@ -135,7 +135,7 @@ HTML
                 $('#box-1').removeClass('animated fadeOutLeft').addClass('animated fadeInLeft');
                 $('#box-3').removeClass('animated fadeOutRight').addClass('animated fadeInRight');
             }, 700);
-            $("#avatar-bloc-{$key}").css('transform','none');
+            $("#avatar-bloc-{$key}").removeClass('fadeOut').addClass('fadeIn').css('transform','none');
         });
         
       });
