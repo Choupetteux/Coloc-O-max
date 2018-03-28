@@ -14,7 +14,6 @@
 #landing .landing-text{
     height:50%;
     display:flex;
-    top:25%;
     left: 0;
     right: 0;
     position: absolute;
@@ -48,4 +47,9 @@
 
 #landing h2{
   color:#FFF;
+}
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
 }
