@@ -6,6 +6,7 @@ require_once 'php/session.class.php' ;
 require_once 'php/visiteur.php' ;
 require_once 'php/Paiement.class.php';
 require_once 'php/Participer.class.php';
+require_once 'php/Facture.class.php';
 
 Session::start();
 
@@ -15,6 +16,22 @@ if(!$loggedin){
 }
 
 $_SESSION['user']->saveLogTime();
+
+$colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+
+if(isset($_POST['delete'])){
+    Paiement::supprimerPaiement($_POST['paiement']);
+}
+
+if(isset($_POST['submit-fac']) && !empty($_POST['montant-facture']) && !empty($_POST['libelle-facture'])){
+    $newpost = array_map ( 'htmlspecialchars' , $_POST );
+    $arrayUser = [];
+    foreach($colocataires as $key => $coloc){
+        $arrayUser[$coloc->getId()] = round(($newpost['montant-facture'] / sizeof($colocataires)), 2);
+    }
+    Facture::createFacture($newpost['libelle-facture'], $newpost['montant-facture'], $_SESSION['user']->getId(), $newpost['date-fac'], $arrayUser);
+}
+
 
 if(isset($_POST['submit'])){
     $newpost = array_map ( 'htmlspecialchars' , $_POST );
@@ -31,12 +48,14 @@ if(isset($_POST['submit'])){
                 $arrayId[$i] = str_replace("€", "", $newpost["montant-" . $i]);
             }
         }
-        $paiement_id = Paiement::createNewPaiement($newpost['montant'], $newpost['raison'], $newpost['typeDep'], $newpost['payeur']);
+        $paiement_id = Paiement::createNewPaiement(round($newpost['montant'],2) , $newpost['raison'], $newpost['typeDep'], $newpost['payeur']);
         foreach($arrayId as $id => $montant){
-            Participer::createNewParticipation($newpost['typePart'], $montant, $paiement_id, $id);
+            Participer::createNewParticipation($newpost['typePart'], round($montant, 2), $paiement_id, $id);
         }
     }
 }
+
+
 
 $p = new WebPage($loggedin, "ColocOmax") ;
 
@@ -101,9 +120,114 @@ $p->appendContent(<<<HTML
     
   <input class="tab-input" id="tab3" type="radio" name="tabs">
   <label class="tab" id="tab3-label" for="tab3">Créer une facture récurrente</label>
-    
+
+<!--Historique des paiements -->
   <section id="content1">
-    
+  <div id="accordion" class="col-lg-10 col-centered">
+HTML
+);
+$historique = $_SESSION['user']->getPaiementsHistory();
+if(!empty($historique)){
+    $i = 0;
+    $max = 10;
+    /** @var Paiement $paiement */
+    foreach($historique as $key => $paiement){
+        if($i < $max){
+            //
+            // TODO : Faire une méthode qui permettrait de gérer plus proprement l'historique.
+            //
+            $user = Paiement::getUtilisateurFromPaiementId($paiement->getPaiementId());
+            //Si autre utilisateur reponsable du paiement
+            if ($paiement->getUtilisateurId() != $_SESSION['user']->getId()){
+                $deletebtn = "";
+                $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+                if ($paiement->getTypePaiement() == 'Dépense'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez participé à une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Remboursement'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez été remboursé d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'positive';
+                } elseif ($paiement->getTypePaiement() == 'Avance'){
+                    $name = $paiement->getTypePaiement() . ' de la part de ' . $user->getPseudo();
+                    $msg = 'Vous avez été avancé d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'positive';
+                }
+                if (!empty($paiement->getRaison())){
+                    $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+                } else{
+                    $raison = '';
+                }
+            }
+            //Si l'utilisateur est responsable du paiement
+            elseif($paiement->getUtilisateurId() == $_SESSION['user']->getId()){
+                $deletebtn = <<<HTML
+                <form method="post">
+                <input type="hidden" name="paiement" value="{$paiement->getPaiementId()}"/>
+                <input name="delete" type="submit" id="delete-btn" class="btn btn-danger col-centered float-right" value="Supprimer">
+                </form>
+HTML
+;
+                if ($paiement->getTypePaiement() == 'Dépense'){
+                    $participationMontant = Participer::getParticipationFromIds($paiement->getPaiementId(), $_SESSION['user']->getId())['montant'];
+                    $name = 'Vous avez créé une dépense';
+                    $msg = 'Vous avez créé une dépense d\'un montant total de ' . $paiement->getMontant() . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Remboursement'){
+                    $participationMontant = $paiement->getMontant();
+                    $name = 'Vous avez envoyé un remboursement.';
+                    $msg = 'Vous avez envoyé un remboursement d\'un montant de ' . $participationMontant . ' €';
+                    $sign = 'negative';
+                } elseif ($paiement->getTypePaiement() == 'Avance'){
+                    $participationMontant = $paiement->getMontant();
+                    $name = 'Vous avez avancé de l\'argent';
+                    $msg = 'Vous avez avancé un montant de ' . $participationMontant . ' €';
+                    $sign = 'negative';
+                }
+                if (!empty($paiement->getRaison())){
+                    $raison = 'pour la raison suivante :<br><em>' . $paiement->getRaison() . '</em>';
+                } else{
+                    $raison = '';
+                }
+            }
+
+            $p->appendContent(<<<HTML
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link col-lg-12" data-toggle="collapse" data-target="#collapse-{$key}" aria-expanded="true" aria-controls="collapse-{$key}">
+                        <span class="float-left">{$name}</span><span class="float-right {$sign}">{$participationMontant} €</span>
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapse-{$key}" class="collapse hide" aria-labelledby="heading-{$key}" data-parent="#accordion">
+                    <div class="card-body">
+                        <p class="depense-msg">{$msg} {$raison}</p>
+                        {$deletebtn}
+                    </div>
+                </div>
+        </div>
+HTML
+            );
+            $i++;
+        }
+        else{
+            break;
+        }
+    }
+}
+
+else{
+    $p->appendContent(<<<HTML
+        <p>Vous n'avez pas encore créé ou participé à une dépenses.</p>  
+HTML
+);
+}
+
+$p->appendContent(<<<HTML
+    </div>
   </section>
     
   <section id="content2">
@@ -115,7 +239,7 @@ $p->appendContent(<<<HTML
             <div class="col-lg-4"></div>
         </div>
         <div class="col-lg-12">
-            <hr/>
+            <br/>
         </div>
         <div class="align-items-center form-row">
             <div class="col-lg-5"></div>
@@ -123,7 +247,7 @@ $p->appendContent(<<<HTML
                 <option value="{$_SESSION['user']->getId()}" > {$_SESSION['user']->getPseudo()} </option>
 HTML
 );
-$colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+
 foreach($colocataires as $key => $coloc){
     if($coloc->getId() == $_SESSION['user']->getId()){
         //Dun do nothin'
@@ -142,9 +266,9 @@ $p->appendContent(<<<HTML
             <div class="col-lg-5"></div>
             <label class="col-lg-2 col-centered text-center form-label">a
             <select class="col-lg-8" id="type-depense" type ="select" name="typeDep">
-                <option value="depense">dépensé</option>
-                <option value="remboursement">remboursé</option>
-                <option value="avance">avancé</option>
+                <option value="Dépense">dépensé</option>
+                <option value="Remboursement">remboursé</option>
+                <option value="Avance">avancé</option>
             </select></label>
             <div class="col-lg-5"></div>
             <div class="col-lg-5"></div>
@@ -226,15 +350,65 @@ $p->appendContent(<<<HTML
 </form>
 
   </section>
-    
+
+
+<!-- DEBUT ONGLET 3 -->
   <section id="content3">
-    <p>
-      Bacon ipsum dolor sit amet beef venison beef ribs kielbasa. Sausage pig leberkas, t-bone sirloin shoulder bresaola. Frankfurter rump porchetta ham. Pork belly prosciutto brisket meatloaf short ribs.
-    </p>
-    <p>
-      Brisket meatball turkey short loin boudin leberkas meatloaf chuck andouille pork loin pastrami spare ribs pancetta rump. Frankfurter corned beef beef tenderloin short loin meatloaf swine ground round venison.
-    </p>
-  </section>
+    <form method="POST">
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <h4 class="col-lg-4">Ajouter une facture</h4> 
+            <div class="col-lg-4"></div>
+        </div>
+        <div class="col-lg-12">
+            <br/>
+        </div>
+        <div class="align-items-center form-row">
+            <div class="col-lg-5"></div>
+HTML
+);
+
+$colocataires = $_SESSION['user']->getColocation()->getListeColocataire();
+$p->appendContent(<<<HTML
+            </select>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <label class="col-lg-2 col-centered text-center form-label">Montant de la facture :</label>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <div class="input-group col-lg-2">
+                <input class="form-control" id="montant-facture" type="text" name="montant-facture" pattern="[1-9]\d*(\.\d{2}$)?" required>
+                <div class="input-group-prepend">
+                    <div class="input-group-text">€</div>
+                </div>
+            </div>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5"></div>
+            <label class="col-lg-2 form-label"> pour : </label>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-4"></div>
+            <input class="form-control col-lg-4" id="libelle-facture" type="text" name="libelle-facture" placeholder="Nom de la facture" required>
+            
+            <div class="col-lg-4"></div>
+            <div class="col-lg-5"></div>
+            <label class="col-lg-2 form-label"> qui prendra effet le : </label>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-4"></div>
+            <input class="col-lg-4" name="date-fac" id="datetime" type="datetime-local">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-12">
+                <hr/>
+            </div>
+            <div class="col-lg-3"></div>
+            <label id="choose-msg" class="col-lg-6 form-label"> Tous les colocataires participeront à la facture </label>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3"></div>
+            <label id="choose-msg" class="col-lg-6 form-label"> (Coming soon : Selection avancée des colocataires qui contribuent à la facture)</label>
+            <div class="col-lg-3"></div>
+            <input name="submit-fac" type="submit" class="btn btn-primary col-centered save-button" value="Enregistrer la facture">
+            </form>
+            </div>
+<section>
 HTML
 );
 }
@@ -315,22 +489,16 @@ $p->appendJS(<<<JS
 
     $('#type-depense').change(function() {
         if ($(this).val() === 'depense') {
-            $("#choose-msg").empty();
-            $("#choose-msg").append("Choisissez les personnes qui participent à cette dépense :");
-            $("#participation-msg").empty();
-            $("#participation-msg").append("Elles participent à");
+            $("#choose-msg").empty().append("Choisissez les personnes qui participent à cette dépense :");
+            $("#participation-msg").empty().append("Elles participent à");
         }
         else if($(this).val() === 'remboursement'){
-            $("#choose-msg").empty();
-            $("#choose-msg").append("Choisissez la ou les personnes remboursées :");
-            $("#participation-msg").empty();
-            $("#participation-msg").append("Elles sont remboursées à");
+            $("#choose-msg").empty().append("Choisissez la ou les personnes remboursées :");
+            $("#participation-msg").empty().append("Elles sont remboursées à");
         }
         else if($(this).val() === 'avance') {
-            $("#choose-msg").empty();
-            $("#choose-msg").append("Choisissez la ou les personnes avancées :");
-            $("#participation-msg").empty();
-            $("#participation-msg").append("Elles sont avancées à");
+            $("#choose-msg").empty().append("Choisissez la ou les personnes avancées :");
+            $("#participation-msg").empty().append("Elles sont avancées à");
         }
     });
 
@@ -358,14 +526,11 @@ $p->appendJS(<<<JS
             });
             $("#montant").val(montantTotal);
             if(montantTotal === 0 || isNaN(montantTotal)){
-                $('#save-label').empty();
-                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
-                $('#save-label').show();
+                $('#save-label').empty().append("Le total des montants ne peut-être égal a 0.").show();
                 $("#save-btn").attr("disabled", true);
             }
             else{
-                $('#save-label').empty();
-                $('#save-label').hide();
+                $('#save-label').empty().hide();
                 $("#save-btn").removeAttr("disabled");
             }
         }
@@ -403,10 +568,8 @@ $p->appendJS(<<<JS
 
     $("#type-participation").change(function() {
         if($("#type-participation").val() === "partegale"){
-            $('#save-label').empty();
-            $('#save-label').hide();
-            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext");
-            $(".money-avatar").attr("readonly", true);
+            $('#save-label').empty().hide();
+            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext").attr("readonly", true);
             $("#montant").removeAttr("readonly");
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
@@ -415,8 +578,7 @@ $p->appendJS(<<<JS
             });
         }
         else if($("#type-participation").val() === "montant"){
-            $(".money-avatar").removeClass("form-control-plaintext").addClass("form-control");
-            $(".money-avatar").removeAttr("readonly");
+            $(".money-avatar").removeClass("form-control-plaintext").addClass("form-control").removeAttr("readonly");
             $("#montant").attr("readonly", true);
             var montantTotal = 0;
             $("input:checkbox:checked").each(function() {
@@ -426,20 +588,16 @@ $p->appendJS(<<<JS
                 $("#percent-div-"+key).fadeTo(200, 0);
             });
             if(montantTotal === 0 || montantTotal === ""){
-                $('#save-label').empty();
-                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
-                $('#save-label').show();
+                $('#save-label').empty().append("Le total des montants ne peut-être égal a 0.").show();
                 $("#save-btn").attr("disabled", true);
             }
             else{
-                $('#save-label').empty();
-                $('#save-label').hide();
+                $('#save-label').empty().hide();
                 $("#save-btn").removeAttr("disabled");
             }
         }
         else if($("#type-participation").val() === "pourcentage"){
-            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext");
-            $(".money-avatar").attr("readonly", true);
+            $(".money-avatar").removeClass("form-control").addClass("form-control-plaintext").attr("readonly", true);
             $("#montant").removeAttr("readonly");
             $("input:checkbox:checked").each(function() {
                 var key = $(this).attr('id').split("-")[1];
@@ -458,14 +616,11 @@ $p->appendJS(<<<JS
             });
             $("#montant").val(montantTotal);
             if(montantTotal === 0 || isNaN(montantTotal)){
-                $('#save-label').empty();
-                $('#save-label').append("Le total des montants ne peut-être égal a 0.");
-                $('#save-label').show();
+                $('#save-label').empty().append("Le total des montants ne peut-être égal a 0.").show();
                 $("#save-btn").attr("disabled", true);
             }
             else{
-                $('#save-label').empty();
-                $('#save-label').hide();
+                $('#save-label').empty().hide();
                 $("#save-btn").removeAttr("disabled");
             }
         }
@@ -485,9 +640,7 @@ $p->appendJS(<<<JS
             $("#save-btn").removeAttr("disabled");
         }
         else{
-            $('#save-label').show();
-            $('#save-label').empty();
-            $('#save-label').append("Le total des pourcentages doit être égal à 100.");
+            $('#save-label').show().empty().append("Le total des pourcentages doit être égal à 100.");
             $("#save-btn").attr("disabled", true);
         }
     })
@@ -497,5 +650,10 @@ $p->appendJS(<<<JS
 JS
 );
 
+
 echo $p->toHTML() ;
-?>
+
+
+
+
+var_dump($_POST);

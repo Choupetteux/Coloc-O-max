@@ -28,6 +28,10 @@ Class Paiement{
         return $this->utilisateur_id;
     }
 
+    public function getTypePaiement(){
+        return $this->typePaiement;
+    }
+
     /**
      * Retourne les paiements émis par un utilisateur donné.
      *
@@ -43,6 +47,18 @@ Class Paiement{
         $PDO->execute(array($id));
         $paiements = $PDO->fetchAll();
         return $paiements;
+    }
+
+    public static function getUtilisateurFromPaiementId($id){
+        $PDO = myPdo::getInstance()->prepare(
+            "SELECT u.utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar
+            FROM utilisateurs u, paiements p
+            WHERE p.paiement_id = ?
+            AND   u.utilisateur_id = p.utilisateur_id");
+        $PDO->setFetchMode(PDO::FETCH_CLASS, 'utilisateur');
+        $PDO->execute(array($id));
+        $user = $PDO->fetch();
+        return $user;
     }
 
     public static function getRemboursementsSentBy($utilisateur_id){
@@ -89,6 +105,19 @@ Class Paiement{
                 WHERE paiement_id = ?"
             );
             $PDO->execute(array($this->raison, $this->paiement_id));
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
+    public static function supprimerPaiement($paiement_id){
+        try{
+            $PDO = myPdo::getInstance()->prepare(
+                "DELETE FROM paiements
+                WHERE paiement_id = ?"
+            );
+            $PDO->execute(array($paiement_id));
         }
         catch(PDOException $e){
             echo $e->getMessage();

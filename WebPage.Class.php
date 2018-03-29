@@ -38,7 +38,7 @@ class WebPage {
                             <p id="username" class="btn dropdown-toggle" data-toggle="dropdown">{$_SESSION['user']->getPseudo()}</p>
                             <a href="profil?id={$_SESSION['user']->getId()}"><img class="img-fluid" id="avatar" src="{$_SESSION['user']->getAvatarPath()}"></a></img>
                             <ul class="dropdown-menu" style="margin-left:10px;">
-                                <li class="dropdown-item"><a class="dropdown-link" href="profil?id={$_SESSION['user']->getId()}">Voir votre profil</a></li>
+                                <li class="dropdown-item"><a class="dropdown-link" href="profil.php?id={$_SESSION['user']->getId()}">Voir votre profil</a></li>
                                 <li class="dropdown-item"><a class="dropdown-link" href="settings.php">Paramètres</a></li>
                                 <li class="dropdown-item"><a class="dropdown-link" href="deconnexion.php">Se déconnecter</a></li>
                             </ul>

@@ -106,10 +106,16 @@ Class Colocation{
 		return Utilisateur::getUtilisateurFromID($this->colocation_creator);
 	}
 
-	//Retourne un array contenant chaque colocataire
+    /**Retourne un array contenant chaque colocataire
+     * @return Utilisateur[]
+     *
+     * @throws Exception
+     */
 	public function getListeColocataire(){
 		$PDO = myPdo::getInstance()->prepare(
-			"SELECT utilisateur_id, nom, prenom, date_de_naissance, sexe, pseudo, colocation_id, avatar
+			"SELECT utilisateur_id, nom, prenom, DATE_FORMAT(date_de_naissance,'%d/%m/%Y') 
+			AS \"date_de_naissance\", sexe, pseudo, passwd, colocation_id, avatar, 
+				DATE_FORMAT(FROM_UNIXTIME(UNIX_TIMESTAMP(dateInscription)), '%d/%m/%Y') AS \"dateInscription\"
 			FROM utilisateurs
 			WHERE colocation_id = ?");
 		$PDO->setFetchMode(PDO::FETCH_CLASS, "Utilisateur");

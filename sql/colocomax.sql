@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Client :  mysql
--- Généré le :  Lun 12 Mars 2018 à 14:45
+-- Généré le :  Ven 23 Mars 2018 à 11:18
 -- Version du serveur :  5.5.56-MariaDB
 -- Version de PHP :  5.4.16
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `colocations` (
   `ville` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `colocation_pass` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `colocation_creator` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Contenu de la table `colocations`
@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `colocations` (
 
 INSERT INTO `colocations` (`colocation_id`, `colocation_nom`, `adresse`, `ville`, `colocation_pass`, `colocation_creator`) VALUES
 (1, 'OfflineTV', NULL, 'Los Angeles', 'WW3-k6i-0W1', 1),
-(2, 'ProjetS4', NULL, 'Reims', 'Xzq-3lr-RrL', 5);
+(2, 'ProjetS4', NULL, 'Reims', 'Xzq-3lr-RrL', 5),
+(3, 'yop', '166 rue Ponsardin', 'Reims', 'bYU-ZwO-R8k', 11);
 
 -- --------------------------------------------------------
 
@@ -66,18 +67,22 @@ CREATE TABLE IF NOT EXISTS `paiements` (
   `montant` float NOT NULL,
   `raison` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `typePaiement` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `datePaiement` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `paiement_id` int(11) NOT NULL,
   `utilisateur_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Contenu de la table `paiements`
 --
 
-INSERT INTO `paiements` (`montant`, `raison`, `typePaiement`, `paiement_id`, `utilisateur_id`) VALUES
-(400, 'Machine à laver', 'depense', 12, 6),
-(50, '', 'avance', 13, 6),
-(45, '', 'remboursement', 14, 4);
+INSERT INTO `paiements` (`montant`, `raison`, `typePaiement`, `datePaiement`, `paiement_id`, `utilisateur_id`) VALUES
+(400, 'Machine à laver', 'Dépense', '0000-00-00 00:00:00', 12, 6),
+(50, '', 'Avance', '0000-00-00 00:00:00', 13, 6),
+(45, '', 'Remboursement', '0000-00-00 00:00:00', 14, 4),
+(160, 'Courses', 'Dépense', '0000-00-00 00:00:00', 15, 8),
+(10, 'course', 'Dépense', '0000-00-00 00:00:00', 16, 11),
+(10, 'course', 'Remboursement', '0000-00-00 00:00:00', 17, 11);
 
 -- --------------------------------------------------------
 
@@ -102,7 +107,12 @@ INSERT INTO `participer` (`type`, `montant`, `paiement_id`, `utilisateur_id`) VA
 ('partegale', 100, 12, 7),
 ('partegale', 100, 12, 8),
 ('partegale', 50, 13, 4),
-('partegale', 45, 14, 6);
+('partegale', 45, 14, 6),
+('montant', 125, 15, 6),
+('montant', 25, 15, 7),
+('montant', 10, 15, 8),
+('partegale', 10, 16, 11),
+('partegale', 10, 17, 11);
 
 -- --------------------------------------------------------
 
@@ -121,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `colocation_id` int(11) DEFAULT NULL,
   `avatar` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'placeholder.jpg',
   `LASTTIMESEEN` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Contenu de la table `utilisateurs`
@@ -131,13 +141,14 @@ INSERT INTO `utilisateurs` (`utilisateur_id`, `nom`, `prenom`, `date_de_naissanc
 (1, 'Ribbi', 'Luigi', NULL, NULL, 'Luigito', '$2y$10$kCiZsf3hA9d9H2BzmYrkjuSd0sGhzlIe665mraLp5hN.W3bd32tEG', NULL, 'placeholder.jpg', NULL),
 (2, 'Dielh', 'Lorenza', NULL, NULL, 'mikaiix', '$2y$10$tKa9BwXLyFAWQz5hYUxIb.hZSxzvjVXX8RhUA0f2ATpz7kspIPW3a', NULL, 'placeholder.jpg', NULL),
 (3, 'Pichu', 'Lily', '1998-02-19', 'F', 'Lilypichu', '$2y$10$9z/bt.TF/jCGKKL.X4FtB.02kJgJKm01MdniCfcVkpaaXl4NBn4Z.', 1, '4ed78a3f31bde0f919033a242cb38e5f8dcb91414f1c9f0bf0c58ca3b7b10eb8.jpeg', '2018-03-03 14:16:16'),
-(4, 'Myster', 'Federico', NULL, 'M', 'Fedmyster', '$2y$10$mFuLX1IeyJL2eDJRiSqPzuDV0R/j4tTkRMTQeeVbVUbe5s/33ccOu', 1, '9883e2142f1d1bade0cbf9fa10c6f96ebd461e366df0c7c929e2d804accda74d.jpeg', '2018-03-12 14:43:31'),
+(4, 'Myster', 'Federico', '1998-02-19', 'M', 'Fedmyster', '$2y$10$mFuLX1IeyJL2eDJRiSqPzuDV0R/j4tTkRMTQeeVbVUbe5s/33ccOu', 1, '9883e2142f1d1bade0cbf9fa10c6f96ebd461e366df0c7c929e2d804accda74d.jpeg', '2018-03-14 14:00:53'),
 (5, 'Marchand', 'Antoine', NULL, NULL, 'marchand', '$2y$10$6Kbov5YtI50MlS1qaFMzR.5Gh8.badAcUmqNU9YOKkA3AgbVoeRl.', 2, 'placeholder.jpg', NULL),
-(6, 'Imane', 'Poki', '1992-02-05', 'F', 'Pokimane', '$2y$10$Je1SscAi6L7GSczvSQYefeibqFTds1sikN/hBiK/.AVN5dNMURiFy', 1, '043906d634f43bee460d079c0e168e2efcdca68507e00277dac2fbe178557825.jpeg', '2018-03-12 14:44:48'),
+(6, 'Imane', 'Poki', '1992-02-05', 'F', 'Pokimane', '$2y$10$Je1SscAi6L7GSczvSQYefeibqFTds1sikN/hBiK/.AVN5dNMURiFy', 1, '043906d634f43bee460d079c0e168e2efcdca68507e00277dac2fbe178557825.jpeg', '2018-03-23 11:14:48'),
 (7, 'Scar', 'Ra', NULL, NULL, 'Scarra', '$2y$10$hW.koNHM1BI2KoS.8Oe8luAFWJjFUE21pWV1BjCK8rplzKt8aAtV6', 1, '5ec7ca4cfeb70effc27c913ee7c26c84e7bcce0bac1155eb8b71a748dfd4cfdb.jpeg', '2018-03-03 14:15:19'),
-(8, 'Chan', 'Rebecca', NULL, NULL, 'Pecca', '$2y$10$f9uTgwtXAClZIhCz8slGEuMrbIJ1mky.vaL5KKcPbBn2s1RQDdAa6', 1, '47187873db9b949200519a48bd969cc8271f872b363bb563adca3663aec34fc6.jpeg', NULL),
+(8, 'Chan', 'Rebecca', NULL, NULL, 'Pecca', '$2y$10$f9uTgwtXAClZIhCz8slGEuMrbIJ1mky.vaL5KKcPbBn2s1RQDdAa6', 1, '47187873db9b949200519a48bd969cc8271f872b363bb563adca3663aec34fc6.jpeg', '2018-03-12 15:19:30'),
 (9, 'Chan', 'Chris', NULL, NULL, 'ChrisTo', '$2y$10$Gb0XsJ5nxvbA8Tr5D/cLMOIpe.JNrwVLrZfGIpOhcWywGDCwJFl.K', 1, '13704f8eba8a9388ce61d013fd54e60c04d4b8a87ac012d8b6bc0959838fd137.jpeg', NULL),
-(10, 'legendre', 'lea', NULL, NULL, 'lege0007', '$2y$10$ahz3RNHtUrp0q/JfVO/1QurKjRZKtHhKu1aabDV7kbhTrKi/2aJZu', 1, 'placeholder.jpg', '2018-03-12 14:44:53');
+(10, 'legendre', 'lea', NULL, NULL, 'lege0007', '$2y$10$ahz3RNHtUrp0q/JfVO/1QurKjRZKtHhKu1aabDV7kbhTrKi/2aJZu', NULL, 'placeholder.jpg', '2018-03-12 15:05:53'),
+(11, 'Marchand', 'Antoine', '1995-04-17', 'M', 'antoine2', '$2y$10$ELjFCxrYEiX/EgIz9p57BOwZtxN.aR4ACpKT8AtOboJhagcT9.MiC', 3, '116526ec2b3cfe5bf65c37b721b7dd69c5419b0a8f0f2e9bfad11754496a64c5.jpeg', '2018-03-22 13:11:14');
 
 --
 -- Index pour les tables exportées
@@ -189,7 +200,7 @@ ALTER TABLE `utilisateurs`
 -- AUTO_INCREMENT pour la table `colocations`
 --
 ALTER TABLE `colocations`
-  MODIFY `colocation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `colocation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT pour la table `factures`
 --
@@ -199,12 +210,12 @@ ALTER TABLE `factures`
 -- AUTO_INCREMENT pour la table `paiements`
 --
 ALTER TABLE `paiements`
-  MODIFY `paiement_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+  MODIFY `paiement_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `utilisateur_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+  MODIFY `utilisateur_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- Contraintes pour les tables exportées
 --

@@ -225,10 +225,10 @@ input:checked + .tab {
   font-family: "Open Sans", sans-serif;
 }
   
-  .col-centered{
-    float: none;
-    margin: 0.1em auto;
-  }
+.col-centered{
+  float: none;
+  margin: 0.1em auto;
+}
 
 .coloc-checkbox{
     display:none;
@@ -274,4 +274,24 @@ input:checked + .tab {
 
 .save-button{
   margin-top:10px;
+}
+
+.btn-link{
+  color:#474747 !important;
+}
+
+.depense-msg{
+  text-align:center;
+}
+
+.positive{
+  color:green;
+}
+
+.negative{
+  color:red;
+}
+
+em{
+  font-weight: bold;
 }

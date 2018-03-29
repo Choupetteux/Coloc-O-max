@@ -1,5 +1,7 @@
 <?php
 
+use PHP_CodeSniffer\Tokenizers\JS;
+
 require_once 'php/utilisateurs.class.php';
 
 require_once 'WebPage.Class.php' ;
@@ -82,17 +84,23 @@ HTML
 
 $p->appendContent(<<<HTML
 <div class="landing-text">
-    <div class="row">
-        <div class="col-lg-3"></div>
+<div class="row" id="text-landing" style="display:none;">
 
-        <div class="col-lg-6">
-            <h1 class="title animated zoomIn">Prêt pour une coloc' ?</h1>
-            <p class="animated zoomIn">Revenez plus tard, nous sommes en train de paufiner la future plateforme qui facilitera les points importants de votre colocation !</p>
+        <div class="col-lg-6 col-centered" style="margin-top:13%;">
+            <h1 class="title">Prêt pour une coloc' ?</h1>
+            <p>Inscrivez vous gratuitement pour faciliter les points importants de votre colocation !</p>
             <a href="inscription.php" class="btn-sign-up">S'inscrire</a>
         </div>
-
-        <div class="col-lg-3"></div>   
     </div> 
+    <div class="row">
+    <section id="key" class="row" style="width: 1920px; height: 974px;">
+		<div class="videocontainer col-centered" style="width: 1280px; height: 720px; top: -53px; left: 0px; opacity: 1;">
+			<div id="video01"></div>
+		</div>
+	</section>
+    </div>
+
+    
 </div>
 <div class="landing-img">
     <div class="row">
@@ -105,10 +113,52 @@ $p->appendContent(<<<HTML
 HTML
 );
 
+$p->appendJs(<<<JS
+    
+        
+    var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+        var player;
+        function onYouTubeIframeAPIReady() {
 
+	        player = new YT.Player(
+		    "video01",
+            {
+                height: '100%',
+                width: '100%',
+                videoId: 'ZbYBBcBzibQ',
+                wmode: 'transparent',
+                playerVars:{
+                    controls:0,
+                    showinfo:0,
+                    disablekb:1,
+                    autoplay:1,
+                    rel:0,
+                    modestbranding:1,
+                    frameborder:"0",
+                    playsinline:1
+                },
+                events:{
+                    'onReady': function (event) {
+                        console.log("ready");
+                        perfume.isLoadedVideo = true;
+                    },
+                    'onStateChange': function (event) {
+                        if(event.data == YT.PlayerState.PLAYING ){
+
+                        }else if(event.data == YT.PlayerState.ENDED){
+                            $('#video01').hide();
+                            $('#text-landing').addClass("animated fadeInUpBig").show();
+                        }
+                    }
+                }
+            }
+            );
+        }
+JS
+);
 
 echo $p->toHTML() ;
-
-
-?>

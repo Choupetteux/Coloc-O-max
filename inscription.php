@@ -10,8 +10,6 @@ Session::start();
 
 $loggedin = isset($_SESSION['loggedin']);
 
-$_SESSION['user']->saveLogTime();
-
 $p = new WebPage($loggedin, "Inscription | ColocOmax") ;
 
 $p->appendCssUrl("css/general-style.css") ;
